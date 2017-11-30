@@ -13,7 +13,7 @@ and the value of an item need not be correlated - the most precious item may be
 a tiny gemstone. But it turns out it's pretty tricky to get a truly optimal
 solution, and that a bruteforce approach really doesn't scale.
 
-A bit more motivation - this is a very general optimization problem that can be
+A bit more motivation - this ios a very general optimization problem that can be
 applied in a multitude of situations, from resource selection and allocation to
 stuffing stolen goods in knapsacks.
 
@@ -31,16 +31,16 @@ The specific goal of this exercise is to write a program that takes input files
 that look like this:
 
 ```
-    1    42    81
-    2    42    42
-    3    68    56
-    4    68    25
-    5    77    14
-    6    57    63
-    7    17    75
-    8    19    41
-    9    94    19
-   10    34    12
+1 42 81
+2 42 42
+3 68 56
+4 68 25
+5 77 14
+6 57 63
+7 17 75
+8 19 41
+9 94 19
+10 34 12
 ```
 
 The first row number is just a row/observation number, to facilitate reading and
