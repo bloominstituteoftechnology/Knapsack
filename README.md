@@ -2,7 +2,7 @@
 
 ![xkcd "NP-Complete"](https://imgs.xkcd.com/comics/np_complete.png "General solutions get you a 50% tip.")
 
-Suppose you are Indiana Jones, and you have found the secret entrance to the the
+Suppose you are Indiana Jones, and you have found the secret entrance to the
 Temple of Doom. Before you is a multitude of artifacts and treasures - pots,
 gemstones, works of art, and more. These belong in a museum! But there are
 soldiers hot on your heels, and you can only carry so much...
@@ -13,7 +13,7 @@ and the value of an item need not be correlated - the most precious item may be
 a tiny gemstone. But it turns out it's pretty tricky to get a truly optimal
 solution, and that a bruteforce approach really doesn't scale.
 
-A bit more motivation - this ios a very general optimization problem that can be
+A bit more motivation - this is a very general optimization problem that can be
 applied in a multitude of situations, from resource selection and allocation to
 stuffing stolen goods in knapsacks.
 
