@@ -22,7 +22,7 @@ const knapsackHeaps = (data, n = data.length) => {
     knapsackHeaps(data, n - 1);
     n % 2 === 0 ?
       [data[i], data[n - 1]] = [data[n - 1], data[i]] :
-      [data[0], data[i]] = [data[i], data[0]];
+      [data[0], data[n - 1]] = [data[n - 1], data[0]];
   }
   knapsackHeaps(data, n - 1);
 }
@@ -33,14 +33,14 @@ const bruteForce = () => {
   let best_value = 0, best_items = [];
   for (let i = 0; i < possible.length; i++) {
     let current_value = 0, thresh = threshold, count = -1;
-    while (thresh > 0) {
+    while (thresh >= 0) {
       count++;
       current_value += possible[i][count][1];
       thresh -= possible[i][count][0];
     }
     current_value -= possible[i][count][1];
     
-    if (current_value > best_value) {
+    if (current_value >= best_value) {
       best_value = current_value;
       best_items = possible[i].slice(0, count);
     }
