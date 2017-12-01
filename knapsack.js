@@ -48,7 +48,7 @@ const bruteForce = () => {
   console.log(best_items, best_value);
 }
 
-bruteForce();
+//bruteForce();
 
 const ratio = () => {
   let rData = data;
@@ -56,6 +56,8 @@ const ratio = () => {
   rData = rData.sort((a, b) => b[2] - a[2]);
   return rData;
 };
+
+
 
 const greed = () => {
   const rData = ratio();
@@ -68,4 +70,24 @@ const greed = () => {
   console.log(knapped, value);
 }
 
-greed();
+//greed();
+
+const dynamic = (capacity, weight, value, n) => {
+  const K = Array.from({length: n + 1}, v => Array.from({length: capacity + 1}, z => 0));
+  for (let i = 0; i <= n; i++) {
+    for (let j = 0; j <= capacity; j++) {
+      if (i === 0 || j === 0) K[i][j] = 0;
+      else if (weight[i - 1] <= j) K[i][j] = Math.max(value[i - 1] + K[i - 1][j - weight[i - 1]], K[i - 1][j]);
+      else K[i][j] = K[i - 1][j];
+    }
+  }
+  console.log(K[n][capacity]);
+}
+
+const dynamicCall = () => {
+  const weight = data.map(arr => arr[0]);
+  const value = data.map(arr => arr[1]);
+  dynamic(threshold, weight, value, value.length);
+}
+
+dynamicCall();
