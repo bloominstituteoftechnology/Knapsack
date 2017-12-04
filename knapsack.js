@@ -53,8 +53,8 @@ const bruteForce = () => {
 const ratio = () => {
   let rData = data;
   rData.forEach(item => item.push(item[1]/item[0]));
-  rData = rData.sort((a, b) => b[2] - a[2]);
-  return rData;
+  // rData = rData.sort((a, b) => b[2] - a[2]); need to sort twice for large dataset
+  return rData.sort((a, b) => b[2] - a[2]);
 };
 
 
@@ -70,7 +70,7 @@ const greed = () => {
   console.log(knapped, value);
 }
 
-//greed();
+// greed();
 
 const dynamic = (capacity, weight, value, n) => {
   const K = Array.from({length: n + 1}, v => Array.from({length: capacity + 1}, z => 0));
