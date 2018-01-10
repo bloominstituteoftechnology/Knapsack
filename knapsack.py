@@ -1,5 +1,6 @@
 import os.path
 import sys
+import time
 
 class Item:
   def __init__(self, id, weight, value):
@@ -107,34 +108,44 @@ def run():
   knapsack.print_inventory()
 
 if __name__ == '__main__':
+  start_time = int(round(time.time() * 1000))
   run();
+  end_time = int(round(time.time() * 1000))
+  print('Took %dms to run.' % ((end_time - start_time)))
 
 
 # small1.txt
   # Items: 1, 7, 8
   # Weight: 78
   # Value: 197
+  # Time: 3ms
 # small2.txt
   # Items: 1, 9, 10
   # Weight: 68
   # Value: 259
+  # Time: 4ms
 # small3.txt
   # Items: 4, 7, 9
   # Weight: 50
   # Value: 114
+  # Time: 4ms
 # medium1.txt
   # Items: 44, 49, 60, 77, 80, 83, 94, 104, 107, 117, 134, 157, 160, 170
   # Weight: 91
   # Value: 1009
+  # Time: 6ms
 # medium2.txt
   # Items: 1, 10, 28, 66, 120, 139, 145, 153, 155, 174, 188, 191, 200
   # Weight: 100
   # Value: 956
+  # Time: 6ms
 # medium3.txt
   # Items: 9, 14, 15, 47, 68, 116, 120, 133, 154, 158, 161, 164, 170, 181, 198
   # Weight: 94
   # Value: 847
+  # Time: 6ms
 # large1.txt
   # Items: 44, 83, 104, 107, 134, 160, 239, 271, 295, 297, 308, 329, 335, 337, 370, 373, 420, 432, 561, 566, 623, 648, 671, 693, 704, 737, 782, 795, 796, 814, 844, 866, 907, 909, 913, 935, 949, 997
   # Weight: 99
   # Value: 2628
+  # Time: 18ms
