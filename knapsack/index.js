@@ -17,7 +17,7 @@ class Knapped {
             weight: 0, value: 0
         }
         this.capacity = 0;
-        
+
         this._prompt = ' \u2B55 \u0020\u0020';
         this.linein = rl;
 
@@ -117,12 +117,12 @@ class Knapped {
     }
 
     process(procArr) {
-        let store = { 
-            values: this.values, 
-            weights: this.weights, 
-            items: this.items, 
-            averages: this.averages, 
-            capacity: this.capacity 
+        let store = {
+            values: this.values,
+            weights: this.weights,
+            items: this.items,
+            averages: this.averages,
+            capacity: this.capacity
         };
         if (procArr.length < 2) {
             // Use default processor
@@ -133,13 +133,13 @@ class Knapped {
             for (let i = 0; i < processors.length; i++) {
                 if (curProcessorNames.includes(processors[i]))
                     store = this.processors[processors[i]](store);
+                    this.values = store.values;
+                    this.weights = store.weights;
+                    this.items = store.items;
+                    this.averages = store.averages;
+                    this.capacity = store.capacity;
             }
         }
-        this.values = store.values;
-        this.weights = store.weights;
-        this.items = store.items;
-        this.averages = store.averages;
-        this.capacity = store.capacity;
     }
 
     readEntry(entry) {
@@ -161,7 +161,7 @@ class Knapped {
         this.capacity = 0;
         console.log('.....Cleared values to 0');
     }
-    
+
     setProperty(propertySet) {
         if (!propertySet.length > 2) {
             console.log('.....Unmet parameters to set property.');
@@ -169,7 +169,7 @@ class Knapped {
         }
 
         let wasSet = true;
-        
+
         switch(propertySet[0]) {
             case 'average-weight':
                 this.averages.weight = propertySet[1];
@@ -196,27 +196,44 @@ class Knapped {
         # Values: \t ${this.values.length}\t\t# Weights: \t ${this.weights.length}
         Capacity: \t ${this.capacity}
 
-        Items: ${this.items.length}
+        Knapsack Items: ${this.items.length}
         ----------------------------------------------------------
-        | Value:    | Weight:
+        | Value:    | Weight:   | index
         ----------------------------------------------------------`);
-        for (let i = 0; i < this.items.length; i++) console.log(`\t| ${this.items[i].value} \t    | ${this.items[i].weight}`);
+        for (let i = 0; i < this.items.length; i++) console.log(`\t| ${this.items[i].value} \t    | ${this.items[i].weight} \t    | ${this.items[i].index}`);
         console.log(`
+        Totals:
+        ----------------------------------------------------------`);
+        const totals = this.items.reduce((total, item) => {
+            total.weight += parseInt(item.weight);
+            total.value += parseInt(item.value);
+            total.count += parseInt(1);
+            return total;
+        }, {weight: 0, value: 0, count: 0});
+        console.log(`
+        | ${totals.value.toString().padEnd(10, ' ')}| ${totals.weight.toString().padEnd(10, ' ')}| ${totals.count.toString().padEnd(10, ' ')}
+        ----------------------------------------------------------
         Averages:
         ----------------------------------------------------------
-        Value:\t ${this.averages.value}\t\t\tWeight:\t ${this.averages.weight}        
+        Value:\t ${this.averages.value}\t\t\tWeight:\t ${this.averages.weight}
         `);
         console.log(`
-       Processors:
+        Processors:
        ----------------------------------------------------------`);
         const procKeys = Object.keys(this.processors);
         for (let i = 0; i < procKeys.length; i++) {
             console.log(`        ${procKeys[i]}`);
         }
         console.log(`
+        All Items:
         ----------------------------------------------------------`);
-        for (let i = 0; i < this.values.length; i++) {
-            console.log(`       ${this.values[i]}       ${this.weights[i]}`);
+        for (let i = 0; i < this.values.length; i+=3) {
+            let str = `       `;
+            for(let st = 1; st <= 3 && st + i < this.values.length; st++) {
+                str += `${this.values[i + st].toString().padStart(2, ' ')}    ${this.weights[i + st].toString().padStart(2, ' ')}`;
+                if (st !== 3) str += ' | ';
+            }
+            console.log(str);
         }
     }
 
@@ -321,13 +338,13 @@ class Knapped {
             default: {
                 console.log('.....Unknown command: ', args[0]);
             }
-                
+
         }
         this.showPrompt();
     }
-    
+
     prompt( p = this._prompt, q = '', cb = this.output) {
-        
+
     }
 }
 
@@ -342,10 +359,10 @@ knapped.prompt();
  3 // Weights (stored in array w)
  4 // Number of distinct items (n)
  5 // Knapsack capacity (W)
- 6 
+ 6
  7 for j from 0 to W do:
  8     m[0, j] := 0
- 9 
+ 9
 10 for i from 1 to n do:
 11     for j from 0 to W do:
 12         if w[i] > j then:

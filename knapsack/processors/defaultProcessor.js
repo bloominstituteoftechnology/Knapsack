@@ -4,12 +4,13 @@ module.exports = (store) => {
     console.log(`Started running: ${startTime}`);
     // Ratios to compare with
     const ratios = [];
-    
+
     // Iterate over the values
     for (let i = 0; i < store.values.length; i++) {
         // Push the pair to the ratio array
+        // could custom sort with insert sort here
         ratios.push({
-            ratio: store.values[i] / store.weights[i], 
+            ratio: store.values[i] / store.weights[i],
             weight: store.weights[i],
             value: store.values[i],
             index: i
