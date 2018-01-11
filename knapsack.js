@@ -18,20 +18,35 @@ data = data.map((item) => {
 });
 
 const exhaustive = ((data) => {
-  const recurse = ((threshold, weights, values, n) => {
-    if (n === 0 || threshold === 0){
-      return 0;
+  let bestValue = -1;
+  let bestItems = [];
+  const recurse = ((items, threshold, { value, taken}) => {
+    if(value > bestValue) {
+      bestValue = value;
+      bestItems = taken;
     }
-    if (weights[n-1] > threshold) {
-      return recurse(threshold, weights, values, n-1);
+    if(!items || (items.length === 1 && items[0].weight > threshold)) {
+      return {value, taken};
+    } else if (items.length === 1) {
+      taken.push(items[0].index);
+      value += items[0].value;
+      if(value > bestValue) {
+        bestValue = value;
+        bestItems = taken;
+      }
+      return {value, taken};
+    } else if (threshold > items[0].weight) {
+      let takenCopy = taken.slice();
+      takenCopy.push(items[0].index);
+      return Math.max(recurse(items.slice(1), threshold - items[0].weight, {value: value + items[0].value, taken: takenCopy}), 
+                         recurse(items.slice(1), threshold, {value, taken}));
     } else {
-      return Math.max(values[n-1] + recurse(threshold-weights[n-1], weights, values, n-1), recurse(threshold, weights, values, n-1));  
+      return recurse(items.slice(1), threshold, {value, taken});
     }
   });
-  const weights = data.map(arr => arr.weight);
-  const values = data.map(arr => arr.value);
-  const totalValue = recurse(threshold, weights, values, weights.length);
-  console.log(`Total value: ${totalValue}`);
+  recurse(data, threshold, {value: 0, taken: []});
+  console.log(`Items to select: ${bestItems.join(", ")}`);
+  console.log(`Total value: ${bestValue}`);
 });
 
 const greedy = ((data) => {
@@ -98,6 +113,6 @@ const dynamic = ((data) => {
   console.log(`Total value: ${totalValue}`);
 });
 
-// exhaustive(data);  // do not run with the large file
+exhaustive(data);  // do not run with the large file
 greedy(data);
 dynamic(data);
