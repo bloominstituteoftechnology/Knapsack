@@ -64,16 +64,42 @@ const greedyKnapSack = (items, capacity) => {
 const dynamicKnapSack = (items, capacity) => {
   const weightMatrix = [];
   const taken = [];
-  for(let i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length + 1; i++) {
     weightMatrix[i] = new Array(capacity + 1);
     taken[i] = new Array(capacity + 1);
   }
 
-  for(let i = 0; i <= items.length; i++) {
-    for(let j = 0; j <= capacity; j++) {
-      
+  for (let i = 0; i <= items.length; i++) {
+    for (let j = 0; j <= capacity; j++) {
+      if (i === 0 || j === 0) {
+        weightMatrix[i][j] = 0;
+      } else if (items[i - 1].size < j) {
+        const newMax =
+          items[i - 1].val + weightMatrix[i - 1][j - items[i - 1].size];
+        const oldMax = weightMatrix[i - 1][j];
+
+        if (newMax > oldMax) {
+          weightMatrix[i][j] = newMax;
+          taken[i][j] = 1;
+        } else {
+          weightMatrix[i][j] = oldMax;
+          taken[i][j] = 0;
+        }
+      } else {
+        weightMatrix[i][j] = weightMatrix[i - 1][j];
+      }
     }
   }
+  let weightIdx = capacity;
+  const resultArr = [];
+  for (let i = items.length; i > 0; i--) {
+    if (taken[i][weightIdx] === 1) {
+      resultArr.push(items[i - 1].item);
+      weightIdx -= items[i - 1].size;
+    }
+  }
+
+  return { total: weightMatrix[items.length][capacity], taken: resultArr };
 };
 
 fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
@@ -94,6 +120,7 @@ fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
     }, []);
 
   // const result = recKnapSack(dataObj, args.threshold, 0, []);
-  const result = greedyKnapSack(dataObj, args.threshold);
+  //const result = greedyKnapSack(dataObj, args.threshold);
+  const result = dynamicKnapSack(dataObj, args.threshold);
   console.log(result);
 });
