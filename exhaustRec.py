@@ -2,28 +2,25 @@
 this is working through your solution
 '''
 import sys
+from collections import namedtuple
 
 dataFile = sys.argv[1]
 capacity = float(sys.argv[2])
 
-with open("data/"+dataFile) as f:
-    items = f.readlines()
+input_data_file = open("data/" + dataFile, 'r')
+input_data = ''.join(input_data_file.readlines()).rstrip()
 
-items = [x.strip() for x in items]
+# create an item class with namedtuple
+Item = namedtuple("Item", ['index', 'weight', 'value'])
 
-itemObjs = []
+# parse the input
+lines = input_data.split('\n')
+items = []
 
-for i in items:
-	item = i.split(" ")
-	itemObj = {}
-	itemObj["index"] = item[0]
-	itemObj["weight"] = float(item[1])
-	itemObj["value"] = float(item[2])
-
-	itemObjs.append(itemObj)
-
-# the named numpled things looks awesome
-# sortedItems = sorted(itemObjs, key=lambda k: k['value'], reverse=True)
+for line in lines:
+    parts = line.split()
+    # Item(index, size, value)
+    items.append(Item(int(parts[0]), int(parts[1]), int(parts[2])))
 
 def knapsackRec(items, capacityLeft, totalVal, taken):
     if not items or (len(items) == 1 and items[0].weight > capacityLeft):
@@ -49,4 +46,4 @@ def knapsackRec(items, capacityLeft, totalVal, taken):
         return knapsackRec(items[1:], capacityLeft, totalVal, taken)
 
 
-print knapsackRec(itemObjs, capacity, 0, 0)
+print knapsackRec(items, capacity, 0, [0] * len(items))

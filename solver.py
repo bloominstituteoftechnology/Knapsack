@@ -142,9 +142,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         capacity = int(sys.argv[2])
         file_location = sys.argv[1].strip()
-        input_data_file = open(file_location, 'r')
+        input_data_file = open("data/" + file_location, 'r')
         input_data = ''.join(input_data_file.readlines()).rstrip()
         input_data_file.close()
+        # print input_data
         print solve_it(input_data, capacity)
     else:
         print 'Usage: solver.py (file) (capacity)'
