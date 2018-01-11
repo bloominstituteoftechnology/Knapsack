@@ -1,0 +1,11 @@
+{
+  "name": "Knapsack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:JPRoland/Knapsack.git",
+  "author": "Joe Roland <joroland@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "yargs": "^10.1.1"
+  }
+}
