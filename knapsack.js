@@ -107,7 +107,7 @@ fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
     console.error(`Could not read file: ${args.file}`);
     process.exit(1);
   }
-  const dataObj = data
+  const dataArr = data
     .toString()
     .split("\n")
     .reduce((res, item, i) => {
@@ -119,8 +119,8 @@ fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
       return res;
     }, []);
 
-  // const result = recKnapSack(dataObj, args.threshold, 0, []);
-  //const result = greedyKnapSack(dataObj, args.threshold);
-  const result = dynamicKnapSack(dataObj, args.threshold);
+  // const result = recKnapSack(dataArr, args.threshold, 0, []);
+  //const result = greedyKnapSack(dataArr, args.threshold);
+  const result = dynamicKnapSack(dataArr, args.threshold);
   console.log(result);
 });
