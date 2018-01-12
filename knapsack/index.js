@@ -227,11 +227,11 @@ class Knapped {
         console.log(`
         All Items:
         ----------------------------------------------------------`);
-        for (let i = 0; i < this.values.length; i+=3) {
-            let str = `       `;
-            for(let st = 1; st <= 3 && st + i < this.values.length; st++) {
+        for (let i = 0; i < this.values.length; i+=4) {
+            let str = `        `;
+            for(let st = 1; st <= 4 && st + i < this.values.length; st++) {
                 str += `${this.values[i + st].toString().padStart(2, ' ')}    ${this.weights[i + st].toString().padStart(2, ' ')}`;
-                if (st !== 3) str += ' | ';
+                if (st !== 4) str += '    |   ';
             }
             console.log(str);
         }

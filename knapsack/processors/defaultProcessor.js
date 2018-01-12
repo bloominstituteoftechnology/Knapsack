@@ -49,7 +49,7 @@ module.exports = (store) => {
         // loop over while j isn't out of range and nothing called the exit flag
         while (j < ratios.length) {
             // Log for visuals...
-            //console.log('capacity: ', store.capacity, 'weight: ', store.weights[ratios[j].index]);
+            //ßconsole.log('capacity: ', store.capacity, 'weight: ', ratios[j].weight, 'value: ', ratios[j].value);
             // weight
             const w = parseInt(ratios[j].weight);
             if (w <= store.capacity && !used.includes(ratios[j].index)) {
@@ -60,6 +60,7 @@ module.exports = (store) => {
                 // add to used
                 used.push(ratios[j].index);
                 exit = false;
+                if (store.capacity === 0) exit = true;
             }
             j++;
         }
