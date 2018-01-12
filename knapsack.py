@@ -31,8 +31,6 @@ if totalWeight < limit:
     sys.exit(0)
 
 ratios = sorted(ratiosUnsorted)
-for abcd in ratios:
-    print abcd
 bestCombo = []
 currentCombo = []
 bestTotalSize = 0

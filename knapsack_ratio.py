@@ -1,6 +1,7 @@
 import sys
 from functools import reduce
-
+import time
+begin = time.time()
 filename = sys.argv[1]
 limit = int(sys.argv[2])
 file_object = open(filename, 'r')
@@ -35,7 +36,18 @@ for i in range(len(itemNumber) - 1, -1, -1):
         currentCombo += [itemRow]
         currentSizeTotal += itemSize
         currentValueTotal += itemValue
-
+end = time.time()
+print '|_______________________________________________________|'
+print '|-------------------------------------------------------|'
+print '|------------Best combination using %i items------------|\n' % len(currentCombo)
 print currentCombo
-print currentValueTotal
-print currentSizeTotal
+print '\n|-------------------------------------------------------|'
+print '|---------------------Total Value-----------------------|'
+print '|-------------------------------------------------------|\n'
+print '|                         %i' % currentValueTotal
+print '\n|-------------------------------------------------------|'
+print '|---------------------Total  Size-----------------------|'
+print '|-------------------------------------------------------|\n'
+print '|                          %i' % currentSizeTotal
+
+print '\n\nTotal Time ---> %f\n' % (end - begin)
