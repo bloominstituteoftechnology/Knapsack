@@ -102,6 +102,91 @@ const dynamicKnapSack = (items, capacity) => {
   return { total: weightMatrix[items.length][capacity], taken: resultArr };
 };
 
+const createNode = (level, profit, weight, bound, contains) => {
+  return { level, profit, weight, bound, contains };
+};
+
+const bound = (node, capacity, items) => {
+  if (node.weight >= capacity) {
+    return 0;
+  }
+
+  let profitBound = node.profit;
+  let i = node.level + 1;
+  let totalWeight = node.weight;
+
+  while (i < items.length && totalWeight + items[i].size <= capacity) {
+    totalWeight += items[i].size;
+    profitBound += items[i].val;
+    i++;
+  }
+
+  if (i < items.length) {
+    profitBound += (capacity - totalWeight) * items[i].density;
+  }
+
+  return profitBound;
+};
+
+const bbKnapSack = (items, capacity) => {
+  const sorted = items.map(item => {
+    return {
+      pos: item.item,
+      size: item.size,
+      val: item.val,
+      density: item.val / item.size
+    };
+  });
+
+  sorted.sort((a, b) => b.density - a.density);
+
+  const q = [];
+  let node1 = createNode(-1, 0, 0, 0, []);
+
+  q.push(node1);
+  let maxProfit = 0;
+  let taken = [];
+  while (q.length) {
+    node1 = q.shift();
+
+    if (node1.level === sorted.length - 1) {
+      continue;
+    }
+
+    let n2Level = node1.level + 1;
+    let node2 = createNode(
+      n2Level,
+      node1.profit + sorted[n2Level].val,
+      node1.weight + sorted[n2Level].size,
+      0,
+      []
+    );
+
+    node2.contains = node1.contains.slice(0);
+    node2.contains.push(sorted[node2.level].pos);
+    node2.bound = bound(node2, capacity, sorted);
+
+    if (node2.weight <= capacity && node2.profit > maxProfit) {
+      maxProfit = node2.profit;
+      taken = node2.contains;
+    }
+
+    if (node2.bound > maxProfit) {
+      q.push(node2);
+    }
+
+    node2 = createNode(n2Level, node1.profit, node1.weight, 0, []);
+    node2.contains = node1.contains.slice(0);
+    node2.bound = bound(node2, capacity, sorted);
+
+    if (node2.bound > maxProfit) {
+      q.push(node2);
+    }
+  }
+
+  return { total: maxProfit, taken };
+};
+
 fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
   if (err) {
     console.error(`Could not read file: ${args.file}`);
@@ -120,7 +205,8 @@ fs.readFile(`${__dirname}/data/${args.file}`, (err, data) => {
     }, []);
 
   // const result = recKnapSack(dataArr, args.threshold, 0, []);
-  //const result = greedyKnapSack(dataArr, args.threshold);
-  const result = dynamicKnapSack(dataArr, args.threshold);
+  // const result = greedyKnapSack(dataArr, args.threshold);
+  // const result = dynamicKnapSack(dataArr, args.threshold);
+  const result = bbKnapSack(dataArr, args.threshold);
   console.log(result);
 });
