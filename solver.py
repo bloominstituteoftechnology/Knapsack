@@ -123,16 +123,7 @@ def knapsackBB(items):
     """
     pass
 
-def solve_it(input_data, capacity):
-    # parse the input
-    lines = input_data.split('\n')
-    items = []
-
-    for line in lines:
-        parts = line.split()
-        # Item(index, size, value)
-        items.append(Item(int(parts[0]), int(parts[1]), int(parts[2])))
-
+def solve_it(items, capacity):
     answer = knapsackExhaustive(items, capacity)
     # answer = knapsackGreedy(items, capacity)
     # answer = knapsackDP(items, capacity)
@@ -142,9 +133,13 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         capacity = int(sys.argv[2])
         file_location = sys.argv[1].strip()
-        input_data_file = open(file_location, 'r')
-        input_data = ''.join(input_data_file.readlines()).rstrip()
-        input_data_file.close()
-        print solve_it(input_data, capacity)
+        file_contents = open(file_location, 'r')
+        items = []
+        for line in file_contents.readlines():
+            data = line.rstrip().split()
+            # Item(index, size, value)
+            items.append(Item(int(data[0]), int(data[1]), int(data[2])))
+        file_contents.close()
+        print solve_it(items, capacity)
     else:
         print 'Usage: solver.py (file) (capacity)'
