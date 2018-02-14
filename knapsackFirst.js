@@ -27,35 +27,50 @@ rl.question('What is the maximum threshold for your backpack? ', (threshold) => 
         }
 
         data = temp;
-        //console.log(data);
+        // console.log(data);
         
         // Knapsack calculations
-        let tempSumArr = [];
-        let tempSum = 0;
+        let sumArr = [];
+        let sumIndex = [];
+
+        let indexCounter = 0;
+
+        let indices = [];
+        let sumWeight = 0;
+        let sumValue = 0
+
         for (let i = 0; i < data.length; i++) {
             // console.log("--------------Beginning of for loop---------------");
-            tempSum = data[i][1];
+            sumWeight = data[i][1];
+            sumValue = data[i][2];
+            indices.push([data[i][0]]);
             for (let j = i + 1; j < data.length; j++) {
-                // console.log(`tempSum BEFORE: ${tempSum}.`);
-                // console.log(`data[${i}][1] adding to tempSum`);
-                tempSum += data[j][1];
+                sumWeight += data[j][1];
                 // console.log(`tempSum AFTER:  ${tempSum}.`);
-                if (tempSum > 100) {
-                    tempSum -= data[j][1];
+                if (sumWeight > 100) {
+                    sumWeight -= data[j][1];
                 } else {
-                    tempSumArr.push([i, j, tempSum]);
+                    sumValue += data[j][2];
+                    sumArr.push([sumWeight, sumValue]);
+                    indices[i].push(data[j][0]);
                 }
             }
         }
+        // console.log(sumArr.length);
+        console.log(indices);
 
-        // Knapsack finding the max weight sum
-        let maxWeight = 0;
-        for (let i = 0; i < tempSumArr.length; i++) {
-            if (maxWeight < tempSumArr[i][2]) {
-                maxWeight = tempSumArr[i][2];
+        // Knapsack finding the max value sum
+        let maxValue = 0;
+        let maxIndex = 0;
+
+        for (let i = 0; i < sumArr.length; i++) {
+            if (maxValue < sumArr[i][1]) {
+                maxValue = sumArr[i][1];
+                maxIndex = i;
             }
         }
-        console.log(maxWeight);
+        // console.log(sumArr[maxIndex][1]);
+        // console.log(indices[maxIndex]);
     });
 
     rl.close();
