@@ -31,6 +31,7 @@ const optimizeKnapsack = (data, threshold) => {
     value: 0
   }
   if (threshold <= 0) return defaultKnapsack;
+  console.log(data);
   data.reduce(() => {
     
   }, []);
@@ -41,7 +42,7 @@ async function run() {
     const { file, threshold } = ensureArgs(process.argv);
     const data = await readFileFromDisk(file);
     const formattedData = formatData(data);
-    const knapsack = optimizeKnapsack(data, threshold);
+    const knapsack = optimizeKnapsack(formattedData, threshold);
   } catch (e) {
     console.error(e);
   }
