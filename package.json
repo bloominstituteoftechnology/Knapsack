@@ -1,0 +1,22 @@
+{
+  "name": "knapsack",
+  "version": "1.0.0",
+  "description": "![xkcd \"NP-Complete\"](https://imgs.xkcd.com/comics/np_complete.png \"General solutions get you a 50% tip.\")",
+  "main": "knapsack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davdaarn/Knapsack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davdaarn/Knapsack/issues"
+  },
+  "homepage": "https://github.com/davdaarn/Knapsack#readme",
+  "devDependencies": {
+    "n-readlines": "^0.2.8"
+  }
+}
