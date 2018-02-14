@@ -3,7 +3,7 @@
 import sys
 from collections import namedtuple
 
-Item = namedtuple("Item", ['index', 'size', 'value'])
+Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsackExhaustive(items, capacity):
     """
