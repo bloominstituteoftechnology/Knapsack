@@ -140,6 +140,6 @@ if __name__ == '__main__':
             # Item(index, size, value)
             items.append(Item(int(data[0]), int(data[1]), int(data[2])))
         file_contents.close()
-        print solve_it(items, capacity)
+        print(solve_it(items, capacity))
     else:
-        print 'Usage: solver.py (file) (capacity)'
+        print('Usage: solver.py (file) (capacity)')
