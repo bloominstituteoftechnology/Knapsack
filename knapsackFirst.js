@@ -22,19 +22,40 @@ rl.question('What is the maximum threshold for your backpack? ', (threshold) => 
         // Converting data to an array
         let temp = [];
 
-        for (let i = 0; i < data.length - 3; i += 3) {
+        for (let i = 0; i < data.length; i += 3) {
             temp.push([Number(data[i]), Number(data[i + 1]), Number(data[i + 2])]);
         }
 
         data = temp;
+        //console.log(data);
         
         // Knapsack calculations
-        let maxWeight;
-        let cost;
-        let value;
+        let tempSumArr = [];
+        let tempSum = 0;
+        for (let i = 0; i < data.length; i++) {
+            // console.log("--------------Beginning of for loop---------------");
+            tempSum = data[i][1];
+            for (let j = i + 1; j < data.length; j++) {
+                // console.log(`tempSum BEFORE: ${tempSum}.`);
+                // console.log(`data[${i}][1] adding to tempSum`);
+                tempSum += data[j][1];
+                // console.log(`tempSum AFTER:  ${tempSum}.`);
+                if (tempSum > 100) {
+                    tempSum -= data[j][1];
+                } else {
+                    tempSumArr.push([i, j, tempSum]);
+                }
+            }
+        }
 
-
-        // console.log(`threshold variable ${threshold}`);
+        // Knapsack finding the max weight sum
+        let maxWeight = 0;
+        for (let i = 0; i < tempSumArr.length; i++) {
+            if (maxWeight < tempSumArr[i][2]) {
+                maxWeight = tempSumArr[i][2];
+            }
+        }
+        console.log(maxWeight);
     });
 
     rl.close();

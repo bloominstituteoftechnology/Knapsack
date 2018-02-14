@@ -32,7 +32,16 @@ Total value: 117
 
 - Command line execution: `./knapsack input.txt --threshold=100`
 
+  - Current Command line execution: `node .\knapsackFirst.js .\data\small1.txt`
+
+  - What is the maximum threshold for your backpack? `users input`
+
 #### Brainstorm
 - Convert data from string to numbers
 - Get program to read data (.txt) provided and command line inputs. `node fs - readline`
 
+
+- __Solution Guideline__
+  - __Exhaustive__: consider all possible ways to fill the knapsack (consider a while loop, or possibly recursion). Check the total value for each, and return whichever one is highest.
+
+  - __Greedy__: come up with a heuristic (score) for some items being "better" than another. For example, an item with weight 20 and value 50 is probably better than an item with weight 50 and value 20. Then, pick the items that have the best score until the knapsack is full.
