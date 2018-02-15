@@ -32,15 +32,9 @@ def knapsackExhaustive(items, capacity):
         else:
             # Doesn't fit, just skip and recurse on rest
             return knapsackRec(items[1:], capacity, value, taken)
+
     # Initial call with nothing taken
-    value, taken = knapsackRec(items, capacity, 0, [0] * len(items))
-    # Output is a string of the value of the knapsack (line 1)
-    # Note - first row is all 0s because picking from 0 items
-    # Need to have it to refer back to for solution computation
-    # and a 0/1 array indicating whether items were taken (line 2)
-    output_data = str(value) + '\n'
-    output_data += ' '.join(map(str, taken))
-    return output_data
+    return knapsackRec(items, capacity, 0, [0] * len(items))
 
 def knapsackGreedy(items, capacity):
     """
@@ -50,7 +44,7 @@ def knapsackGreedy(items, capacity):
     weight = 0
     taken = [0] * len(items)
     # Relax the problem by considering items in increasing order of weight by value
-    norm_items = [Item(item[0], float(item[1]) / item[2], item[2])
+    norm_items = [Item(item.index, float(item.size) / item.value, item.value)
                   for item in items]
     sorted_items = sorted(norm_items, key=lambda item: item.size)
 
@@ -61,9 +55,7 @@ def knapsackGreedy(items, capacity):
             value += item.value
             weight += (item.size * item.value)
 
-    output_data = str(value) + '\n'
-    output_data += ' '.join(map(str, taken))
-    return output_data
+    return value, taken
 
 def knapsackDP(items, capacity):
     """
@@ -110,9 +102,7 @@ def knapsackDP(items, capacity):
         else:
             i -= 1
 
-    output_data = str(knapsack[-1][-1]) + '\n'
-    output_data += ' '.join(map(str, taken))
-    return output_data
+    return knapsack[-1][-1], taken
 
 def knapsackBB(items):
     """
@@ -123,11 +113,18 @@ def knapsackBB(items):
     """
     pass
 
-def solve_it(items, capacity):
-    answer = knapsackExhaustive(items, capacity)
-    # answer = knapsackGreedy(items, capacity)
-    # answer = knapsackDP(items, capacity)
-    return answer
+def solve(items, capacity):
+    value, taken = knapsackExhaustive(items, capacity)
+    # value, taken = knapsackGreedy(items, capacity)
+    # value, taken = knapsackDP(items, capacity)
+
+    # Output is a string of the value of the knapsack (line 1)
+    # Note - first row is all 0s because picking from 0 items
+    # Need to have it to refer back to for solution computation
+    # and a 0/1 array indicating whether items were taken (line 2)
+    output = str(value) + '\n'
+    output += ' '.join(map(str, taken))
+    return output
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -140,6 +137,6 @@ if __name__ == '__main__':
             # Item(index, size, value)
             items.append(Item(int(data[0]), int(data[1]), int(data[2])))
         file_contents.close()
-        print(solve_it(items, capacity))
+        print(solve(items, capacity))
     else:
         print('Usage: solver.py (file) (capacity)')
