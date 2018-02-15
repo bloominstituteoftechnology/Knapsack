@@ -44,25 +44,23 @@ const generatePossibilityTable = (items, tableIn, threshold) => {
       table[row][column] = calculateMaxValueFromTable(items, column, table, row, column);
      
     }
-    console.log(table[row].join(' '));
+    // console.log(table[row].join(' '));
   }
   return table;
 }
 const extractBestKnapsack = (items, table, threshold) => {
   let rowsLeft = items.length;
   let weightLeft = threshold;
-  let itemsIncluded = [];
-  while(rowsLeft > 0 && weightLeft > 0) {
-    // console.log(rowsLeft, weightLeft, table[rowsLeft][weightLeft] );
+  const itemsIncluded = [];
+  while(rowsLeft > 0 &&  weightLeft > 0) {
+    // console.log('weightLeft', weightLeft);
     if(table[rowsLeft][weightLeft] != table[rowsLeft-1][weightLeft]) {
-      itemsIncluded = [...itemsIncluded, rowsLeft]
-      weightLeft = weightLeft - items[rowsLeft].weight      
-      rowsLeft--;
-    } else {
-      rowsLeft--;
+      itemsIncluded.push(rowsLeft);
+      weightLeft -= items[rowsLeft-1].weight;
     }
+    rowsLeft--;
   }
-  return itemsIncluded;
+  return itemsIncluded.map(item =>  items[item-1] );
   // console.log(table[rowsLeft][weightLeft], table[0].length);
 }
 
@@ -76,17 +74,17 @@ const optimizeKnapsack = (items, threshold) => {
 
   const table = createtable(items.length, threshold);
   const possibilities = generatePossibilityTable(items, table, threshold);
-  let i = items.length;
-  let j = threshold;
-  const taken = [];
-  while(i > 0 &&  j > 0) {
-    if(possibilities[i][j] != possibilities[i-1][j]) {
-      taken.push(i);
-      j -= items[i].weight;
-    }
-    i--;
-  }
-  console.log(taken);
+  const bestItems = extractBestKnapsack(items, possibilities, threshold);
+  console.log(bestItems);
+  // console.log(items, bestItems.map(i => {
+  //   console.log(items[i]);
+  // }));
+  console.log(`
+    Items to select: ${bestItems.map(item => item.item).join(", ")}
+    Total Weight: ${ bestItems.reduce((weight, item) => weight + parseInt(item.weight), 0)}
+    Total Value: ${ bestItems.reduce((value, item) => value + parseInt(item.value), 0)}
+    
+  `)
 }
 
 async function run() {
@@ -94,7 +92,7 @@ async function run() {
     const { file, threshold } = ensureArgs(process.argv);
     const data = await readFileFromDisk(file);
     const formattedData = formatData(data);
-    console.log(formattedData.length);
+    // console.log(formattedData.length);
     const knapsack = optimizeKnapsack(formattedData, threshold);
   } catch (e) {
     console.error(e);
