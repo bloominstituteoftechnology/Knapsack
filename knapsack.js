@@ -15,21 +15,23 @@ const matrix = contents
   .map((line) => line? line.split(' ').map((val) => +val) : null);
 matrix.pop();
 
-///////////////
-matrix.sort((a, b) => a[2]/a[1] < b[2]/b[1]);
-const itemsToSelect = [];
-let capacity = total, totalValue = 0, totalCost = 0, i = 0;
+///////////////////////////
+/// GREEDY             ///
+///                   ///
+////////////////////////
+// matrix.sort((a, b) => a[1]/a[2] - b[1]/b[2]);
+// const itemsToSelect = [];
+// let capacity = total, totalValue = 0, weight = 0, i = 0;
 
-while (i < matrix.length) {
-  if (capacity - matrix[i][1] >= 0) {
-    totalValue += matrix[i][2];
-    totalCost += matrix[i][1];
-    itemsToSelect.push(matrix[i][0]);
-    capacity -= matrix[i][1];
-  }
-  i += 1;
-}
+// while (i < matrix.length) {
+//   if (weight + matrix[i][1] <= capacity) {
+//     totalValue += matrix[i][2];
+//     itemsToSelect.push(matrix[i][0]);
+//     weight += matrix[i][1];
+//   }
+//   i += 1;
+// }
 
-console.log('Items to select:', itemsToSelect.sort((a, b) => a - b));
-console.log('Total cost:', totalCost);
-console.log('Total value:', totalValue);
+// console.log('Items to select:', itemsToSelect.sort((a, b) => a - b));
+// console.log('Total cost:', weight);
+// console.log('Total value:', totalValue);
