@@ -1,12 +1,27 @@
 # index, weight, value
-with open("small1.txt", "r") as data:
-    lines = data.readlines()
-    database =  # what on earth do I put here? lol
-    for line in lines:
-        s = line.rstrip().split()
-        item = (int(s[0]), int(s[1]), int(s[2]))
-        database.append(item)  # what do I put here?
-    print("database", database)
+# with open("small1.txt", "r") as data:
+#     lines = data.readlines()
+#     database =  # what on earth do I put here? lol
+#     for line in lines:
+#         s = line.rstrip().split()
+#         item = (int(s[0]), int(s[1]), int(s[2]))
+#         database.append(item)  # what do I put here?
+#     print("database", database)
+
+# if I remove the comments for the database here, it works.  Importing the file gives me
+# AttributeError: 'tuple' object has no attribute 'append'.
+# So the task at hand, is editing my file import to output a match to this data:
+# # database = (
+#     (1, 42, 81), (2, 42, 42), (3, 68, 56), (4, 68, 25),
+#     (5, 77, 14), (6, 57, 63), (7, 17, 75), (8, 19, 41),
+#     (9, 94, 19), (10, 34, 12),
+# )
+# At the moment, it looks like this:
+# database = [
+#     (1, 42, 81), (2, 42, 42), (3, 68, 56), (4, 68, 25),
+#     (5, 77, 14), (6, 57, 63), (7, 17, 75), (8, 19, 41),
+#     (9, 94, 19), (10, 34, 12),
+# ]
 
 
 def total_value(database, max_weight):
@@ -31,12 +46,6 @@ def solve(database, max_weight):
         cache[(database, max_weight)] = answer
     return cache[(database, max_weight)]
 
-
-# database = (
-#     (1, 42, 81), (2, 42, 42), (3, 68, 56), (4, 68, 25),
-#     (5, 77, 14), (6, 57, 63), (7, 17, 75), (8, 19, 41),
-#     (9, 94, 19), (10, 34, 12),
-# )
 
 max_weight = 100
 
