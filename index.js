@@ -75,16 +75,7 @@ const optimizeKnapsack = (items, threshold) => {
   const table = createtable(items.length, threshold);
   const possibilities = generatePossibilityTable(items, table, threshold);
   const bestItems = extractBestKnapsack(items, possibilities, threshold);
-  console.log(bestItems);
-  // console.log(items, bestItems.map(i => {
-  //   console.log(items[i]);
-  // }));
-  console.log(`
-    Items to select: ${bestItems.map(item => item.item).join(", ")}
-    Total Weight: ${ bestItems.reduce((weight, item) => weight + parseInt(item.weight), 0)}
-    Total Value: ${ bestItems.reduce((value, item) => value + parseInt(item.value), 0)}
-    
-  `)
+  return bestItems;
 }
 
 async function run() {
@@ -94,6 +85,12 @@ async function run() {
     const formattedData = formatData(data);
     // console.log(formattedData.length);
     const knapsack = optimizeKnapsack(formattedData, threshold);
+    console.log(`
+    Items to select: ${knapsack.map(item => item.item).join(", ")}
+    Total Weight: ${ knapsack.reduce((weight, item) => weight + parseInt(item.weight), 0)}
+    Total Value: ${ knapsack.reduce((value, item) => value + parseInt(item.value), 0)}
+    
+  `)
   } catch (e) {
     console.error(e);
   }
