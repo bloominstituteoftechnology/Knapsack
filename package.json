@@ -1,0 +1,14 @@
+{
+  "name": "Knapsack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/invegat/Knapsack.git",
+  "author": "invegat <mark.c.oliver@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^5.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0"
+  }
+}
