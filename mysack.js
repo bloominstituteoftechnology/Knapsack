@@ -2,7 +2,9 @@
 var fs = require('fs');
 
 
-fs.readFile('./data/small1.txt', 'utf8', function(err, data) {  
+// fs.readFile('./data/large1.txt', 'utf8', function(err, data) {  
+fs.readFile(process.argv[2], 'utf8', function(err, data) {  
+    // './data/medium1.txt'
     if (err) throw err;
 
     let dataArray = data
@@ -32,9 +34,9 @@ function sortedArray(dataArray) {
  
 
 function fillSack(dataArray) {
-    console.log(dataArray.length);
+    // console.log(dataArray.length);
     let sackLevel = 0;
-    let sackSize = 100;
+    let sackSize = process.argv[3];
     let totVal  = 0;
     let items = [];
 
@@ -53,7 +55,7 @@ function fillSack(dataArray) {
 }
 // console.log(dataArray);
 sortedArray(dataArray);
-console.log(dataArray);
+// console.log(dataArray);
 fillSack(dataArray);
 //console.log(sackLevel);
 
