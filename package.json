@@ -1,0 +1,19 @@
+{
+  "name": "knapsack",
+  "version": "1.0.0",
+  "description": "![xkcd \"NP-Complete\"](https://imgs.xkcd.com/comics/np_complete.png \"General solutions get you a 50% tip.\")",
+  "main": "index.js",
+  "scripts": {
+    "test": "./knapsack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sulemc/Knapsack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sulemc/Knapsack/issues"
+  },
+  "homepage": "https://github.com/sulemc/Knapsack#readme"
+}
