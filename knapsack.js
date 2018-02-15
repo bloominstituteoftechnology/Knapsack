@@ -4,10 +4,10 @@ const util = require('util');
 const fs = require('fs');
 
 const rl = readline.createInterface({
-  input: fs.createReadStream('./data/medium1.txt'),
+  input: fs.createReadStream('./data/large1.txt'),
 });
 
-const liner = new lineByLine('./data/medium1.txt');
+const liner = new lineByLine('./data/large1.txt');
 
 const quickSort = (items) => {
   if (items.length <= 1) {
@@ -17,11 +17,8 @@ const quickSort = (items) => {
   let right = [];
   let newArray = [];
   const pivot = items.pop();
-  // console.log(pivot);
-  // const pivotLocation = Math.floor(items.length / 2);
-  // const pivot = items[pivotLocation].ratio;
   const length = items.length;
-  // console.log(length);
+
   for (let i = 0; i < length; i++) {
     if (items[i].ratio <= pivot.ratio) {
       left.push(items[i]);
@@ -29,9 +26,6 @@ const quickSort = (items) => {
       right.push(items[i]);
     }
   }
-  // console.log(left.length);
-  // console.log(right.length);
-  // return;
   return newArray.concat(quickSort(left), pivot, quickSort(right));
 }
 
