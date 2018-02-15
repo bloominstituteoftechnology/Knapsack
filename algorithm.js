@@ -1,18 +1,6 @@
-const fs = require('fs');
+const fs = require('fs')
 
-function largestDifference(arr) {
-  let largest = 0;
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = i + 1; j < arr.length; j++) {
-      if ((arr[j]-arr[i]) > largest) {
-        largest = arr[j]-arr[i];
-      }
-    }
-  }
-  return largest;
-}
-
-fs.readFile('./data/small1.txt', (err, data) => {
+fs.readFile('data/small1.txt', (err, data) => {
   if (err) {
     console.error('Could not find file')
     process.exit(1)
@@ -28,9 +16,23 @@ fs.readFile('./data/small1.txt', (err, data) => {
       res[i] = { item: line[0], size: Number(line[1]), val: Number(line[2]) }
       return res;
     }, [])
-    console.log(dataArray[2].size);
-  })
-// console.log(res);
-// console.log(split.length);
-// console.log(typeof(text));
-// text.forEach(item => console.log(item));
+
+    console.log(dataArray);
+    let weight = 0;
+    let value = 0;
+        for (i = 0; i < dataArray.length; i++) {
+            for (j = i+1; j < dataArray.length; j++) {
+                for (k = j+1; k < dataArray.length; k++) {
+                weight = dataArray[i].size+dataArray[j].size+dataArray[k].size;
+                if (weight <= 100) {
+                    if ((dataArray[i].val+dataArray[j].val+dataArray[k].val) > value) {
+                        value = dataArray[i].val+dataArray[j].val+dataArray[k].val;
+                        console.log(`Items to select: ${dataArray[i].item}, ${dataArray[j].item}, ${dataArray[k].item}`);
+                        console.log(`Total cost: ${weight}`);
+                        console.log(`Total value: ${value}`);
+                    };
+                }
+            }
+        }
+    }
+})
