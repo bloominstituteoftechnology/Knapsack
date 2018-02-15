@@ -23,7 +23,7 @@ const formatData = data => data.split('\n').reduce((arr, line) => {
      }
   ] : arr 
 }, []);
-const createTabel = (rows, cols) => (new Array(rows)).fill(0).map(row => (new Array(cols).fill(0)));
+const createtable = (rows, cols) => (new Array(rows)).fill(0).map(row => (new Array(cols).fill(0)));
 
 const optimizeKnapsack = (data, threshold) => {
   const defaultKnapsack = {
@@ -32,7 +32,7 @@ const optimizeKnapsack = (data, threshold) => {
     value: 0
   }
   if (threshold <= 0) return defaultKnapsack;
-  const tabel = createTabel(data.length, threshold+1);
+  const table = createtable(data.length, threshold+1);
 }
 
 async function run() {
