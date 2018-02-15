@@ -23,16 +23,70 @@ const formatData = data => data.split('\n').reduce((arr, line) => {
      }
   ] : arr 
 }, []);
-const createtable = (rows, cols) => (new Array(rows)).fill(0).map(row => (new Array(cols).fill(0)));
+const createtable = (rows, cols) => (new Array(rows+1)).fill(0).map(row => (new Array(cols+1).fill(0)));
+function calculateMaxValueFromTable(items, maxWeight, table, row, column) {
+  if(row === 0 || column === 0) {
+    return 0;
+  }
+  const currentItem = items[row-1];
+  const currentWeight = parseInt(currentItem.weight);
+  const currentValue = parseInt(currentItem.value);
+  const canSelectCurrentItem = currentWeight <= column;
+  const prvValue = table[row - 1][column];
+  // console.log('current item', currentItem, 'row', row)
+  return canSelectCurrentItem ? Math.max(currentValue + table[row - 1][column - currentWeight], prvValue) : prvValue;
+}
+const generatePossibilityTable = (items, tableIn, threshold) => {
+  const table = [...tableIn];
+  for(let row = 0; row < table.length; row++) {
+    let test = 0;
+    for(let column = 0; column < threshold+1; column++) {
+      table[row][column] = calculateMaxValueFromTable(items, column, table, row, column);
+     
+    }
+    console.log(table[row].join(' '));
+  }
+  return table;
+}
+const extractBestKnapsack = (items, table, threshold) => {
+  let rowsLeft = items.length;
+  let weightLeft = threshold;
+  let itemsIncluded = [];
+  while(rowsLeft > 0 && weightLeft > 0) {
+    // console.log(rowsLeft, weightLeft, table[rowsLeft][weightLeft] );
+    if(table[rowsLeft][weightLeft] != table[rowsLeft-1][weightLeft]) {
+      itemsIncluded = [...itemsIncluded, rowsLeft]
+      weightLeft = weightLeft - items[rowsLeft].weight      
+      rowsLeft--;
+    } else {
+      rowsLeft--;
+    }
+  }
+  return itemsIncluded;
+  // console.log(table[rowsLeft][weightLeft], table[0].length);
+}
 
-const optimizeKnapsack = (data, threshold) => {
+const optimizeKnapsack = (items, threshold) => {
   const defaultKnapsack = {
     items: [],
     cost: 0,
     value: 0
   }
   if (threshold <= 0) return defaultKnapsack;
-  const table = createtable(data.length, threshold+1);
+
+  const table = createtable(items.length, threshold);
+  const possibilities = generatePossibilityTable(items, table, threshold);
+  let i = items.length;
+  let j = threshold;
+  const taken = [];
+  while(i > 0 &&  j > 0) {
+    if(possibilities[i][j] != possibilities[i-1][j]) {
+      taken.push(i);
+      j -= items[i].weight;
+    }
+    i--;
+  }
+  console.log(taken);
 }
 
 async function run() {
@@ -40,6 +94,7 @@ async function run() {
     const { file, threshold } = ensureArgs(process.argv);
     const data = await readFileFromDisk(file);
     const formattedData = formatData(data);
+    console.log(formattedData.length);
     const knapsack = optimizeKnapsack(formattedData, threshold);
   } catch (e) {
     console.error(e);
