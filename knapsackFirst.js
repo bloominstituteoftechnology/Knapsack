@@ -56,7 +56,7 @@ rl.question('What is the maximum threshold for your backpack? ', (threshold) => 
                 }
             }
         }
-        // console.log(sumArr.length);
+        console.log(sumArr);
         console.log(indices);
 
         // Knapsack finding the max value sum
