@@ -20,9 +20,37 @@ fs.readFile(filename, 'utf8', (err, data) => {
 
     content = formatData(data);
 
-    console.log(knapsackGreedy(content, threshold));
+    console.log(knapsackExhaustive(content, threshold, 0, []));
+    // console.log(knapsackGreedy(content, threshold));
     
 });
+
+const knapsackExhaustive = (items, capacity, value, taken) => {
+    if ((items.length === 1 && capacity - items[0][1] < 0) || items.length === 0) {
+      return [value, taken];
+    } else if (items.length === 1) {
+      value += items[0][2];
+      capacity -= items[0][1];
+      taken.push(items[0][0]);
+      return [value, taken];
+    } else {
+      if ( capacity >= items[0][1]) {
+        const takenCopy = taken.slice();
+        takenCopy.push(items[0][0]);
+        const valWith = knapsackExhaustive(
+          items.slice(1),
+          capacity - items[0][1],
+          value + items[0][2],
+          takenCopy
+        );
+        const valWithout = knapsackExhaustive(items.slice(1), capacity, value, taken);
+        const picked = valWith[0] > valWithout[0] ? valWith : valWithout;
+        return picked;
+      } else {
+        return knapsackExhaustive(items.slice(1), capacity, value, taken);
+      }
+    }
+  };
 
 function knapsackGreedy(items, capacity) {
     let value = 0;
