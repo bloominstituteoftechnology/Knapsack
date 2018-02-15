@@ -20,11 +20,37 @@ fs.readFile(filename, 'utf8', (err, data) => {
 
     content = formatData(data);
 
-    console.log(content);
+    console.log(knapsackGreedy(content, threshold));
     
 });
 
-
+function knapsackGreedy(items, capacity) {
+    let value = 0;
+    let weight = 0;
+    let taken = [];
+    
+    let normItems = [];
+    
+    for (let i = 0; i < items.length; i++){
+      normItems[i] = [items[i][0], items[i][1]/items[i][2], items[i][2]];
+    }
+    
+    let sorted = normItems.sort((a, b) => {
+  
+      return a[1] - b[1];
+    });
+    
+    for (let i = 0; i < sorted.length; i++) {
+      if (weight + (sorted[i][1] * sorted[i][2]) <= capacity) {
+        taken.push(sorted[i][0]);
+        value += sorted[i][2];
+        weight+= (sorted[i][1] * sorted[i][2]);
+      }
+      i++;
+    }
+    
+    console.log(`value: ${value}\nweight: ${weight}\ntaken: ${taken}`);
+  }
 
 const formatData = (data) => {
     content = data.toString().trim().split("\n");
