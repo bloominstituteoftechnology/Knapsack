@@ -33,37 +33,25 @@ fs.readFile(file, (err, data) => {
       return m;
     }, []);
   
-  console.log(dataArray);
   dataArray.sort((a, b) => (b.value / b.cost) - (a.value / a.cost));
-  console.log(dataArray);
+/**
+  * KnapSac Problem
+  */
   let totalCost = 0;
-  let pack = [];
+  let totalValue = 0;
+  const pack = [];
   for (let i = 0; i < dataArray.length; i++) {
-    const {index, cost} = dataArray[i];
-    console.log(dataArray.length, i, threshold, cost)
+    const {index, cost, value} = dataArray[i];
+    // console.log(dataArray.length, i, threshold, cost)
     if (totalCost + Number(cost) < threshold) {
       totalCost += Number(cost);
-      pack.push(dataArray[i]);
+      totalValue += Number(value);
+      pack.push(index);
     }
   }
-  console.log(pack);
+  console.log(`
+    Items to select: ${pack.sort((a, b) => a - b).join(', ')}
+    Total cost: ${totalCost}
+    Total value: ${totalValue}`
+  );
 });
-
-/**
- * KnapSac Problem
- */
-/*
-The maximum weight W
-The number of items n
-for w = 0 to W do 
-   c[0, w] = 0 
-for i = 1 to n do 
-   c[i, 0] = 0 
-   for w = 1 to W do 
-      if wi ≤ w then 
-         if vi + c[i-1, w-wi] then 
-            c[i, w] = vi + c[i-1, w-wi] 
-         else c[i, w] = c[i-1, w] 
-      else 
-         c[i, w] = c[i-1, w]
-*/
