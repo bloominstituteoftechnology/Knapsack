@@ -1,8 +1,9 @@
 # index, weight, value
-max_weight = 100
+file = str(input("file (must be in current directory): "))
+max_weight = int(input("Threshold: "))
 cache = {}
 
-with open("small1.txt", "r") as data:
+with open(file, "r") as data:
     lines = data.readlines()
     database_list = []
     for line in lines:
@@ -10,7 +11,7 @@ with open("small1.txt", "r") as data:
         item = (int(s[0]), int(s[1]), int(s[2]))
         database_list.append(item)
     database = tuple(database_list)
-    print("database", database)
+    #print("database", database)
 
 
 def total_value(database, max_weight):
