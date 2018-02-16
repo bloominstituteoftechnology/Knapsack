@@ -1,6 +1,6 @@
-const fs = require('fs')
+const fs = require('fs');
 
-fs.readFile('data/small3.txt', (err, data) => {
+fs.readFile(`./data/${process.argv[2]}`, (err, data) => {
   if (err) {
     console.error('Could not find file')
     process.exit(1)
@@ -18,14 +18,14 @@ fs.readFile('data/small3.txt', (err, data) => {
     }, [])
 
   //console.log(dataArray);
-  const max = 1000;
+  const max = process.argv[3];
   let count = 0;
   let array = [];
   let weight = 0;
   let value = 0;
   let cost = 0;
   let final = [[], [], []];
-  while (weight < max && count < 100) {
+  while (weight < max && count < 1000) {
     count++;
     for (h = 0; h < dataArray.length; h++) {
       for (i = h + 1; i < dataArray.length; i++) {
@@ -61,4 +61,4 @@ fs.readFile('data/small3.txt', (err, data) => {
   console.log("Total cost: ", final[1]);
   console.log("Total value: ", final[2]);
   return;
-})
+});
