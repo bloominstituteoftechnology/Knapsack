@@ -6,7 +6,6 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-
 def knapsackExhaustive(items, capacity):
     """
     Exhaustive solution - correct, but doesn't scale.
@@ -37,8 +36,6 @@ def knapsackExhaustive(items, capacity):
     # Initial call of inner method with nothing taken
     value, taken = knapsackRec(items, capacity, 0, [0] * len(items))
     # Output is a string of the value of the knapsack (line 1)
-    # Note - first row is all 0s because picking from 0 items
-    # Need to have it to refer back to for solution computation
     # and a 0/1 array indicating whether items were taken (line 2)
     output_data = str(value) + '\n'
     output_data += ' '.join(map(str, taken))
@@ -75,10 +72,59 @@ item1 value=2 size=1
 item2 value=99 size=100
 """
 
+def knapsackDP(items, capacity):
+    """
+    Semi-scalable (depends on knapsack size/available memory) correct solution
+    """
+    # Initialize the knapsack matrix: rows are items (including a "no item" row)
+    # Columns are integral capacities: 0, 1, 2, ..., capacity - 1, capacity
+    knapsack = [[0] * (capacity + 1) for _ in range(len(items) + 1)]
+    # [[0, 0, 0...], [0, 0, 0... ], ...]
+
+    taken = [0] * len(items)
+    # DP loops for filling in knapsack matrix
+    # if the item does not fit in a "sub-knapsack", don't include it
+    # else include it only if its value makes the knapsack more valuable
+    # These loops fill the matrix but do not solve the problem
+    # Note - first row is all 0s because picking from 0 items
+    # Need to have it to refer back to for solution computation
+    for i in range(1, len(knapsack)):
+        for j in range(len(knapsack[i])):
+            new_taken = taken[:]
+            if items[i-1].size > j:
+                # Item doesn't fit, skip
+                knapsack[i][j] = knapsack[i-1][j]
+            else:
+                # Item fits, take max of skipping it or adding it
+                # Adding -> base new knapsack on current - size + value of item
+                knapsack[i][j] = max(
+                    knapsack[i-1][j],
+                    knapsack[i-1][j - items[i-1].size] + items[i-1].value)
+
+    # With this loop we can traverse the matrix and figure out what items
+    # to take in our knapsack, that is, if the value increased from item i-1
+    # to item i then we know we took item it and should go to the previous
+    # item in the smaller knapsack
+    # (the column discounting the size of the taken item)
+    i = len(knapsack) - 1
+    j = len(knapsack[-1]) - 1
+    while i > 0 and j > 0:
+        if knapsack[i][j] != knapsack[i-1][j]:
+            taken[i-1] = 1
+            i -= 1
+            j -= items[i].size
+        else:
+            i -= 1
+
+    value = knapsack[-1][-1]
+    output_data = str(value) + '\n'
+    output_data += ' '.join(map(str, taken))
+    return output_data
+
 def solve_it(items, capacity):
     # answer = knapsackExhaustive(items, capacity)
-    answer = knapsackGreedy(items, capacity)
-    # answer = knapsackDP(items, capacity)
+    # answer = knapsackGreedy(items, capacity)
+    answer = knapsackDP(items, capacity)
     return answer
 
 if __name__ == '__main__':
@@ -95,3 +141,4 @@ if __name__ == '__main__':
         print(solve_it(items, capacity))
     else:
         print('Usage: solver.py (file) (capacity)')
+        

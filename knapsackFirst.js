@@ -6,6 +6,10 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+function knapsackExhaustive() {
+
+};
+
 rl.question('What is the maximum threshold for your backpack? ', (threshold) => {
     const args = process.argv.slice(2);
 
@@ -27,50 +31,6 @@ rl.question('What is the maximum threshold for your backpack? ', (threshold) => 
         }
 
         data = temp;
-        // console.log(data);
-        
-        // Knapsack calculations
-        let sumArr = [];
-        let sumIndex = [];
-
-        let indexCounter = 0;
-
-        let indices = [];
-        let sumWeight = 0;
-        let sumValue = 0
-
-        for (let i = 0; i < data.length; i++) {
-            // console.log("--------------Beginning of for loop---------------");
-            sumWeight = data[i][1];
-            sumValue = data[i][2];
-            indices.push([data[i][0]]);
-            for (let j = i + 1; j < data.length; j++) {
-                sumWeight += data[j][1];
-                // console.log(`tempSum AFTER:  ${tempSum}.`);
-                if (sumWeight > 100) {
-                    sumWeight -= data[j][1];
-                } else {
-                    sumValue += data[j][2];
-                    sumArr.push([sumWeight, sumValue]);
-                    indices[i].push(data[j][0]);
-                }
-            }
-        }
-        console.log(sumArr);
-        console.log(indices);
-
-        // Knapsack finding the max value sum
-        let maxValue = 0;
-        let maxIndex = 0;
-
-        for (let i = 0; i < sumArr.length; i++) {
-            if (maxValue < sumArr[i][1]) {
-                maxValue = sumArr[i][1];
-                maxIndex = i;
-            }
-        }
-        // console.log(sumArr[maxIndex][1]);
-        // console.log(indices[maxIndex]);
     });
 
     rl.close();
