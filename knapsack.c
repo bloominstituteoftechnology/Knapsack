@@ -4,9 +4,10 @@
 int main(void) {
 
     FILE* file;
-    file = fopen("./data/small3.txt", "r"); // 'r' is for reading
+    file = fopen("./data/small2.txt", "r"); // 'r' is for reading
     int index, weight, value;
-    int arrIndex[11], arrWeight[11], arrValue[11];
+    int num = 11;
+    int arrIndex[num], arrWeight[num], arrValue[num];
     int i = 1;
     while (!feof(file)) {
         fscanf(file, "%d %d %d", &index, &weight, &value);
@@ -15,7 +16,7 @@ int main(void) {
         arrValue[i] = value;
         i++;
     }
-    for (int i = 1; i < sizeof(arrWeight)/sizeof(arrWeight[0]); i++) {
+    for (int i = 1; i < num; i++) {
         printf("%d ", arrIndex[i]); 
         printf("%d ", arrWeight[i]);  
         printf("%d\n", arrValue[i]);
@@ -24,19 +25,21 @@ int main(void) {
     int currentVal;
     int highestVal;
     int weightMax;
-    int n = sizeof(arrValue)/sizeof(arrValue[0]);
     char* concatinatedInt = "";
     char* storeIndex;
     char str[100];
     char* indexUsed;
     char* storeMaxIndex;
-    for (int b = 1; b < n; b++) {
+    for (int b = 1; b < num; b++) {
         // bug where indexUsed is somehow being changed outside the inner if statement
-        printf("%s\n", indexUsed);
-        for (int j = 1; j < n; j++) {
-            if (j == b) {
-                continue;
-            }
+        currentVal = arrValue[i];
+        //printf("%s\n", indexUsed);
+        int j = b + 1;
+         if (j == num) {
+                j = 1;
+        }
+        while (j != b) {
+            printf("%d\n", j);
             if ((myWeight + arrWeight[j] >= 100) && currentVal > highestVal) {
                 // bug where indexUsed should only be changed in this inner if statement
                 // but seem to changing outside of it. 
@@ -56,6 +59,10 @@ int main(void) {
             sprintf(str, "%s %d", concatinatedInt, arrIndex[j]);
             int result=strtol(str, NULL, 10);
             concatinatedInt = str;
+            j++;
+            if (j == num) {
+                j = 1;
+            }
         }
     }
     printf("%s, %d, %d\n", indexUsed, weightMax, highestVal);
