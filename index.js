@@ -33,18 +33,14 @@ function calculateMaxValueFromTable(items, maxWeight, table, row, column) {
   const currentValue = parseInt(currentItem.value);
   const canSelectCurrentItem = currentWeight <= column;
   const prvValue = table[row - 1][column];
-  // console.log('current item', currentItem, 'row', row)
   return canSelectCurrentItem ? Math.max(currentValue + table[row - 1][column - currentWeight], prvValue) : prvValue;
 }
 const generatePossibilityTable = (items, tableIn, threshold) => {
   const table = [...tableIn];
   for(let row = 0; row < table.length; row++) {
-    let test = 0;
     for(let column = 0; column < threshold+1; column++) {
       table[row][column] = calculateMaxValueFromTable(items, column, table, row, column);
-     
     }
-    // console.log(table[row].join(' '));
   }
   return table;
 }
@@ -53,7 +49,6 @@ const extractBestKnapsack = (items, table, threshold) => {
   let weightLeft = threshold;
   const itemsIncluded = [];
   while(rowsLeft > 0 &&  weightLeft > 0) {
-    // console.log('weightLeft', weightLeft);
     if(table[rowsLeft][weightLeft] != table[rowsLeft-1][weightLeft]) {
       itemsIncluded.push(rowsLeft);
       weightLeft -= items[rowsLeft-1].weight;
@@ -61,7 +56,6 @@ const extractBestKnapsack = (items, table, threshold) => {
     rowsLeft--;
   }
   return itemsIncluded.map(item =>  items[item-1] );
-  // console.log(table[rowsLeft][weightLeft], table[0].length);
 }
 
 const optimizeKnapsack = (items, threshold) => {
