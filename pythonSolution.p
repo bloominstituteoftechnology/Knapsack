@@ -41,6 +41,9 @@ def knapsackExhaustive(items, capacity):
     output_data += ' '.join(map(str, taken))
     return output_data
 
+
+
+
 def knapsackGreedy(items, capacity):
     """
     Scalable/efficient but incorrect solution.
@@ -120,6 +123,9 @@ def knapsackDP(items, capacity):
     output_data = str(value) + '\n'
     output_data += ' '.join(map(str, taken))
     return output_data
+
+
+    
 
 def solve_it(items, capacity):
     # answer = knapsackExhaustive(items, capacity)
