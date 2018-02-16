@@ -81,5 +81,5 @@ int main(void) {
         }
     }
     printf("\n The total weight is %d.", weightTotal);
-    printf("\n The max value is %d,\n", tp);
+    printf("\n The max value is %d.\n", tp);
 }

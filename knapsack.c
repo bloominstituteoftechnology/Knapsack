@@ -4,7 +4,7 @@
 int main(void) {
 
     FILE* file;
-    file = fopen("./data/small2.txt", "r"); // 'r' is for reading
+    file = fopen("./data/small3.txt", "r"); // 'r' is for reading
     int index, weight, value;
     int num = 11;
     int arrIndex[num], arrWeight[num], arrValue[num];
@@ -17,9 +17,7 @@ int main(void) {
         i++;
     }
     for (int i = 1; i < num; i++) {
-        printf("%d ", arrIndex[i]); 
-        printf("%d ", arrWeight[i]);  
-        printf("%d\n", arrValue[i]);
+        printf("%d %d %d", arrIndex[i], arrWeight[i], arrWeight[i]); 
     }
     int myWeight;
     int currentVal;
@@ -65,7 +63,9 @@ int main(void) {
             }
         }
     }
-    printf("%s, %d, %d\n", indexUsed, weightMax, highestVal);
+    printf("\nThe indices that make up the max value include: %s.", indexUsed);
+    printf("\n The total weight is %d.", weightMax);
+    printf("\n The max value is %d.\n", highestVal);
     fclose(file);
     return 0;
 }
