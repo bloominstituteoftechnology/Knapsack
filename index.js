@@ -1,6 +1,11 @@
 const commandLineArgs = require('command-line-args');
 const fs = require('fs');
 const mongoose = require('mongoose');
+const readline = require('readline');
+
+
+
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -74,91 +79,95 @@ function logRow(row, rowNumber) {
     }
 }
 async function main() {
-    fs.readFile(options.src, 'utf8', (err, data) => {
-        const matches = data.match(/^(?:(\d+)\s+){3}/mg);
-        // console.log(`length ${matches.length}\n0: ${matches[0]}1: ${matches[1]}`);
-
-        const matchO = [];
-        let l = 0;
-        const byWV = [];
-        matches.forEach(arrs => {
-            const arr = arrs.split(' ');
-            // matchO.push({ id: Number(arr[0]), weight: Number(arr[1]), value: Number(arr[2]) });
-            matchO.push(new Knap({ _id: Number(arr[0]), weight: Number(arr[1]), value: Number(arr[2]) }));
-
-            // if (l<10)
-            //     console.log(`matchO[l].weight: ${matchO[l].weight} ${matchO[l].value}     arr[1]: ${arr[1]} is Array: ${Array.isArray(arr)}   `);
-            // l++;
-        });
-        Knap.remove((err, removed) => {
-            Knap.collection.insert(matchO, (err, knaps) => {
-                if (err) {
-                    console.log(`error: ${err}`);
-                    process.exit(1);
-                }
-                // checkDups(matchO);
-                // matchO.sort((a, b) => {
-                //     return (a.weight * 1000000 - a.value * 10000 + a._id)  - (b.weight * 1000000 - a.value * 10000 + a._id);
-                // });
-                // checkDups(matchO);
-                //console.log(`knaps ids[0] type ${typeof knaps.insertedIds[0]}  isArray: ${Array.isArray(knaps.insertedIds)} `);
-                const table = new Array(matchO.length);// [matchO.length] [options.threshold];
-                let loop = 0
-                matchO.forEach((o, i) => {
-                    loop++;
-                    if (i < 0)
-                        console.log(`i: ${i} o.id ${o.id}  o.weight:${o.weight}  o.value: ${o.value}`);
-                    if (i === 0) {
-                        table[i] = new Array(W);
-                        for (let j = 0; j < o.weight; j++)
-                            table[i][j] = { objects: [], value: 0 };
-                        for (let j = o.weight; j < W; j++) {
-                            table[i][j] = { objects: [o], value: o.value };
-                            // if (j === o.weight)
-                            //     console.log(`o weight: ${o.weight}  o.id: ${o.id}  o.value: ${o.value} i: ${i}, j: ${j} ol: ${table[i][j].objects.length}`);
-                        }
-
-                    } else {
-                        table[i] = new Array(W);
-                        for (let j = 0; j < o.weight; j++)
-                            table[i][j] = table[i - 1][j];
-                        for (let j = o.weight; j < W; j++) {
-                            const remaining = j - o.weight;
-                            if (o.id == 671 && j < 0) {
-                                console.log(`before o.weight: ${o.weight}  o._id: ${o._id} value: ${o.value}  i: ${i}, j: ${j}, remaining: ${remaining} table[i-1][remaining]: ${table[i - 1][remaining].objects.length}`)
-                                logObject(table[i-1][remaining].objects);
-                                console.log(`remaining objects ${table[i - 1][remaining].objects}  ${table[i - 1][j].value} ${table[i - 1][j].objects} `);
-                            }
-                            table[i][j] = (table[i - 1][remaining].value + o.value > table[i - 1][j].value) ?
-                                { objects: [].concat(table[i - 1][remaining].objects, [o]), value: table[i -1][remaining].value + o.value } :
-                                table[i - 1][j];
-                            if (o.id == 671 && j < 0) {
-                                console.log(`after table[i][j].objects: ${table[i][j].objects}`);
-                                // logObject(table[i][remaining].objects);
-                            }
-                        }
-
-                    }
-                    if (i == -1) {
-                        // console.log(`o.id ${o.id}  o.weight:${o.weight}  o.value: ${o.value}`);
-                        logRow(table[i], i);
-                    }
-                });
-                let totalWeight = 0, totalValue = 0, totalW1 = 0;
-                const r = table[matchO.length - 1][W - 1];
-
-                for (let i = 0; i < r.objects.length; i++) {
-                    totalWeight += r.objects[i].weight;
-                    totalValue += r.objects[i].value;
-                    if (r.objects[i].weight === 1) totalW1++;
-                }
-                // // console.log(table[matchO.length - 1][1]);
-                // // console.log(table[matchO.length - 1][2]);
-                // console.log(`loop : ${loop} result: ${r.objects.length}   totalWeight: ${totalWeight}   totalValue: ${totalValue}  total Weight==1: ${totalW1} `)
-                console.log(`total value: ${totalValue}`)
-            });
-        });
+    const rl = readline.createInterface({
+        input: fs.createReadStream(options.src),
+        terminal: false
     });
+    const atATime = 1000;
+    let loop = 0;
+    let matchO = [];
+    let iOffset = 0;
+    const table = new Array(atATime + 1);// [matchO.length] [options.threshold];
+    tableLastIndex = -1;
+    rl.on('line', function (data) {
+
+        const matches = data.match(/^(\d+)\s+(\d+)\s+(\d+)/);
+        // console.log(`data: |${data}| matches: ${matches} matches.length: ${matches.length}  `);
+        if (matches === null) {
+            console.log(`null match, data: ${data}`);
+            return;
+        }
+        matchO.push(new Knap({ _id: Number(matches[1]), weight: Number(matches[2]), value: Number(matches[3]) }))
+
+        // do {
+        if ((loop % atATime) === 0) {
+            if (matchO.length > 0) {
+                if (tableLastIndex >= 0) {
+                    const last = table.slice(tableLastIndex,tableLastIndex + 1);
+                    table[0] = last[0];
+                    iOffset = 1;
+                    tableLastIndex = 0;
+                }
+                runMatchO();
+                matchO = [];
+            }
+            if ((loop % 100000) === 0) console.log(`loop: ${loop}`);
+        }
+        loop++;
+
+    });
+    function runMatchO() {
+        matchO.forEach((o, I) => {
+            let i = I + iOffset;
+            if (iOffset === 0) {
+                table[i] = new Array(W);
+                for (let j = 0; j < o.weight; j++)
+                    table[i][j] = { objects: [], value: 0 };
+                for (let j = o.weight; j < W; j++) {
+                    table[i][j] = { objects: [o], value: o.value };
+                }
+            } else {
+                table[i] = (table[i] === undefined ? new Array(W) : table[i]);
+                for (let j = 0; j < o.weight; j++)
+                    table[i][j] = table[i - 1][j];
+                for (let j = o.weight; j < W; j++) {
+                    const remaining = j - o.weight;
+                    table[i][j] = (table[i - 1][remaining].value + o.value > table[i - 1][j].value) ?
+                        { objects: [].concat(table[i - 1][remaining].objects, [o]), value: table[i - 1][remaining].value + o.value } :
+                        table[i - 1][j];
+                }
+            }
+            tableLastIndex = i;
+        });
+    }
+
+    rl.on("close", () => {
+        // console.log(`tableLastIndex: ${tableLastIndex}  matchO.length: ${matchO.length} `)
+        if (matchO.length > 0) {
+            if (tableLastIndex >= 0) {
+                const last = table.slice(tableLastIndex,tableLastIndex + 1);
+                table[0] = last[0];
+                iOffset = 1;
+                tableLastIndex = 0;
+            }
+            runMatchO();
+        }
+        let totalWeight = 0, totalValue = 0, totalW1 = 0;
+        const r = table[tableLastIndex][W - 1];
+
+        for (let i = 0; i < r.objects.length; i++) {
+            totalWeight += r.objects[i].weight;
+            totalValue += r.objects[i].value;
+            if (r.objects[i].weight === 1) totalW1++;
+        }
+        // // console.log(table[matchO.length - 1][1]);
+        // // console.log(table[matchO.length - 1][2]);
+        // console.log(`loop : ${loop} result: ${r.objects.length}   totalWeight: ${totalWeight}   totalValue: ${totalValue}  total Weight==1: ${totalW1} `)
+        console.log(`${options.src} ${options.threshold} total value: ${totalValue}`);
+        process.exit(0);
+    });
+    //         });
+    //     });
 }
 main();
 

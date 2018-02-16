@@ -1,0 +1,3 @@
+./data/huge1mil.txt 100 total value: 504813
+./data/huge1mil.txt 1000 total value: 589946
+
