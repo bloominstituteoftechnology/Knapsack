@@ -1,37 +1,10 @@
 const commandLineArgs = require('command-line-args');
 const fs = require('fs');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const readline = require('readline');
-
-
-
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:21078/knapsack');
-
-const KnapSchema = new mongoose.Schema({
-    _id: { type: Number, required: true },
-    weight: { type: Number, required: true },
-    value: { type: Number, required: true }
-});
-const Knap = mongoose.model('Knap', KnapSchema);
-function createKnap(o) {
-    const { id, weight, value } = o;
-    const newKnap = new Knap(_id = id, weight, value);
-    newKnap.save().then(
-
-    );
-    return;
-}
-function findMaxByWeight(weight, callback) {
-    Knap.findOne(weight)
-        .sort("-value")
-        .exec((err, m) => {
-            callback(m);
-        })
 }
 
 const optionDefinitions = [
@@ -83,12 +56,9 @@ async function main() {
         input: fs.createReadStream(options.src),
         terminal: false
     });
-    const atATime = 1000;
     let loop = 0;
     let matchO = [];
-    let iOffset = 0;
-    const table = new Array(atATime + 1);// [matchO.length] [options.threshold];
-    tableLastIndex = -1;
+    const table = new Array(2);
     rl.on('line', function (data) {
 
         const matches = data.match(/^(\d+)\s+(\d+)\s+(\d+)/);
@@ -97,77 +67,47 @@ async function main() {
             console.log(`null match, data: ${data}`);
             return;
         }
-        matchO.push(new Knap({ _id: Number(matches[1]), weight: Number(matches[2]), value: Number(matches[3]) }))
-
-        // do {
-        if ((loop % atATime) === 0) {
-            if (matchO.length > 0) {
-                if (tableLastIndex >= 0) {
-                    const last = table.slice(tableLastIndex,tableLastIndex + 1);
-                    table[0] = last[0];
-                    iOffset = 1;
-                    tableLastIndex = 0;
-                }
-                runMatchO();
-                matchO = [];
+        runRing({ _id: Number(matches[1]), weight: Number(matches[2]), value: Number(matches[3]) });
+    });
+    above = (i) => {
+        return i === 0 ? 1 : i - 1;;
+    }
+    function runRing(o) {
+        if (loop === 0) {
+            table[0] = new Array(W);
+            for (let j = 0; j < o.weight; j++)
+                table[0][j] = { objects: [], value: 0 };
+            for (let j = o.weight; j < W; j++) {
+                table[0][j] = { objects: [o], value: o.value };
             }
-            if ((loop % 100000) === 0) console.log(`loop: ${loop}`);
+
+        } else {
+            const i = loop % 2;
+            table[i] = (table[i] === undefined ? new Array(W) : table[i]);
+            for (let j = 0; j < o.weight; j++)
+                table[i][j] = table[above(i)][j];
+            for (let j = o.weight; j < W; j++) {
+                const remaining = j - o.weight;
+                table[i][j] = (table[above(i)][remaining].value + o.value > table[above(i)][j].value) ?
+                    { objects: [].concat(table[above(i)][remaining].objects, [o]), value: table[above(i)][remaining].value + o.value } :
+                    table[above(i)][j];
+            }
         }
         loop++;
-
-    });
-    function runMatchO() {
-        matchO.forEach((o, I) => {
-            let i = I + iOffset;
-            if (iOffset === 0) {
-                table[i] = new Array(W);
-                for (let j = 0; j < o.weight; j++)
-                    table[i][j] = { objects: [], value: 0 };
-                for (let j = o.weight; j < W; j++) {
-                    table[i][j] = { objects: [o], value: o.value };
-                }
-            } else {
-                table[i] = (table[i] === undefined ? new Array(W) : table[i]);
-                for (let j = 0; j < o.weight; j++)
-                    table[i][j] = table[i - 1][j];
-                for (let j = o.weight; j < W; j++) {
-                    const remaining = j - o.weight;
-                    table[i][j] = (table[i - 1][remaining].value + o.value > table[i - 1][j].value) ?
-                        { objects: [].concat(table[i - 1][remaining].objects, [o]), value: table[i - 1][remaining].value + o.value } :
-                        table[i - 1][j];
-                }
-            }
-            tableLastIndex = i;
-        });
     }
 
     rl.on("close", () => {
-        // console.log(`tableLastIndex: ${tableLastIndex}  matchO.length: ${matchO.length} `)
-        if (matchO.length > 0) {
-            if (tableLastIndex >= 0) {
-                const last = table.slice(tableLastIndex,tableLastIndex + 1);
-                table[0] = last[0];
-                iOffset = 1;
-                tableLastIndex = 0;
-            }
-            runMatchO();
-        }
         let totalWeight = 0, totalValue = 0, totalW1 = 0;
-        const r = table[tableLastIndex][W - 1];
+        const r = table[above(loop % 3)][W - 1];
 
         for (let i = 0; i < r.objects.length; i++) {
             totalWeight += r.objects[i].weight;
             totalValue += r.objects[i].value;
             if (r.objects[i].weight === 1) totalW1++;
         }
-        // // console.log(table[matchO.length - 1][1]);
-        // // console.log(table[matchO.length - 1][2]);
-        // console.log(`loop : ${loop} result: ${r.objects.length}   totalWeight: ${totalWeight}   totalValue: ${totalValue}  total Weight==1: ${totalW1} `)
         console.log(`${options.src} ${options.threshold} total value: ${totalValue}`);
         process.exit(0);
     });
-    //         });
-    //     });
 }
 main();
 
