@@ -98,7 +98,7 @@ async function main() {
 
     rl.on("close", () => {
         let totalWeight = 0, totalValue = 0, totalW1 = 0;
-        const r = table[above(loop % 3)][W - 1];
+        const r = table[above(loop % 2)][W - 1];
 
         for (let i = 0; i < r.objects.length; i++) {
             totalWeight += r.objects[i].weight;
