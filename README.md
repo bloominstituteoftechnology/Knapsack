@@ -27,6 +27,10 @@ Audience: students and algorithms enthusiasts
 
 ## Getting started
 
+This exercise can be completed in just about any language.  Each solution will be different, depending on the specifics of the language chosen.  
+
+Before starting, check with your instructor about the language you are using.
+
 The specific goal of this exercise is to write a program that takes input files
 that look like this:
 
