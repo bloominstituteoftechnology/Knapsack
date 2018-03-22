@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
       int found = fscanf(fp, "%d", &numberRead);
       if (found == 1)
-        printf("found is %d\n", found);
+
       {
         switch (j)
         {
@@ -67,8 +67,9 @@ int main(int argc, char *argv[])
   // Adds up by highest value so that corresponding weight is less than or equal to 100
 
   int totalWeight = 0;
-  int itemsSelected[];
+  int itemsSelected[10] = {0};
   int numItems = 0;
+  printf("Highest value less than or equal to weight 100, added by highest values first, then 2nd, etc..\n");
   for (int i = 0; i < 10; i++)
   {
     totalWeight += weights[i];
@@ -76,6 +77,11 @@ int main(int argc, char *argv[])
     if (totalWeight <= maxWeight)
     {
       itemsSelected[numItems] = i;
+      printf("item %d\n", i);
+    }
+    else
+    {
+      totalWeight -= weights[i];
     }
   }
 };
