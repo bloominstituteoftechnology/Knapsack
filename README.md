@@ -58,7 +58,9 @@ The goal is to select a subset of the items to maximize the payoff such that the
 cost is below some threshold. That is, the output should be a set of items
 (identified by number) that solves the Knapsack problem. It's also worth
 outputting the total cost and value of these items. This can all just be printed
-and may look something like this (this is *not* a solution, just an example):
+and may look something like below.
+
+This is *not* a solution, just an example:
 
 ```
 Items to select: 2, 8, 10
