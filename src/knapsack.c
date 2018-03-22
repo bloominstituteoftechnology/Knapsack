@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     totalWeight = 0;
     int itemsSelectedByWeight[10] = {0};
     numItems = 0;
-    printf("Highest value less than or equal to weight 100, added by lowest weight first, then second, then thir, etc...\n");
+    printf("Highest value less than or equal to weight 100, added by lowest weight first, then second, then third, etc...\n");
     for (int i = 0; i < 10; i++)
     {
         totalWeight += weights[i];
