@@ -1,0 +1,4 @@
+*1*: Simple solutions - take by lightest or shiniest.
+*2*: Sort by best value.
+*3*: Naive recursive.
+*4*: Really fancy solutions like memoization or better.
