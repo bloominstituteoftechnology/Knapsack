@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
   }
 
   fclose(fp);
+
+  // Sorts objects in descending order by value
   int temp;
   for (int i = 0; i < 10; i++)
   {
@@ -61,8 +63,19 @@ int main(int argc, char *argv[])
       }
     }
   }
+
+  // Adds up by highest value so that corresponding weight is less than or equal to 100
+
+  int totalWeight = 0;
+  int itemsSelected[];
+  int numItems = 0;
   for (int i = 0; i < 10; i++)
   {
-    printf("values in order are %d: with weights %d\n: ", values[i], weights[i]);
+    totalWeight += weights[i];
+
+    if (totalWeight <= maxWeight)
+    {
+      itemsSelected[numItems] = i;
+    }
   }
 };
