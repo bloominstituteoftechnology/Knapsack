@@ -42,5 +42,27 @@ int main(int argc, char *argv[])
       }
     }
   }
+
   fclose(fp);
+  int temp;
+  for (int i = 0; i < 10; i++)
+  {
+    for (int j = i + 1; j < 10; j++)
+    {
+      if (values[i] < values[j])
+      {
+        temp = weights[j];
+        weights[j] = weights[i];
+        weights[i] = temp;
+
+        temp = values[j];
+        values[j] = values[i];
+        values[i] = temp;
+      }
+    }
+  }
+  for (int i = 0; i < 10; i++)
+  {
+    printf("values in order are %d: with weights %d\n: ", values[i], weights[i]);
+  }
 };
