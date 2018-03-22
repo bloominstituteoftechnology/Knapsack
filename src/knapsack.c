@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX_SIZE 100;
+#define MAX_SIZE 100
 
 int main (int argc, char *argv[])
 {
@@ -38,13 +38,13 @@ int main (int argc, char *argv[])
                     case 2:
                         values[i] = numberRead;
                         break;
-            }
-            }
+                }
+            }   
         }
             printf("trying to get a number : %d\n", weights[3]);
             printf("we counted %d objects\n", numObjects);
         
-        fclose(fp);
+
     }
-};
-        
+    fclose(fp);
+}       
