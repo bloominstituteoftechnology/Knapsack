@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <argp.h>
 
 #define MAXITEMS 2000
 
@@ -110,27 +109,28 @@ int main(int argc, char *argv[])
     int maxWeight = 100; // TODO GET FROM CONSOLE ARGS
     if (argv[2] != NULL) // If max weight is passed in
     {
-        int extractedWeight = 0;
-        char *argv2 = argv[2];
+        // int extractedWeight = 0;
+        // char *argv2 = argv[2];
 
-        printf("argv2 is %s\n", argv[2]);
+        // printf("argv2 is %s\n", argv[2]);
 
-        char forward[10] = {"\0"};
-        int count = 0;
-        int whilecount = 0;
-        while (argv[whilecount] != "\0")
-        {
-            if (argv[whilecount] != "=")
-            {
-                count++;
-            }
-            if (count > 0)
-            {
-                forward[count] = argv[whilecount];
-            }
-            whilecount++;
-        }
-        printf("Extracted argv[2] is %s\n", forward);
+        // char forward[10] = {"\0"};
+        // int count = 0;
+        // int whilecount = 0;
+        // while (argv[whilecount] != "\0")
+        // {
+        //     if (argv[whilecount] != "=")
+        //     {
+        //         count++;
+        //     }
+        //     if (count > 0)
+        //     {
+        //         forward[count] = argv[whilecount];
+        //     }
+        //     whilecount++;
+        // }
+        // printf("Extracted argv[2] is %s\n", forward);
+        maxWeight = atoi(argv[2]);
     }
     struct Item items[MAXITEMS] = {{0}}; // Initialize our array of structs with 0.
     int returns[5] = {0};                // Closure Array
