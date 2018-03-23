@@ -7,8 +7,8 @@
 struct item
 {
     int id;
-    int weight;
-    int value;
+    float weight;
+    float value;
     float quality;
     int selected;
 };
@@ -63,101 +63,101 @@ int loadfile(char *fpath, struct item items[])
 
 int qualitysort(const void *a, const void *b)
 {
+
     struct item *ia = (struct item *)a;
     struct item *ib = (struct item *)b;
-    return (int)(ia->quality - ib->quality);
-}
 
-//Utility function to evaluate our best posible scenarion for the knapsack problem
-int knapsack(int maxWt, int n, struct item items[], int solution[])
-{
-    memset(solution, 0, (maxitems * sizeof(int)));
-    // If we have no items, or our weight is 0 then stop trying to fill.
-    if (n == 0 || maxWt == 0)
+    if (ia->quality > ib->quality)
     {
-        return 0;
+        return 1;
     }
-    // If Weight of item Exceeds our Allowed Total Weight
-    // Recursivelly call the next item down the list.
-    if (items[n - 1].weight > maxWt)
-    {
-        return knapsack(maxWt, n - 1, items, solution);
-    }
-    // Zero Out array: memset(solution, 0, (maxitems * sizeof(int)));
-    // Otherwise lets compute our best possible scenario
     else
     {
-        int option1 = items[n - 1].value + knapsack(maxWt - items[n - 1].weight, n - 1, items, solution);
-        int option2 = knapsack(maxWt, n - 1, items, solution);
-        int maxNum;
-
-        if (option1 > option2)
-
-        {
-            solution[n - 1] = n - 1;
-            maxNum = option1;
-        }
-        else
-        {
-            solution[n - 1] = 0;
-            maxNum = option2;
-        }
-
-        return maxNum;
+        return -1;
     }
 }
 
-int ksmine(int maxWt, int n, struct item items[])
+//Utility function to evaluate our best possible scenario for the knapsack problem
+int ksmine(int maxWt, int n, struct item items[], int returns[])
 {
     int remainingWt = maxWt;
+    int total = 0;
+    int count = 0;
     for (int i = n; i > 0; i--) // Transverse our array of structs in reverse
     {
         int itemWt = items[i].weight;
         if (itemWt < remainingWt)
         {
             remainingWt = remainingWt - itemWt;
+            total += items[i].value;
             items[i].selected = 1;
+            count = count + 1;
         }
     }
+    returns[0] = maxWt - remainingWt; // Returns 0 is cost
+    returns[1] = total;               // Returns 1 is my total
+    returns[2] = count;               // How many items in bag
+
+    return total;
 }
 
 int main(int argc, char *argv[])
 {
     // TODO GET THE MAX ITEMS FIGURED OUT!
-    int maxWeight = 100; // TODO GET FROM CONSOLE ARGS
-
+    int maxWeight = 100;                 // TODO GET FROM CONSOLE ARGS
     struct item items[maxitems] = {{0}}; // Initialize our array of structs with 0.
-    int solution[maxitems] = {0};        // Initialize our array
+    int returns[5] = {0};                // Closure Array
 
-    int itemCount = loadfile("./data/mine.txt", items); // load the file and parse it into our array of structs
-    qsort(items, itemCount, sizeof(struct item), qualitysort);
-    int bestcase = knapsack(maxWeight, itemCount, items, solution);
+    int itemCount = loadfile("./data/small1.txt", items);          // (1) load the file and parse it into our array of structs
+    qsort(items, itemCount + 1, sizeof(struct item), qualitysort); // (2) Sort our ingested array of structs
+    ksmine(maxWeight, itemCount, items, returns);                  // (3) Transverse our array backwards and load until full.
 
     // -------------------------------------------------------------------------------------
     // DEBUGGING PROMPTS BEGIN
-    printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
+    // printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
     // PLACE DEBUGGING PROMPTS AFTER THIS LINE!
 
-    printf("Our File contains %d items: \n", itemCount);
+    // printf("Our File contains %d items: \n", itemCount);
+    // for (int i = 0; i < maxitems; i++) // print our array of structs
+    // {
+    //     if (items[i].id > 0)
+    //     {
+    //         printf("item id %d\tweight %f\tvalue %f\tquality %f\tselected? %d\n",
+    //                items[i].id,
+    //                items[i].weight,
+    //                items[i].value,
+    //                items[i].quality,
+    //                items[i].selected);
+    //     }
+    // }
+
+    printf("Items to select: ");
+    int myCounts = returns[2];
+    int innerCount = 0;
     for (int i = 0; i < maxitems; i++) // print our array of structs
     {
-        if (items[i].id > 0)
+
+        if (items[i].selected > 0)
         {
-            printf("item id %d\tweight %d\tvalue %d\tquality %f\tselected? %d\n", items[i].id, items[i].weight, items[i].value, items[i].quality, items[i].selected);
+
+            printf("%d", items[i].id);
+
+            if (innerCount < myCounts - 1)
+            {
+                innerCount++;
+                printf(", ");
+            }
+            else
+            {
+                printf("\n");
+            }
         }
     }
-
-    printf("\n\nOur Best Case is %d:\n", bestcase);
-    for (int i = 0; i < itemCount; i++) // print our array of structs
-    {
-        //if (solution[i] > 0)
-        //{
-        printf("item id %d\n", solution[i]);
-        //}
-    }
+    printf("Total cost: %d\n", returns[0]);
+    printf("Total value: %d\n", returns[1]);
 
     // NO DEBUGGING PROMPTS AFTER THIS LINE!
-    printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
+    // printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
     // DEBUGGING PROMPTS END
     // -------------------------------------------------------------------------------------
 }
