@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 
     // -------------------------------------------------------------------------------------
     // DEBUGGING PROMPTS BEGIN
-    // printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
-    // PLACE DEBUGGING PROMPTS AFTER THIS LINE!
+    //     printf("\n ### --- DEBUGGING STUFF BEGINS HERE --- ### \n\n");
+    // PLACE DEBUGGING PROMPTS AFTER THIS LINE !
 
     // printf("Our File contains %d items: \n", itemCount);
     // for (int i = 0; i < maxitems; i++) // print our array of structs

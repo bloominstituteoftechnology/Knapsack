@@ -1,126 +1,167 @@
 #include <stdio.h>
-void loadfile()
+#include <stdlib.h>
+#include <string.h>
+#include <argp.h>
+
+#define MAXITEMS 2000
+
+struct Item
 {
-    // TODO: Move Loading file logic here.
-    printf("loadfile not implemented yet");
-}
+    int id;
+    float weight;
+    float value;
+    float quality;
+    int selected;
+};
 
-// A utility function that returns maximum of two integers
-//int max(int a, int b) { return (a > b) ? a : b; }
-
-// Returns the maximum value that can be put in a knapsack of capacity W
-int knapSack(int W, int wt[], int val[], int n, int solution[])
+// Utility function to load and parse the contents of a file.
+int loadfile(char *fpath, struct Item items[])
 {
-    // Base Case
-    if (n == 0 || W == 0)
-        return 0;
+    // DECLARE VARIABLES HERE
+    FILE *fp;           // To hold the contents of the file we are going to open.
+    int numberRead = 0; // To hold each number we parse from the file.
+    int itemCount = 0;  // The function will return this integer.
 
-    // If weight of the nth item is more than Knapsack capacity W, then
-    // this item cannot be included in the optimal solution
-    if (wt[n - 1] > W)
-        return knapSack(W, wt, val, n - 1, solution);
+    fp = fopen(fpath, "r");
 
-    // Return the maximum of two cases:
-    // (1) nth item included
-    // (2) not included
-    else
+    int i = 0;
+    int found = 1;
+
+    // If we keep finding numbers, parse them!
+    // Hopefully nobody will get smart and make a very large file...
+    while (found > 0)
     {
-        int number1 = val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1, solution);
-        int number2 = knapSack(W, wt, val, n - 1, solution);
-
-        int maxNum;
-
-        if (number1 > number2)
-        {
-            solution[n] = 1;
-            maxNum = number1;
-        }
-        else
-        {
-            solution[n] = 0;
-            maxNum = number2;
-        }
-
-        return maxNum;
-    }
-}
-
-int knapSack2(int W, int wt[], int val[], int n)
-{
-    int i, w;
-    int K[n + 1][W + 1];
-
-    // Build table K[][] in bottom up manner
-    for (i = 0; i <= n; i++)
-    {
-        for (w = 0; w <= W; w++)
-        {
-            if (i == 0 || w == 0)
-                K[i][w] = 0;
-            else if (wt[i - 1] <= w)
-                K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
-            else
-                K[i][w] = K[i - 1][w];
-        }
-    }
-
-    return K[n][W];
-}
-
-int main(int argc, char *argv[])
-{
-    // Parse Commandline arguments to get file and size
-    // char *file = argv[0];
-    // char *size = argv[1];
-    FILE *fp;
-    int buff[100] = {0};
-    int weights[100] = {0};
-    int values[100] = {0};
-    int numbObjects = 0;
-    int maxWeight = 100;
-
-    int solution[100] = {0};
-
-    int numberRead = 0;
-
-    fp = fopen("./data/small1.txt", "r");
-
-    for (int i = 0; i < 100; i++)
-    {
-
+        i++;
         for (int j = 0; j < 3; j++)
         {
-            int found = fscanf(fp, "%d", &numberRead);
+            found = fscanf(fp, "%d", &numberRead);
             if (found > 0)
             {
+                itemCount++;
                 switch (j)
                 {
                 case 0:
-                    numbObjects++;
+                    // Save number read as the index of the item
+                    items[i].id = numberRead;
                     break;
                 case 1:
-                    weights[i] = numberRead;
+                    // Save number read as the weight of the item
+                    items[i].weight = numberRead;
                     break;
                 case 2:
-                    values[i] = numberRead;
+                    // Save number read as the value of the item
+                    items[i].value = numberRead;
+                    items[i].quality = items[i].value / items[i].weight;
                     break;
                 }
             }
         }
     }
+
     fclose(fp);
+    return itemCount / 3;
+}
 
-    printf("Total num of items in file is: %d\n", numbObjects);
+int qualitysort(const void *a, const void *b)
+{
 
-    printf("The best value combination is: %d\n", knapSack(maxWeight, weights, values, numbObjects, solution));
+    struct Item *ia = (struct Item *)a;
+    struct Item *ib = (struct Item *)b;
 
-    for (int i = 0; i < 100; i++)
+    if (ia->quality > ib->quality)
     {
-        if (solution[i] == 1)
+        return 1;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+//Utility function to evaluate our best possible scenario for the knapsack problem
+int ksmine(int maxWt, int n, struct Item items[], int returns[])
+{
+    int remainingWt = maxWt;
+    int total = 0;
+    int count = 0;
+    for (int i = n; i > 0; i--) // Transverse our array of structs in reverse
+    {
+        int itemWt = items[i].weight;
+        if (itemWt < remainingWt) // if our item fits in the bag
         {
-            printf("Taking item number: %d\n", i);
+            remainingWt = remainingWt - itemWt;
+            total += items[i].value;
+            items[i].selected = 1;
+            count = count + 1;
         }
     }
+    returns[0] = maxWt - remainingWt; // Returns 0 is cost
+    returns[1] = total;               // Returns 1 is my total
+    returns[2] = count;               // How many items in bag
 
+    return total;
+}
+
+int main(int argc, char *argv[])
+{
+    //
+    // Load first argument into filename if it exists
+    char *filename = argv[1] == NULL ? "./data/large1.txt" : argv[1];
+    int maxWeight = 100; // TODO GET FROM CONSOLE ARGS
+    if (argv[2] != NULL) // If max weight is passed in
+    {
+        int extractedWeight = 0;
+        char *argv2 = argv[2];
+
+        printf("argv2 is %s\n", argv[2]);
+
+        char forward[10] = {"\0"};
+        int count = 0;
+        int whilecount = 0;
+        while (argv[whilecount] != "\0")
+        {
+            if (argv[whilecount] != "=")
+            {
+                count++;
+            }
+            if (count > 0)
+            {
+                forward[count] = argv[whilecount];
+            }
+            whilecount++;
+        }
+        printf("Extracted argv[2] is %s\n", forward);
+    }
+    struct Item items[MAXITEMS] = {{0}}; // Initialize our array of structs with 0.
+    int returns[5] = {0};                // Closure Array
+
+    int itemCount = loadfile(filename, items);                     // (1) load the file and parse it into our array of structs
+    qsort(items, itemCount + 1, sizeof(struct Item), qualitysort); // (2) Sort our ingested array of structs
+    ksmine(maxWeight, itemCount, items, returns);                  // (3) Transverse our array backwards and load until full.
+
+    printf("Items to select: ");
+    int myCounts = returns[2];
+    int innerCount = 0;
+    for (int i = 0; i < MAXITEMS; i++) // print our array of structs
+    {
+
+        if (items[i].selected > 0)
+        {
+
+            printf("%d", items[i].id);
+
+            if (innerCount < myCounts - 1)
+            {
+                innerCount++;
+                printf(", ");
+            }
+            else
+            {
+                printf("\n");
+            }
+        }
+    }
+    printf("Total cost: %d\n", returns[0]);
+    printf("Total value: %d\n", returns[1]);
     return 0;
 }
