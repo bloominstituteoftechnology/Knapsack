@@ -4,6 +4,8 @@
 #include <fcntl.h>
 #include <string.h>
 
+#define DEBUG 1 // Set to 1 to turn on some debugging output, or 0 to turn off
+
 int open_treasure_chest(char *filename)
 {
   return open(filename, O_RDONLY);
@@ -103,6 +105,7 @@ int get_method()
          "2: Smallest weights first:\n"
          "3: Weighted average\n"
          "4: Brute force\n"
+         "0: All\n"
          "-1: Exit\n"
          "Method chosen: ");
 
@@ -115,7 +118,7 @@ int get_method()
  * Quick sort
  */
 
-int partition(item arr[], int lo, int hi)
+int partition_values_asc(item arr[], int lo, int hi)
 {
   int pivot = hi;
   int i = lo;
@@ -137,31 +140,80 @@ int partition(item arr[], int lo, int hi)
   return i;
 }
 
-item algorithm(item arr[], int lo, int hi)
+int partition_weight_desc(item arr[], int lo, int hi)
 {
-  int pivot = partition(arr, lo, hi);
+  int pivot = hi;
+  int i = lo;
+
+  for (int j = lo; j < hi; j++)
+  {
+    if (arr[j].weight <= arr[pivot].weight)
+    {
+      item tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+      i++;
+    }
+  }
+
+  item temp = arr[i];
+  arr[i] = arr[hi];
+  arr[hi] = temp;
+  return i;
+}
+
+int partition_avg_weight_asc(item arr[], int lo, int hi)
+{
+  int pivot = hi;
+  int i = lo;
+
+  for (int j = lo; j < hi; j++)
+  {
+    if ((double)arr[j].value / arr[j].weight >= (double)arr[pivot].value / arr[pivot].weight)
+    {
+      item tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+      i++;
+    }
+  }
+
+  item temp = arr[i];
+  arr[i] = arr[hi];
+  arr[hi] = temp;
+  return i;
+}
+
+void algorithm(item arr[], int lo, int hi, int option)
+{
+  int pivot = -1;
+
+  if (option == 1)
+    pivot = partition_values_asc(arr, lo, hi);
+  if (option == 2)
+    pivot = partition_weight_desc(arr, lo, hi);
+  if (option == 3)
+    pivot = partition_avg_weight_asc(arr, lo, hi);
 
   if (lo < pivot - 1)
   {
-    algorithm(arr, lo, pivot - 1);
+    algorithm(arr, lo, pivot - 1, option);
   }
   if (hi > pivot)
   {
-    algorithm(arr, pivot, hi);
+    algorithm(arr, pivot, hi, option);
   }
-
-  return *arr;
 }
 
-void quick_sort(item arr[], int low, int high)
+void quick_sort(item arr[], int low, int high, int option)
 {
-  algorithm(arr, low, high);
+  algorithm(arr, low, high, option);
 }
 
 /**
- * Most valuable first method
+ * Print results
  */
-void most_valuable_first(item *treasure_chest, int treasure_chest_size, int threshold)
+void print_results(item *treasure_chest, int treasure_chest_size, int threshold)
 {
   item knapsack[treasure_chest_size];
   int knapsack_ids[treasure_chest_size];
@@ -169,24 +221,35 @@ void most_valuable_first(item *treasure_chest, int treasure_chest_size, int thre
   int knapsack_value = 0;
   int knapsack_i = 0;
 
-  quick_sort(treasure_chest, 0, treasure_chest_size - 1);
-
   for (int i = 0; i < treasure_chest_size; i++)
   {
+
+#if DEBUG
+
     /* debug for checking sorted knapsack */
-    // printf("\niteme_no: %d\nweight: %d\nvalue: %d\n", treasure_chest[i].id, treasure_chest[i].weight, treasure_chest[i].value);
+
+    printf("\nitem_no: %d\nweight: %d\nvalue: %d\n", treasure_chest[i].id, treasure_chest[i].weight, treasure_chest[i].value);
+
+#endif
 
     if (treasure_chest[i].weight + knapsack_weight <= threshold)
     {
       knapsack[knapsack_i] = treasure_chest[i];
-      knapsack_ids[i] = treasure_chest[i].id;
+      knapsack_ids[knapsack_i] = treasure_chest[i].id;
       knapsack_weight += treasure_chest[i].weight;
       knapsack_value += treasure_chest[i].value;
-      i++;
+      knapsack_i++;
     }
   }
 
-  printf("Items to select: ");
+  printf("\nItems to select: ");
+  for (int i = 0; i < knapsack_i; i++)
+  {
+    printf("%d ", knapsack_ids[i]);
+  }
+
+  printf("\nTotal cost: %d", knapsack_weight);
+  printf("\nTotal value: %d\n", knapsack_value);
 }
 
 /**
@@ -229,27 +292,41 @@ int main(int argc, char **argv)
   close_treasure_chest(fd);
 
   /* get method chosen by user */
-  switch (get_method())
+  // quick_sort(treasure_chest, 0, treasure_chest_size - 1, get_method());
+
+  /* execute all methods */
+  for (int i = 1; i < 4; i++)
   {
-  case 1:
-    most_valuable_first(treasure_chest, treasure_chest_size, threshold);
-    break;
-  case 2:
-    printf("method 2");
-    break;
-  case 3:
-    printf("method 3");
-    break;
-  case 4:
-    printf("method 4");
-    break;
-  case -1:
-    exit(0);
-    break;
-  default:
-    printf("Invalid option. Enter 1 - 4 only");
-    exit(1);
+    quick_sort(treasure_chest, 0, treasure_chest_size - 1, i);
+    print_results(treasure_chest, treasure_chest_size, threshold);
   }
+
+  // switch (get_method())
+  // {
+  // case 1:
+  //   quick_sort(treasure_chest, 0, treasure_chest_size - 1, 1);
+  //   break;
+  // case 2:
+  //   printf("method 2");
+  //   break;
+  // case 3:
+  //   printf("method 3");
+  //   break;
+  // case 4:
+  //   printf("method 4");
+  //   break;
+  // case 0:
+  //   printf("all");
+  //   break;
+  // case -1:
+  //   exit(0);
+  //   break;
+  // default:
+  //   printf("Invalid option. Enter 1 - 4 only");
+  //   exit(1);
+  // }
+
+  // print_results(treasure_chest, treasure_chest_size, threshold);
 
   return 0;
 }
