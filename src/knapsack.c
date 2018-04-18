@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <string.h>
 
-#define DEBUG 1 // Set to 1 to turn on some debugging output, or 0 to turn off
+#define DEBUG 0 // Set to 1 to turn on some debugging output, or 0 to turn off
 
 int open_treasure_chest(char *filename)
 {
@@ -210,6 +210,12 @@ void quick_sort(item arr[], int low, int high, int option)
   algorithm(arr, low, high, option);
 }
 
+/* Brute force */
+void brute_force(item treasure_chest[], int treasure_chest_size, int threshold)
+{
+  // TODO
+}
+
 /**
  * Print results
  */
@@ -300,6 +306,8 @@ int main(int argc, char **argv)
     quick_sort(treasure_chest, 0, treasure_chest_size - 1, i);
     print_results(treasure_chest, treasure_chest_size, threshold);
   }
+
+  brute_force(treasure_chest, treasure_chest_size, threshold);
 
   // switch (get_method())
   // {
