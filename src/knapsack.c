@@ -161,16 +161,32 @@ void quick_sort(item arr[], int low, int high)
 /**
  * Most valuable first method
  */
-void most_valuable_first(item *treasure_chest, int treasure_chest_size)
+void most_valuable_first(item *treasure_chest, int treasure_chest_size, int threshold)
 {
-  // int knapsack[treasure_chest_size];
+  item knapsack[treasure_chest_size];
+  int knapsack_ids[treasure_chest_size];
+  int knapsack_weight = 0;
+  int knapsack_value = 0;
+  int knapsack_i = 0;
 
   quick_sort(treasure_chest, 0, treasure_chest_size - 1);
 
   for (int i = 0; i < treasure_chest_size; i++)
   {
-    printf("\niteme_no: %d\nweight: %d\nvalue: %d\n", treasure_chest[i].id, treasure_chest[i].weight, treasure_chest[i].value);
+    /* debug for checking sorted knapsack */
+    // printf("\niteme_no: %d\nweight: %d\nvalue: %d\n", treasure_chest[i].id, treasure_chest[i].weight, treasure_chest[i].value);
+
+    if (treasure_chest[i].weight + knapsack_weight <= threshold)
+    {
+      knapsack[knapsack_i] = treasure_chest[i];
+      knapsack_ids[i] = treasure_chest[i].id;
+      knapsack_weight += treasure_chest[i].weight;
+      knapsack_value += treasure_chest[i].value;
+      i++;
+    }
   }
+
+  printf("Items to select: ");
 }
 
 /**
@@ -216,7 +232,7 @@ int main(int argc, char **argv)
   switch (get_method())
   {
   case 1:
-    most_valuable_first(treasure_chest, treasure_chest_size);
+    most_valuable_first(treasure_chest, treasure_chest_size, threshold);
     break;
   case 2:
     printf("method 2");
