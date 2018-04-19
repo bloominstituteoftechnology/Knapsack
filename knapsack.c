@@ -96,6 +96,14 @@ int main(int argc, char* argv[])
     value += result[max][2];
     max--;
   }
+  if (cost > threshold) {
+    max++;
+    cost -= result[max][1];
+    value -= result[max][2];
+    items[strlen(items)-1] = '\0';
+    items[strlen(items)-1] = '\0';
+    items[strlen(items)-1] = '\0';
+  }
   items[strlen(items)-1] = '\0';
   printf("%s\n", items);
   printf("Total cost: %d\n", cost);
@@ -119,6 +127,14 @@ int main(int argc, char* argv[])
       cost2 += result[max2][1];
       value2 += result[max2][2];
       max2++;
+  }
+  if (cost2 > threshold) {
+    max2--;
+    cost2 -= result[max2][1];
+    value2 -= result[max2][2];
+    items2[strlen(items2)-1] = '\0';
+    items2[strlen(items2)-1] = '\0';
+    items2[strlen(items2)-1] = '\0';
   }
 
   items2[strlen(items2)-1] = '\0';
