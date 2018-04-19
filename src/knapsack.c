@@ -210,10 +210,163 @@ void quick_sort(item arr[], int low, int high, int option)
   algorithm(arr, low, high, option);
 }
 
-/* Brute force */
+/**
+ * Brute force method
+ */
+int calculate_knapsack_value(item chest[], int knapsack[], int chest_size)
+{
+  int total_value = 0;
+
+  for (int i = 0; i < chest_size; i++)
+  {
+    if (knapsack[i] == 0)
+      total_value += chest[i].value;
+  }
+
+  return total_value;
+}
+
+int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
+{
+  // printf("n is: %d with weight: %d\n", n, W);
+
+  if (n == 0 || W == 0)
+  {
+    // printf("base case\n");
+    return 0;
+  }
+
+  if (chest[n - 1].weight > W)
+  {
+    // printf("item %d (weight: %d) too large\n", n, chest[n - 1].weight);
+    return knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
+  }
+
+  else
+  {
+    int num1, num2, largest_num;
+    knapsack[n - 1] = 0;
+
+    num1 = chest[n - 1].value + knapSack_gfg(W - chest[n - 1].weight, chest, knapsack, n - 1, chest_size);
+
+    /* put this knapsack into a temp array */
+    int tmp[chest_size];
+
+    for (int i = 0; i < chest_size; i++)
+    {
+      tmp[i] = knapsack[i];
+      /* reset knapsack for next condition */
+      knapsack[i] = 1;
+    }
+
+    num2 = knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
+
+    if (num1 > num2)
+    {
+      largest_num = num1;
+      /* if tmp is the larger knapsack */
+      for (int i = 0; i < chest_size; i++)
+      {
+        knapsack[i] = tmp[i];
+      }
+    }
+    else
+      largest_num = num2;
+
+    return largest_num;
+
+    // knapsack[n - 1] = 0;
+    // knapSack_gfg(W - chest[n - 1].weight, chest, knapsack, n - 1, chest_size);
+
+    // int with_value = calculate_knapsack_value(chest, knapsack, chest_size);
+    // printf("with_value: %d\n", with_value);
+
+    // /* put this knapsack into a temp array */
+    // int tmp[chest_size];
+
+    // for (int i = 0; i < chest_size; i++)
+    // {
+    //   tmp[i] = knapsack[i];
+    //   /* reset knapsack for next condition */
+    //   knapsack[i] = 1;
+    // }
+
+    // knapSack_gfg(W, chest, knapsack, chest_size - 1, chest_size);
+    // int without_value = calculate_knapsack_value(chest, knapsack, chest_size);
+    // printf("Without_value: %d", without_value);
+    // return 1234567890;
+
+    // int largest_value;
+
+    // if (with_value > without_value)
+    // {
+    //   /* if tmp is the larger knapsack */
+    //   for (int i = 0; i < chest_size; i++)
+    //   {
+    //     knapsack[i] = tmp[i];
+    //   }
+
+    //   largest_value = with_value;
+    // }
+    // else
+    // {
+    //   largest_value = without_value;
+    // }
+
+    // return largest_value;
+  }
+} /* adapted from https://www.geeksforgeeks.org/knapsack-problem/ */
+
 void brute_force(item treasure_chest[], int treasure_chest_size, int threshold)
 {
-  // TODO
+  int knapsack[treasure_chest_size];
+
+  for (int i = 0; i < treasure_chest_size; i++)
+  {
+    knapsack[i] = 1; /* 0 = include, 1 = not include */
+  }
+
+  int largest_value = knapSack_gfg(threshold, treasure_chest, knapsack, treasure_chest_size, treasure_chest_size);
+
+  item knapsack_ans[treasure_chest_size];
+  int knapsack_i = 0;
+  int knapsack_weight = 0;
+
+  for (int i = 0; i < treasure_chest_size; i++)
+  {
+    if (knapsack[i] == 0)
+    {
+      knapsack_ans[knapsack_i++] = treasure_chest[i];
+      knapsack_weight += treasure_chest[i].weight;
+    }
+  }
+
+  printf("\nItems to select: ");
+  for (int i = 0; i < knapsack_i; i++)
+  {
+    printf("%d ", knapsack_ans[i].id);
+  }
+
+  printf("\nTotal cost: %d", knapsack_weight);
+  printf("\nTotal value: %d\n", largest_value);
+
+  // item brute_force_method_knapsack[treasure_chest_size];
+  // int largest_value = -1;
+
+  // /* total possible knapsack sizes */
+  // for (int i = 1; i <= treasure_chest_size; i++)
+  // {
+  //   /* treasure chest index */
+  //   for (int j = 0; j + i < treasure_chest_size; j++)
+  //   {
+  //     /* add to tmp knapsack */
+  //     int i = 0;
+  //     for (int k = 1; k <= i; k++)
+  //     {
+  //       brute_force_method_knapsack[i++] = treasure_chest[j+k];
+  //     }
+  //   }
+  // }
 }
 
 /**
@@ -303,10 +456,25 @@ int main(int argc, char **argv)
   /* execute all methods */
   for (int i = 1; i < 4; i++)
   {
+    if (i == 1)
+    {
+      printf("\nLargest Values First Method:");
+    }
+
+    else if (i == 2)
+    {
+      printf("\nSmallest Weights First Method:");
+    }
+    else
+    {
+      printf("\nAverage Weighted Method:");
+    }
+
     quick_sort(treasure_chest, 0, treasure_chest_size - 1, i);
     print_results(treasure_chest, treasure_chest_size, threshold);
   }
 
+  printf("\nBrute Force Method");
   brute_force(treasure_chest, treasure_chest_size, threshold);
 
   // switch (get_method())
