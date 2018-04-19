@@ -89,7 +89,6 @@ int main(int argc, char* argv[])
   strcpy(items, "Items to select:");
 
   while (cost < threshold ) {
-    // printf("row 1: %d", result[max][0]);
     sprintf(temp, " %d,", result[max][0]);
     strcat(items, temp);
     cost += result[max][1];
@@ -111,11 +110,11 @@ int main(int argc, char* argv[])
 
   insertionSort(result, k, 1);
 
-  strcpy(items2, "Items to select: ");
+  strcpy(items2, "Items to select:");
 
   
   while (cost2 < threshold ) {
-      sprintf(temp2, "%d,", result[max2][0]);
+      sprintf(temp2, " %d,", result[max2][0]);
       strcat(items2, temp2);
       cost2 += result[max2][1];
       value2 += result[max2][2];
@@ -128,5 +127,5 @@ int main(int argc, char* argv[])
   printf("Total cost: %d\n", cost2);
   printf("Total value: %d\n", value2); 
 
-  // return 0;
+  return 0;
 }
