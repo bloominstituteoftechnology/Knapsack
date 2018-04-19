@@ -228,17 +228,13 @@ int calculate_knapsack_value(item chest[], int knapsack[], int chest_size)
 
 int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
 {
-  // printf("n is: %d with weight: %d\n", n, W);
-
   if (n == 0 || W == 0)
   {
-    // printf("base case\n");
     return 0;
   }
 
   if (chest[n - 1].weight > W)
   {
-    // printf("item %d (weight: %d) too large\n", n, chest[n - 1].weight);
     return knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
   }
 
@@ -274,46 +270,6 @@ int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
       largest_num = num2;
 
     return largest_num;
-
-    // knapsack[n - 1] = 0;
-    // knapSack_gfg(W - chest[n - 1].weight, chest, knapsack, n - 1, chest_size);
-
-    // int with_value = calculate_knapsack_value(chest, knapsack, chest_size);
-    // printf("with_value: %d\n", with_value);
-
-    // /* put this knapsack into a temp array */
-    // int tmp[chest_size];
-
-    // for (int i = 0; i < chest_size; i++)
-    // {
-    //   tmp[i] = knapsack[i];
-    //   /* reset knapsack for next condition */
-    //   knapsack[i] = 1;
-    // }
-
-    // knapSack_gfg(W, chest, knapsack, chest_size - 1, chest_size);
-    // int without_value = calculate_knapsack_value(chest, knapsack, chest_size);
-    // printf("Without_value: %d", without_value);
-    // return 1234567890;
-
-    // int largest_value;
-
-    // if (with_value > without_value)
-    // {
-    //   /* if tmp is the larger knapsack */
-    //   for (int i = 0; i < chest_size; i++)
-    //   {
-    //     knapsack[i] = tmp[i];
-    //   }
-
-    //   largest_value = with_value;
-    // }
-    // else
-    // {
-    //   largest_value = without_value;
-    // }
-
-    // return largest_value;
   }
 } /* adapted from https://www.geeksforgeeks.org/knapsack-problem/ */
 
