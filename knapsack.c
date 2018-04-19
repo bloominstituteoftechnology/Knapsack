@@ -3,17 +3,24 @@
 #include <string.h>
 #include <ctype.h>
 
-void insertionSort(int arr[][3], int n)
+void insertionSort(int arr[][3], int n, int m)
 {
   for (int i = 0; i < n; i++) {
+    int col = arr[i][m];
     int temp = arr[i][2];
+    int temp2 = arr[i][1];
+    int temp3 = arr[i][0];
     int j = i - 1;
-    while (j >= 0 && arr[j][2] > temp) {
+    while (j >= 0 && arr[j][m] > col) {
       arr[j+1][2] = arr[j][2];
+      arr[j+1][1] = arr[j][1];
+      arr[j+1][0] = arr[j][0];
       j--;
     }
     arr[j+1][2] = temp;
-  }
+    arr[j+1][1] = temp2;
+    arr[j+1][0] = temp3;
+  } 
 }
 
 int main(int argc, char* argv[]) 
@@ -72,25 +79,54 @@ int main(int argc, char* argv[])
     result[m][2] = arr[m][2];
 
   }
-  insertionSort(result, k);
+  insertionSort(result, k, 2);
   char items[30];
   char temp[10];
   int cost = 0;
   int value = 0;
   int max = k-1; 
 
-  strcpy(items, "Items to select: ");
+  strcpy(items, "Items to select:");
 
   while (cost < threshold ) {
-      sprintf(temp, "%d ", result[max][0]);
-      strcat(items, temp);
-      cost += result[max][1];
-      value += result[max][2];
-      max--;
+    // printf("row 1: %d", result[max][0]);
+    sprintf(temp, " %d,", result[max][0]);
+    strcat(items, temp);
+    cost += result[max][1];
+    printf("cost %d\n", cost);
+    value += result[max][2];
+    max--;
   }
+  items[strlen(items)-1] = '\0';
   printf("%s\n", items);
   printf("Total cost: %d\n", cost);
   printf("Total value: %d\n", value);  
 
-  return 0;
+  // Start with the smallest weight and go from there
+  char items2[30];
+  char temp2[10];
+  int cost2 = 0;
+  int value2 = 0;
+  int max2 = 0;
+
+  insertionSort(result, k, 1);
+
+  strcpy(items2, "Items to select: ");
+
+  
+  while (cost2 < threshold ) {
+      sprintf(temp2, "%d,", result[max2][0]);
+      strcat(items2, temp2);
+      cost2 += result[max2][1];
+      value2 += result[max2][2];
+      max2++;
+  }
+
+  items2[strlen(items2)-1] = '\0';
+
+  printf("%s\n", items2);
+  printf("Total cost: %d\n", cost2);
+  printf("Total value: %d\n", value2); 
+
+  // return 0;
 }
