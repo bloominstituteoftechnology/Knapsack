@@ -228,6 +228,78 @@ int calculate_knapsack_value(item chest[], int knapsack[], int chest_size)
 
 int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
 {
+  // int i, w;
+  // int K[n + 1][W + 1];
+  // // int *K_k[n + 1][W + 1]; /* this is potential knapsack matrix */
+
+  // for (i = 0; i <= n; i++)
+  // {
+  //   for (w = 0; w <= W; w++)
+  //   {
+  //     if (i == 0 || w == 0)
+  //       K[i][w] = 0;
+  //     /* we don't care about the potential knapsack matrix here */
+  //     else if (chest[i - 1].weight <= w)
+  //     {
+  //       int num1, num2, largest_num;
+  //       knapsack[i - 1] = 0;
+
+  //       num1 = chest[i - 1].value + K[i - 1][w - chest[i - 1].weight];
+
+  //       /* put this knapsack into a temp array */
+  //       int tmp[chest_size];
+
+  //       for (int j = 0; j < chest_size; j++)
+  //       {
+  //         tmp[j] = knapsack[j];
+  //         /* reset knapsack for next condition */
+  //         knapsack[j] = 1;
+  //       }
+
+  //       num2 = K[i - 1][w];
+
+  //       if (num1 > num2)
+  //       {
+  //         largest_num = num1;
+  //         /* if tmp is the larger knapsack */
+  //         for (int k = 0; k < chest_size; k++)
+  //         {
+  //           knapsack[k] = tmp[k];
+  //         }
+  //       }
+  //       else
+  //         largest_num = num2;
+
+  //       K[i][w] = largest_num;
+  //     }
+  //     else
+  //     {
+  //       K[i][w] = K[i - 1][w];
+  //     }
+  //   }
+  // }
+
+  // // for (int x = 0; x <= n; x++)
+  // // {
+  // //   for (int y = 0; y <= W; y++)
+  // //   {
+  // //     printf("[%d] ", K[n][y]);
+  // //   }
+  // //   printf("\n");
+  // // }
+
+  // return K[n][W];
+
+  /* naive solution */
+  /* put this knapsack into a temp array */
+  int tmp[chest_size];
+
+  for (int i = 0; i < chest_size; i++)
+  {
+    int t = knapsack[i];
+    tmp[i] = t;
+  }
+
   if (n == 0 || W == 0)
   {
     return 0;
@@ -241,19 +313,9 @@ int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
   else
   {
     int num1, num2, largest_num;
-    knapsack[n - 1] = 0;
+    tmp[n - 1] = 0;
 
-    num1 = chest[n - 1].value + knapSack_gfg(W - chest[n - 1].weight, chest, knapsack, n - 1, chest_size);
-
-    /* put this knapsack into a temp array */
-    int tmp[chest_size];
-
-    for (int i = 0; i < chest_size; i++)
-    {
-      tmp[i] = knapsack[i];
-      /* reset knapsack for next condition */
-      knapsack[i] = 1;
-    }
+    num1 = chest[n - 1].value + knapSack_gfg(W - chest[n - 1].weight, chest, tmp, n - 1, chest_size);
 
     num2 = knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
 
@@ -263,7 +325,8 @@ int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
       /* if tmp is the larger knapsack */
       for (int i = 0; i < chest_size; i++)
       {
-        knapsack[i] = tmp[i];
+        int u = tmp[i];
+        knapsack[i] = u;
       }
     }
     else
