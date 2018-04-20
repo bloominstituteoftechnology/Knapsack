@@ -36,7 +36,7 @@ item *create_item(int id, int weight, int value)
 
 int read_file(int fd, item *treasure_chest)
 {
-  char buffer[10000];
+  char buffer[100000];
 
   lseek(fd, 0, SEEK_SET);
 
@@ -228,112 +228,184 @@ int calculate_knapsack_value(item chest[], int knapsack[], int chest_size)
 
 int knapSack_gfg(int W, item chest[], int knapsack[], int n, int chest_size)
 {
-  // int i, w;
-  // int K[n + 1][W + 1];
-  // // int *K_k[n + 1][W + 1]; /* this is potential knapsack matrix */
+  int i, w;
+  int K[n + 1][W + 1];
+  int ***K_k;
+  int y, z;
 
-  // for (i = 0; i <= n; i++)
+  K_k = (int ***)malloc(sizeof(int **) * (n + 1));
+  for (y = 0; y < (n + 1); y++)
+  {
+    K_k[y] = (int **)malloc(sizeof(int *) * (W + 1));
+
+    for (z = 0; z < (W + 1); z++)
+    {
+      K_k[y][z] = (int *)malloc(sizeof(int) * chest_size);
+    }
+  } /* 3d malloc from https://bytes.com/topic/c/answers/546378-dynamic-3d-array-memory-alllocation */
+
+  // int **arr_2d = malloc(sizeof (int*) * n * W);
+  // int *arr_1d = malloc(sizeof(int) * n * W * chest_size);
+
+  // for (size_t i = 0; i < )
+
+  // for (y = 0; y < n; y++)
   // {
-  //   for (w = 0; w <= W; w++)
+  //   K_k[y] = malloc(sizeof(int *) * n);
+
+  //   for (z = 0; z < chest_size; z++)
   //   {
-  //     if (i == 0 || w == 0)
-  //       K[i][w] = 0;
-  //     /* we don't care about the potential knapsack matrix here */
-  //     else if (chest[i - 1].weight <= w)
-  //     {
-  //       int num1, num2, largest_num;
-  //       knapsack[i - 1] = 0;
-
-  //       num1 = chest[i - 1].value + K[i - 1][w - chest[i - 1].weight];
-
-  //       /* put this knapsack into a temp array */
-  //       int tmp[chest_size];
-
-  //       for (int j = 0; j < chest_size; j++)
-  //       {
-  //         tmp[j] = knapsack[j];
-  //         /* reset knapsack for next condition */
-  //         knapsack[j] = 1;
-  //       }
-
-  //       num2 = K[i - 1][w];
-
-  //       if (num1 > num2)
-  //       {
-  //         largest_num = num1;
-  //         /* if tmp is the larger knapsack */
-  //         for (int k = 0; k < chest_size; k++)
-  //         {
-  //           knapsack[k] = tmp[k];
-  //         }
-  //       }
-  //       else
-  //         largest_num = num2;
-
-  //       K[i][w] = largest_num;
-  //     }
-  //     else
-  //     {
-  //       K[i][w] = K[i - 1][w];
-  //     }
+  //     K_k[y][z] = malloc(sizeof(int) * chest_size);
   //   }
   // }
 
-  // // for (int x = 0; x <= n; x++)
-  // // {
-  // //   for (int y = 0; y <= W; y++)
-  // //   {
-  // //     printf("[%d] ", K[n][y]);
-  // //   }
-  // //   printf("\n");
-  // // }
+  // int K_k[n + 1][W + 1][chest_size]; /* this is a knapsack matrix */
 
-  // return K[n][W];
+  for (i = 0; i <= n; i++)
+  {
+    for (w = 0; w <= W; w++)
+    {
+      /* put this knapsack into a temp array */
+      // int tmp[chest_size];
+
+      // for (int j = 0; j < chest_size; j++)
+      // {
+      //   int t = knapsack[j];
+      //   tmp[j] = t;
+      // }
+
+      if (i == 0 || w == 0)
+      {
+        K[i][w] = 0;
+
+        for (int b = 0; b < chest_size; b++)
+        {
+          K_k[i][w][b] = knapsack[b];
+        }
+      }
+      else if (chest[i - 1].weight <= w)
+      {
+        int num1, num2, largest_num;
+        int tmp[chest_size];
+
+        num1 = chest[i - 1].value + K[i - 1][w - chest[i - 1].weight];
+
+        num2 = K[i - 1][w];
+
+        if (num1 > num2)
+        {
+          largest_num = num1;
+
+          for (int b = 0; b < chest_size; b++)
+          {
+            tmp[b] = (int)K_k[i - 1][w - chest[i - 1].weight][b];
+          }
+          // memcpy(tmp, K_k[i - 1][w - chest[i - 1].weight], chest_size);
+          tmp[i - 1] = 0;
+
+          /* if tmp is the larger knapsack */
+          // for (int j = 0; j < chest_size; j++)
+          // {
+          //   int t = tmp[j];
+          //   knapsack[j] = t;
+          // }
+        }
+        else
+        {
+          largest_num = num2;
+
+          for (int b = 0; b < chest_size; b++)
+          {
+            tmp[b] = (int)K_k[i - 1][w][b];
+          }
+
+          // memcpy(tmp, K_k[i - 1][w], chest_size);
+        }
+
+        K[i][w] = largest_num;
+
+        for (int b = 0; b < chest_size; b++)
+        {
+          K_k[i][w][b] = tmp[b];
+        }
+        // memcpy(K_k[i][w], tmp, chest_size);
+      }
+      else
+      {
+        K[i][w] = K[i - 1][w];
+
+        for (int b = 0; b < chest_size; b++)
+        {
+          K_k[i][w][b] = (int)K_k[i - 1][w][b];
+        }
+        // memcpy(K_k[i][w], K_k[i - 1][w], chest_size);
+      }
+    }
+  }
+
+  // printf("\n");
+
+  // for (int x = 0; x <= n; x++)
+  // {
+  //   printf("x: %d\n", x);
+  //   for (int y = 0; y <= W; y++)
+  //   {
+  //     printf("%d [ %d ] ", y, K[n][y]);
+  //   }
+  //   printf("\n");
+  // }
+
+  for (int b = 0; b < chest_size; b++)
+  {
+    knapsack[b] = (int)K_k[n][W][b];
+  }
+  // memcpy(knapsack, K_k[n][W], chest_size);
+  return K[n][W];
 
   /* naive solution */
   /* put this knapsack into a temp array */
-  int tmp[chest_size];
+  // int tmp[chest_size];
 
-  for (int i = 0; i < chest_size; i++)
-  {
-    int t = knapsack[i];
-    tmp[i] = t;
-  }
+  // for (int i = 0; i < chest_size; i++)
+  // {
+  //   int t = knapsack[i];
+  //   tmp[i] = t;
+  // }
 
-  if (n == 0 || W == 0)
-  {
-    return 0;
-  }
+  // if (n == 0 || W == 0)
+  // {
+  //   return 0;
+  // }
 
-  if (chest[n - 1].weight > W)
-  {
-    return knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
-  }
+  // if (chest[n - 1].weight > W)
+  // {
+  //   return knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
+  // }
 
-  else
-  {
-    int num1, num2, largest_num;
-    tmp[n - 1] = 0;
+  // else
+  // {
+  //   int num1, num2, largest_num;
+  //   tmp[n - 1] = 0;
 
-    num1 = chest[n - 1].value + knapSack_gfg(W - chest[n - 1].weight, chest, tmp, n - 1, chest_size);
+  //   num1 = chest[n - 1].value + knapSack_gfg(W - chest[n - 1].weight, chest, tmp, n - 1, chest_size);
 
-    num2 = knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
+  //   num2 = knapSack_gfg(W, chest, knapsack, n - 1, chest_size);
 
-    if (num1 > num2)
-    {
-      largest_num = num1;
-      /* if tmp is the larger knapsack */
-      for (int i = 0; i < chest_size; i++)
-      {
-        int u = tmp[i];
-        knapsack[i] = u;
-      }
-    }
-    else
-      largest_num = num2;
+  //   if (num1 > num2)
+  //   {
+  //     largest_num = num1;
+  //     /* if tmp is the larger knapsack */
+  //     for (int i = 0; i < chest_size; i++)
+  //     {
+  //       int u = tmp[i];
+  //       knapsack[i] = u;
+  //     }
+  //   }
+  //   else
+  //     largest_num = num2;
 
-    return largest_num;
-  }
+  //   return largest_num;
+  // }
 } /* adapted from https://www.geeksforgeeks.org/knapsack-problem/ */
 
 void brute_force(item treasure_chest[], int treasure_chest_size, int threshold)
