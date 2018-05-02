@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const rl = require('readline');
 
 const args = process.argv.slice(2);
 
@@ -15,7 +16,13 @@ if (fs.existsSync(filePath)) {
 
     console.log('Ready to process file', filePath);
 
-    
+    const lineReader = rl.createInterface({input: fs.createReadStream(filePath)});
+
+    lineReader.on('line', function (line) {
+
+        console.log(line);
+
+    });
 
 }
 
