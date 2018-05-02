@@ -31,7 +31,7 @@ This exercise can be completed in just about any language.  Each solution will b
 
 Before starting, check with your instructor about the language you are using.
 
-The specific goal of this exercise is to write a program that takes input files
+1. The specific goal of this exercise is to write a program that takes input files
 that look like this:
 
 ```
@@ -68,7 +68,7 @@ Total cost: 98
 Total value: 117
 ```
 
-For first steps, just think a bit about how you might naively solve this with
+2. For first steps, just think a bit about how you might naively solve this with
 brute force. The above data is small enough that such a solution should work, so
 give it a go. More to come soon - larger problems that will require more
 sophisticated approaches.
