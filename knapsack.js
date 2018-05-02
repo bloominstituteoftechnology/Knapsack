@@ -2,8 +2,8 @@ const fs = require('fs');
 const args = process.argv.slice(2);
 
 if (args.length !== 2) {
-    console.error("Enter a filename follow by threshold");
-    process.exit(1);
+  console.error("Enter a filename follow by threshold");
+  process.exit(1);
 }
 
 //extract filename and user capacity input
@@ -11,6 +11,7 @@ const filename = args[0];
 const capacity = args[1]
 
 fs.readFile(`./data/${filename}`, 'utf8', (err, data) => {
+  const t1 = Date.now();
   const arr = data.split('\n');
   arr.pop();
   // create array of object with property item, size, value and ratio
@@ -40,8 +41,11 @@ fs.readFile(`./data/${filename}`, 'utf8', (err, data) => {
     totalValue += i.value;
     totalSize += i.size;
   });
+
+  const t2 = Date.now();
   // print
-  console.log(`Item selected: ${selected}`);
+  console.log(`Item collected: ${selected}`);
   console.log(`Total size: ${totalSize}`);
   console.log(`Total value: ${totalValue}`);
+  console.log(`Total time it took: ${(t2-t1) / 1000} s`);
 });
