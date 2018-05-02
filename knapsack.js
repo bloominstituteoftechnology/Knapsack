@@ -3,7 +3,7 @@ const fs = require("fs");
 const args = process.argv.slice(2);
 const weights = [], values = [];
 
-if (args.length != 1) {
+if (args.length < 1) {
   console.error("usage: knapsack filename sack-size");
   process.exit(2);
 }
