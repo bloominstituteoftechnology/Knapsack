@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const args = process.argv.slice(2);
+console.log(args);
 
 if (args.length != 2) {
   console.error("usage: knapsack-generator filename size");
@@ -12,6 +13,7 @@ if (args.length != 2) {
 }
 
 let [filename, size] = args;
+console.log(args);
 const filePath = path.resolve(__dirname, filename);
 
 if (fs.existsSync(filePath)) {
