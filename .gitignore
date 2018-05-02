@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Compiled exec files
+knapsack
+
+# Make build automation
+Makefile
