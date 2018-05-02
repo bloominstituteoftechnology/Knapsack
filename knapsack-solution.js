@@ -4,30 +4,41 @@ const readline = require("readline");
 
 const args = process.argv.slice(2);
 
-let fileName = args[0];
+let filename = args[0];
 let threshold = args[1];
-
-let dataArray = [];
 
 if (args.length !== 2) {
   console.log("usage: put an input file and a threshold");
   process.exit(1);
 }
 
-let rl = readline.createInterface({
-  input: fs.createReadStream(args[0])
-});
+// let rl = readline.createInterface({
+//   input: fs.createReadStream(args[0])
+// });
 
-rl.on("line", line => {
-  let [index, cost, value] = line;
-  console.log(index, cost, value);
-  console.log(line);
-});
+// rl.on("line", lines => {
+//   const [index, size, value] = lines.split(/\s+/);
+//   items.push({
+//     index: Number(index),
+//     size: Number(size),
+//     value: Number(value)
+//   });
+// });
 
-//foreach line save it as an object inside an array
+// console.log(items);
 
-//make a new column equal to column 3 minus column 2
+const capacity = args[1];
+const filedata = fs.readFileSync(filename, "utf8");
+const lines = filedata.trim().split(/[\rn\n]+/);
+const items = [];
 
-//then sort the new column, and sort it descending
+for (let l of lines) {
+  const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
+  items[index] = {
+    index: index,
+    size: size,
+    value: value
+  };
+}
 
-//Use column 2 as index and keep adding the new column until column 2 is equal to the threshold
+console.log(items);
