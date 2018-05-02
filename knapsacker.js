@@ -37,5 +37,13 @@ found.forEach(num => {
   array.push(object);
 });
 
+let secondArray = array.map(obj => {
+  for (let prop in obj) {
+    return obj[prop] / prop;
+  }
+});
+
 console.log(array);
+console.log(secondArray);
+
 
