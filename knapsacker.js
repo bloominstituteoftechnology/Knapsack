@@ -22,10 +22,20 @@ const RegExTest = /\d+ (\d+) (\d+)/g
 // }
 const found = text.match(RegExTest);
 
-console.log("here is found:", found);
+//console.log("here is found:", found);
+
+array = [];
 
 found.forEach(num => {
-  test = RegExTest.exec(num);
-  console.log(test)
+  //test = RegExTest.exec(num);
+  let useful = num.split(" ");
+
+  let object = {};
+  
+  object[useful[1]] = Number(useful[2]);
+
+  array.push(object);
 });
+
+console.log(array);
 
