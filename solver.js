@@ -24,3 +24,19 @@ data = data.sort((a, b) => {
   else if (a[3] < b[3]) return 1;
   else return 0;
 });
+
+const sack = {
+  items: [],
+  cost: 0,
+  value: 0,
+}
+
+for (let i = 0; i < data.length; i++) {
+  if (sack.cost + data[i][1] <= 100) {
+    sack.items.push(data[i][0]);
+    sack.cost += data[i][1];
+    sack.value += data[i][2];
+  }
+}
+
+console.log(sack);
