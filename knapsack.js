@@ -19,8 +19,9 @@ if (fs.existsSync(filePath)) {
     const lineReader = rl.createInterface({input: fs.createReadStream(filePath)});
 
     lineReader.on('line', function (line) {
-
-        console.log(line);
+        let size  = line.split(' ')[1];
+        let value = line.split(' ')[2];
+        console.log('size:',size, '  value:', value);
 
     });
 
