@@ -14,6 +14,8 @@ const filedata = fs.readFileSync(filename, "utf8");
 
 const lines = filedata.trim().split(/[\r\n]+/);
 
+const start = Date.now();
+
 const items = [];
 
 function compare (a, b) {
@@ -45,4 +47,4 @@ result = items.reduce((memo, obj) => {
 }, 0);
 
 // console.log(objectsUsed);
-console.log(`Cost: ${result}, Value: ${totalValue}`);
+console.log(`Cost: ${result}, Value: ${totalValue}, Time: ${Date.now() - start}ms`);
