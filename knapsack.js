@@ -47,7 +47,6 @@ let finalValue = 0;
 for (let i = 0; i < ratios.length; i++) {
   if (currentWeight + (ratios[i][2]) <= threshold) {
     currentWeight += (ratios[i][2]);
-    // result.push(ratios[i]);
     result[ratios[i][0]] = {};
     result[ratios[i][0]]['weight'] = (ratios[i][2]);
     result[ratios[i][0]]['value'] = (ratios[i][3]);
@@ -62,47 +61,3 @@ console.log(`Items to select: ${Object.keys(result)}`);
 console.log(`Total Weight: ${finalWeight}`);
 console.log(`Total Value: ${finalValue}`);
 
-// // Input:
-// // Values (stored in array v) 3rd number
-// let values = [];
-// items.forEach(item => {
-//   values.push(parseInt(item[2]));
-// })
-
-// // Weights (stored in array w) 2nd number
-// let weights = [];
-// items.forEach(item => {
-//   weights.push(parseInt(item[1]));
-// })
-// // Number of distinct items (n)
-// let n = items.length;
-
-// // Knapsack capacity (W)
-// threshold = parseInt(threshold);
-
-
-// const knapsack = {};
-
-// if (args.length != 2) {
-//   console.error("require correct arguments");
-//   process.exit(1);
-// }
-
-// const filename = args[0];
-// const threshold = args[1];
-
-// let lineReader = require('readline').createInterface({
-//   input: fs.createReadStream(filename)
-// });
-
-// lineReader.on('line', (line) => {
-//   let splitLine = line.split(' ');
-//   let itemInfo = [];
-//   itemInfo.push(splitLine[1]);
-//   itemInfo.push(splitLine[2]);
-//   knapsack[splitLine[0]] = itemInfo;
-// });
-
-// lineReader.on('end', () => {
-//   lineReader.close()
-// });
