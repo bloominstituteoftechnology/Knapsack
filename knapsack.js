@@ -3,16 +3,15 @@ const fs = require("fs");
 const args = process.argv.slice(2);
 const weights = [], values = [];
 
-if (args.length != 2) {
+if (args.length != 1) {
   console.error("usage: knapsack filename sack-size");
   process.exit(2);
 }
 
-const sackSize = (parseInt(args[1], 10));
+let sackSize = (parseInt(args[1], 10));
 
 if (!Number.isInteger(sackSize)) {
-  console.error("sack-size must be an integer!");
-  process.exit(2);
+  sackSize = 100;
 }
 
 const treasure = fs.readFileSync(`./data/${args[0]}`, 'utf8', (err, fd) => {
