@@ -24,6 +24,7 @@ const Main = () => {
     weights.push(+out[1]);
   }
 
+  const start = Date.now();
   for(let i = 0; i < n; i++) {
     table[i] = [];
   }
@@ -41,6 +42,7 @@ const Main = () => {
       }
     }
   }
+  const end = Date.now();
 
   // console.log('arr: ', arr);
   // console.log('val: ', values);
