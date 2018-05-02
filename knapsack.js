@@ -1,22 +1,21 @@
 const fs = require('fs');
 
-const args = process.argv.slice(2);
+const exhaustive = () => {
+};
 
-if (args.length !== 2) {
-  console.error('usage: extractlinks inputfile followed by threshold');
-  process.exit(1);
+function readFile() {
+  const args = process.argv.slice(2);
+
+  if (args.length !== 2) {
+    console.error('usage: extractlinks inputfile followed by threshold');
+    process.exit(1);
+  }
+
+  const filename = args[0];
+  const data = fs.readFileSync(`./data/${filename}`, 'utf-8');
+  let parsed = data.trim().split('\n').map(each => each.split(' '));
+  parsed = parsed.map(each => [Number(each[0]), Number(each[1]), Number(each[2])]);
+  console.log(parsed);
 }
 
-const filename = args[0];
-const threshold = args[1];
-
-let data = fs.readFileSync(filename, 'utf8');
-
-let parsed = data.split('\n').map(each => each.split(' '));
-if (parsed[parsed.length - 1][0] === '') parsed.pop();
-console.log(parsed);
-console.log(threshold);
-
-function printData(data) {
-  console.log(data);
-}
+readFile();
