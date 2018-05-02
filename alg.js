@@ -16,14 +16,13 @@ const Main = () => {
   const file = loadFile();
   const capacity = process.argv[3];
 
-  let arr = file.split('\n');
+  let arr = file.trim().split('\n');
   const n = arr.length;
-  arr = arr.map(elem => {
-    out = elem.split( ' ' );
-    values.push(out[1]);
-    weights.push(out[2]);
-    return out;
-  });
+  for(let e = 0; e < n; e++) {
+    out = arr[e].split( ' ' );
+    values.push(+out[2]);
+    weights.push(+out[1]);
+  }
 
   for(let i = 0; i < n; i++) {
     table[i] = [];
@@ -43,13 +42,12 @@ const Main = () => {
     }
   }
 
-  console.log('arr: ', arr);
-  console.log('val: ', values);
-  console.log('wgt: ', weights);
-  console.log('TABLE: ', table);
-
+  // console.log('arr: ', arr);
+  // console.log('val: ', values);
+  // console.log('wgt: ', weights);
+  // console.log('TABLE: ', table);
+  console.log('TIME: ', ((end - start) / 1000).toFixed(4));
+  console.log('SOLUTION: ', table[n - 1][capacity - 1]);
 };
 
 Main();
-
-
