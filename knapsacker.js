@@ -1,49 +1,48 @@
 const fs = require('fs');
 
-// console.log(process.argv);
 const args = process.argv.slice(2);
-// console.log("here is args:", args);
 
-if (args.length < 2) {
-    console.error("usage: extractlinks inputfile");
+if (args.length != 2) {
+    console.error("usage: knapsack infile capacity");
     process.exit(1);
 }
 
 const filename = `./data/${args[0]}`;
+const capacity = args[1];
 
-// !!!! IMPLEMENT ME
+const filedata = fs.readFileSync(filename, "utf8");
 
-// Read file
-const text = fs.readFileSync(filename, 'utf8');
-const RegExTest = /\d+ (\d+) (\d+)/g
+const lines = filedata.trim().split(/[\r\n]+/);
 
-// if (text) {
-//   console.log(text.split('\r\n'));
-// }
-const found = text.match(RegExTest);
+const items = [];
 
-//console.log("here is found:", found);
+function compare (a, b) {
+  return b.ratio - a.ratio;
+}
 
-array = [];
+for (let l of lines) {
+    const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
 
-found.forEach(num => {
-  //test = RegExTest.exec(num);
-  let useful = num.split(" ");
+    items[index] = {
+        index: index,
+        size: size,
+        value: value,
+        ratio: value/size
+    };
+}
 
-  let object = {};
-  
-  object[useful[1]] = Number(useful[2]);
-
-  array.push(object);
-});
-
-let secondArray = array.map(obj => {
-  for (let prop in obj) {
-    return obj[prop] / prop;
+// console.log(items.sort(compare));
+items.sort(compare);
+const objectsUsed = [];
+let totalValue = 0;
+result = items.reduce((memo, obj) => {
+  if (memo + obj.size <= capacity) {
+    memo += obj.size;
+    totalValue += obj.value;
+    objectsUsed.push(obj);
   }
-});
+  return memo;
+}, 0);
 
-console.log(array);
-console.log(secondArray);
-
-
+// console.log(objectsUsed);
+console.log(`Cost: ${result}, Value: ${totalValue}`);
