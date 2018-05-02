@@ -4,7 +4,7 @@ const args = process.argv.slice(2);
 const weights = [], values = [];
 
 if (args.length < 1) {
-  console.error("usage: knapsack filename sack-size");
+  console.error("usage: knapsack <filename> [sack-size]");
   process.exit(2);
 }
 
