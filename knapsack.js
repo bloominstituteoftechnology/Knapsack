@@ -27,5 +27,3 @@ if (isNaN(size)) {
     console.error(`size must be a number!`);
     process.exit(2);
 }
-
-size = ~~Number(size);
