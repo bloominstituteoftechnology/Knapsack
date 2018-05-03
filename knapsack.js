@@ -1,20 +1,21 @@
 const fs = require('fs');
 
 function knapsackRecursive(items, capacity) {
+
     function recur(i, size) {
         if (i == 0) {
             return {
                 value: 0,
                 size: 0,
                 chosen: []
-            }
+            };
         } else if (items[i].size > size) {
            return recur(i - 1, size);     
         } else {
             const r0 = recur(i - 1, size);
             const r1 = recur(i - 1, size - items[i].size);
     
-            r1 += items[i].value;
+            r1.value += items[i].value;
     
             if (r0.value > r1.value) {
                 return r0;
@@ -24,8 +25,54 @@ function knapsackRecursive(items, capacity) {
                 return r1;
             }
         }
-        return recur(items.length - 1, capacity);
     }
+    return recur(items.length - 1, capacity);
+}
+
+function knapsackRecursiveMemoized (items, capacity) {
+    let resultsMem = Array(items.length);
+
+    for (let s = 0; s < items.length; s++) {
+        resultsMem[s] = Array(capacity + 1).fill(null);
+    }
+
+    function recurMemoized(i, size) {
+        // size = +size;
+        let v = resultsMem[i][size];
+    
+        if (v === null) {
+            v = recur(i, size);
+            resultsMem[i][size] = Object.assign({}, v); // Make a copy of the object
+        }
+        return v;
+    }
+
+    function recur(i, size) {
+        if (i == 0) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            };
+        } else if (items[i].size > size) {
+           return recurMemoized(i - 1, size);     
+        } else {
+            const r0 = recurMemoized(i - 1, size);
+            const r1 = recurMemoized(i - 1, size - items[i].size);
+
+            r1.value += items[i].value;
+    
+            if (r0.value > r1.value) {
+                return r0;
+            } else {
+                r1.size += items[i].size;
+                r1.chosen = r1.chosen.concat(i); // make a copy
+                return r1;
+            }
+        }
+    }
+
+    return recur(items.length - 1, capacity);
 }
 
 function timeRun (name, f, items, capacity) {
@@ -50,7 +97,7 @@ if (args.length != 2) {
 }
 
 const filename = args[0];
-const capacity = args[1];
+const capacity = +args[1];
 
 const filedata = fs.readFileSync(filename, "utf8");
 
@@ -67,5 +114,5 @@ for (let l of lines) {
         value: value
     };
 }
-
-console.log(items);
+timeRun("Recursive", knapsackRecursive, items, capacity);
+timeRun("Recursive Memoized", knapsackRecursiveMemoized, items, capacity);
