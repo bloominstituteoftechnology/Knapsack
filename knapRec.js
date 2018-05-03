@@ -1,0 +1,87 @@
+//Tried to follow Beej, didn't
+
+const fs = require('fs');
+
+function knapsackRecursive(items, capacity) {
+	//(case 1) m[0,w] = 0
+	//(case 2) m[i,w] = m[i-1,w] if w_i>w
+	//(case 3) 
+	// 	m[i,w] = max(
+	//	m[i-1,w],
+	//	m[i-1,w-w_i] + v_i
+	//)
+
+	function recur(i, size) {
+		if (i === 0) {
+			return {
+				value: 0,
+				size: 0,
+				chosen: [],
+			}
+		}
+		else if (items[i].size > size) return recur(i-1,size);
+		else {
+			const r0 = recur(i-1, size);
+			const r1 = recur(i-1,size-items[i].size);
+		
+			r1.value += items[i].value;
+		
+			if (r0.value > r1.value) {
+				return r0;
+			}
+			else {
+				r1.size += items[i.size];
+				r1.chosen = r1.chosen.concat(i);
+				return r1;
+			}
+		}
+	}
+
+	return recur(items.length -1, capacity);
+}
+
+function timedRun(name, f, items, capacity) {
+	let t0 = Date.now();
+	f(items, capacity);
+	let t1 = Date.now();
+	let td = t1 - t0;
+
+	console.log(`Function ${f} took ${(td/1000).toFixed(4)} seconds`);
+}
+
+//-----------
+// MAIN 
+//-----------
+const args = process.argv.slice(2);
+
+if (args.length != 2) {
+    console.error("usage: knapsack infile capacity");
+    process.exit(1);
+}
+
+const filename = args[0];
+const capacity = args[1];
+
+const filedata = fs.readFileSync(filename, "utf8");
+
+const lines = filedata.trim().split(/[\r\n]+/);
+
+const items = [];
+
+for (let l of lines) {
+    const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
+
+    items[index] = {
+        index: index,
+        size: size,
+        value: value
+    };
+}
+
+console.log("Value Run Beginning...\n");
+const value = knapsackRecursive(items, capacity);
+console.log(`Value Run: \n${value}`);
+console.log('Time Run Beginning...\n');
+timedRun("Recursive", knapsackRecursive, items, capacity);
+
+console.log(value);
