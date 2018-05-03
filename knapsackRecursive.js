@@ -2,6 +2,22 @@ const fs = require('fs');
 
 function knapsackRecursive(items, capacity) {
 
+  let resultsMem = Array(items.length);
+
+  for (let s = 0; s < items.length; s++) {
+    resultsMem[s] = Array(capacity + 1).fill(null);
+  }
+  
+  function recurMemoized(i, size) {
+    let v = resultsMem[i][size];
+
+    if (v === null) {
+      v = recur(i, size);
+      resultsMem[i][size] = Object.assign({}, v); // Make a copy of the object
+    }
+    return v;
+  }
+
   function recur(i, size) { // start with index and capacity
     if (i == 0) {
       return  {
@@ -11,11 +27,11 @@ function knapsackRecursive(items, capacity) {
       };
     }
     else if (items[i].size > size) {
-      return recur(i-1, size);
+      return recurMemoized(i-1, size);
     }
     else {
-        const r0 = recur(i - 1, size);
-        const r1 = recur(i - 1, size - items[i].size);
+        const r0 = recurMemoized(i - 1, size);
+        const r1 = recurMemoized(i - 1, size - items[i].size);
 
         r1.value += items[i].value;
         if (r0.value > r1.value) {
@@ -54,7 +70,7 @@ if (args.length != 2) {
 }
 
 const filename = args[0];
-const capacity = args[1];
+const capacity = +args[1];
 
 const filedata = fs.readFileSync(filename, "utf8");
 
