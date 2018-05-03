@@ -5,16 +5,18 @@ if (process.argv.length < 3){
 
 const filename = process.argv[2];
 const fs = require("fs");
+const values = [];
 
 const incomingData = fs.readFile(filename, 'utf8', (err, data) => {
     if (err) throw err;
-    console.log("OK: " + filename);
-    console.log(data);
-    return data;
+    let output = data.split(/\r\n/);
+    output.forEach(string => {
+        let splitString = string.split(/ /);
+        let pushObj = {size: parseInt(splitString[1]), value: parseInt(splitString[2])}
+        values.push(pushObj);
+    })
+    console.log(values);
 })
-
-
-
 
 /*Steps:
 *1. Store the read values as an array of objects
