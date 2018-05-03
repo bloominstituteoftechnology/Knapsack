@@ -3,12 +3,15 @@ const args = process.argv.slice(2);
 
 let t0 = Date.now();
 
+// Sample CLI input: node ./data/large1.txt 100
+
 fs.readFile(args[0], (err, data) => {
 	if (err) return console.log({ error: err });
 	else {
 		Janus(data, args[1]);
 		let t1 = Date.now();
 		let elapsed = t1 - t0;
+		console.log({ elapsed });
 		console.log("seconds elapsed = " + Math.floor(elapsed / 1000));
 	}
 });
@@ -35,7 +38,7 @@ const Janus = (data, maxCost) => {
 		});
 	}
 
-	ranking = quickSort(ranking).reverse();
+	ranking = quickSort(ranking, "weight").reverse();
 
 	let bestOptions = [];
 	let currentCost = 0;
@@ -56,25 +59,27 @@ const Janus = (data, maxCost) => {
 	console.log({
 		totalCost: currentCost,
 		totalKudos: currentKudos,
-		bestOptions
+		optionCount: bestOptions.length,
+		bestOptions,
+		rankingRemains: ranking.slice(bestOptions.length, ranking.length)
 	});
 };
 
-const quickSort = arr => {
+const quickSort = (arr, target) => {
 	if (arr.length <= 1) {
 		return arr;
 	}
-	var less = [],
+	let less = [],
 		greater = [];
 
-	var pivot = arr.splice(Math.floor(arr.length / 2), 1);
-	for (var i = 0; i <= arr.length - 1; i++) {
+	let pivot = arr.splice(Math.floor(arr.length / 2), 1);
+	for (let i = 0; i <= arr.length - 1; i++) {
 		if (arr[i].weight <= pivot[0].weight) {
 			less.push(arr[i]);
 		} else {
 			greater.push(arr[i]);
 		}
 	}
-	var c = [];
+	let c = [];
 	return c.concat(quickSort(less), pivot, quickSort(greater));
 };
