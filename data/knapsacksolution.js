@@ -185,3 +185,6 @@ Output for node knapsacksolution.js large1.txt 10
   { index: 99, size: 72, value: 50 },
   ... 901 more items ]
 */
+
+// Recursive test returns 630
+
