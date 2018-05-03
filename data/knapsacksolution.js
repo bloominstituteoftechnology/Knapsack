@@ -40,10 +40,10 @@ const lines = filedata.trim().split(/[\r\n]+/);
 
 const items = [];
 
-for (let i of lines) {
+for (let l of lines) {
     const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
 
-    items = {
+    items[index] = {
         index: index,
         size: size,
         value: value
