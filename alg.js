@@ -58,7 +58,7 @@ const Main = () => {
   // console.log('val: ', values);
   // console.log('wgt: ', weights);
   // console.log('TABLE: ', table);
-  console.log('TIME: ', ((end - start) / 1000).toFixed(4));
+  console.log('TIME: ', (end - start), 'ms');
   console.log('SOLUTION: ', table[n - 1][capacity - 1]);
 };
 
