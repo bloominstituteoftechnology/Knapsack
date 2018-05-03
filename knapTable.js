@@ -1,4 +1,5 @@
 // Guy from the group's example
+// I also didn't follow this either... blah
 const fs = require('fs');
 const filename = process.argv[2] + '';
 
