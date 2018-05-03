@@ -24,7 +24,7 @@ let ratios = [];
 items.forEach(item => {
   let temp = [];
   temp.push(item[0]);
-  temp.push(parseInt(item[2]/item[1]));
+  temp.push(parseFloat(item[2]/item[1]));
   temp.push(parseInt(item[1]));
   temp.push(parseInt(item[2]));
   ratios.push(temp);
@@ -55,9 +55,6 @@ for (let i = 0; i < ratios.length; i++) {
   }
 };
 
-
-
 console.log(`Items to select: ${Object.keys(result)}`);
 console.log(`Total Weight: ${finalWeight}`);
 console.log(`Total Value: ${finalValue}`);
-
