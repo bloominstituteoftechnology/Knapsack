@@ -5,18 +5,55 @@ if (process.argv.length < 3){
 
 const filename = process.argv[2];
 const fs = require("fs");
-const values = [];
+const originalValues = [];
+const solutions = [];
+const solutions2 = [];
 
 const incomingData = fs.readFile(filename, 'utf8', (err, data) => {
     if (err) throw err;
     let output = data.split(/\r\n/);
     output.forEach(string => {
         let splitString = string.split(/ /);
-        let pushObj = {size: parseInt(splitString[1]), value: parseInt(splitString[2])}
-        values.push(pushObj);
+        let pushObj = {index: splitString[0], weight: parseInt(splitString[1]), value: parseInt(splitString[2])}
+        originalValues.push(pushObj);
     })
-    console.log(values);
 })
+
+const bruteForce = (W) => {
+    console.log(`Test 1`);
+    for (let i = 0; i < originalValues.length; i++){
+        console.log(`Test 1.5`);
+        let j = i + 1;
+        solutions[i] = originalValues[i];
+        for (j; j < solutions.length; j++){
+            console.log(`Test 2`);
+            if (solutions[i].weight + originalValues[j].weight <= W){
+                console.log(`Test 3`);
+                let pushObj = {
+                    index: solutions[i].index + " " + originalValues[j].index,
+                    weight: solutions[i].weight + originalValues[j].weight,
+                    value: solutions[i].value + originalValues[j].value
+                }
+                solutions[i] = pushObj;
+                solutions2.push(pushObj);
+            } else {
+                console.log(`Test 4`);
+            }
+        }
+    }
+}
+
+// const knapsackFunction = (knapSize) => {
+//     for (let i = 1; i <= knapSize; i++){
+//         let lootVal;
+//         for (let j = 1; j < originalValues.length; i++){
+//             if (originalValues[i].size <= i){
+//                 lootVal = Math.max(lootVal, originalValues[i].value);
+//             }
+//         }
+//         solutions[k] = {}
+//     }
+// }
 
 /*Steps:
 *1. Store the read values as an array of objects
