@@ -1,33 +1,113 @@
+// Beej's solution
+// run using `node knapsack.js .txt size#`
 const fs = require("fs");
-const path = require("path");
-const readline = require("readline");
 
-const args = process.argv.slice(2);
+// const args = process.argv.slice(2);
+// const items = [];
 
-let filename = args[0];
-let threshold = args[1];
+function knapsackMemoRecursive(items, capacity) {
+  let resultsMem = Array(items.length);
 
-if (args.length !== 2) {
-  console.log("usage: put an input file and a threshold");
-  process.exit(1);
+  for (let s = 0; s < items.length; s++) {
+    resultsMem[s] = Array(capacity + 1).fill(null);
+  }
+
+  function recurMemoized(i, size) {
+    size = +size;
+    let v = resultsMem[i][size];
+
+    if (v === null) {
+      v = recur(i, size);
+      resultsMem[i][size] = Object.assign({}, v); // Make a copy of the object
+    }
+
+    return v;
+  }
+  //
+  function recur(i, size) {
+    if (i === 0) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: []
+      };
+    } else if (items[i].size > size) {
+      return recurMemoized(i - 1, size);
+      console.log("hye");
+    } else {
+      const r0 = recurMemoized(i - 1, size);
+      const r1 = recurMemoized(i - 1, size - items[i].size);
+      console.log(r1);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i);
+        return r1;
+      }
+    }
+  }
+  return recur(items.length - 1, capacity);
 }
 
-// let rl = readline.createInterface({
-//   input: fs.createReadStream(args[0])
-// });
+//test
 
-// rl.on("line", lines => {
-//   const [index, size, value] = lines.split(/\s+/);
-//   items.push({
-//     index: Number(index),
-//     size: Number(size),
-//     value: Number(value)
-//   });
-// });
+//
 
-// console.log(items);
+// function knapsackRecursive(items, capacity) {
+//   function recur(i, size) {
+//     if (i == 0) {
+//       return {
+//         value: 0,
+//         size: 0,
+//         chosen: []
+//       };
+//     } else if (items[i].size > size) {
+//       return recur(i - 1, size);
+//     } else {
+//       const r0 = recur(i - 1, size);
+//       const r1 = recur(i - 1, size - items[i].size);
 
+//       //Accumalting all the items of what ever is fitting inside the bag
+//       r1.value += items[i].value;
+
+//       if (r0.value > r1.value) {
+//         return r0;
+//       } else {
+//         r1.size += items[i].size;
+//         r1.chosen = r1.chosen.concat(i);
+//         return r1;
+//       }
+//     }
+//   }
+
+//   return recur(items.length - 1, capacity);
+// }
+
+function timedRun(name, f, items, capacity) {
+  let t0 = Date.now();
+  let result = f(items, capacity);
+  let t1 = Date.now();
+  let td = t1 - t0;
+
+  console.log("Function: " + name);
+  console.log("Time: " + (td / 1000).toFixed(4));
+  console.log("Size: " + result.size);
+  console.log("Value: " + result.value);
+  console.log("Chosen: " + result.chosen);
+}
+
+const args = process.argv.slice(2);
+if (args.length != 2) {
+  console.error("usage: knapsack infile capacity");
+  process.exit(1);
+}
+const filename = args[0];
 const capacity = args[1];
+
 const filedata = fs.readFileSync(filename, "utf8");
 const lines = filedata.trim().split(/[\rn\n]+/);
 const items = [];
@@ -41,4 +121,9 @@ for (let l of lines) {
   };
 }
 
-console.log(items);
+// timedRun("Recursive", knapsackRecursive, items, capacity);
+
+// const value = knapsackRecursive(items, capacity);
+timedRun("Memo Recursive", knapsackMemoRecursive, items, capacity);
+
+// console.log(value);
