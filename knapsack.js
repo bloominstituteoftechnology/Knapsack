@@ -25,17 +25,36 @@ let value = 0;
 let volume = 0;
 const final = {};
 
+// Greedy Unbounded Solution
+// for (let i = 1; i < items.length; i++) {
+//   while (volume + items[i].size <= capacity) {
+//     volume += items[i].size;
+//     value += items[i].value;
+//     if (final[items[i].index]) {
+//       final[items[i].index] += 1;
+//     } else {
+//       final[items[i].index] = 1;
+//     }
+//   }
+//   if (volume === capacity) break;
+// }
+
+// Greedy 0/1 Solution
 for (let i = 1; i < items.length; i++) {
-  while (volume + items[i].size <= capacity) {
+  if (volume + items[i].size <= capacity) {
     volume += items[i].size;
+    value += items[i].value;
     if (final[items[i].index]) {
       final[items[i].index] += 1;
     } else {
       final[items[i].index] = 1;
     }
+    if (volume === capacity) break;    
   }
-  if (volume === capacity) break;
 }
 
 console.log(items);
-console.log(final);
+console.log(value);
+
+// 2640 idealized 0/1
+// 2639 greedy 0/1
