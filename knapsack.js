@@ -16,38 +16,25 @@ file.pop(); // Removes empty element at the end
 const items = [];
 
 file.forEach(item => {
-  items.push({ 
+  items.push({
     id: item[ 0 ],
     size: item[ 1 ],
     value: item[ 2 ],
-    valuePerSize: item[2] / item[1]
+    valuePerSize: item[ 2 ] / item[ 1 ]
   });
 });
 
-console.log('ITEMS:\n', items, '\n');
-
-// Helper function to calculate total size of current items
-const calculateSize = items => {
-  let totalSize = 0;
-  for (const item in items) {
-    total += item.size;
-  }
-  return totalSize;
-};
+items.sort((a, b) => b.valuePerSize - a.valuePerSize);
 
 const knapsack = {
   maxSize: knapsackSize,
-  currentSize: calculateSize(this.items),
+  currentSize: 0,
   totalValue: 0,
   items: []
 };
 
-// const auditionItem = (knapsack, item) => {
-//   let items = knapsack.items;
-// };
-
-for (let item in items) {
-  item = items[ item ];
+items.forEach((item, i) => {
+  item = items[ i ];
   if (
     knapsack.currentSize < knapsack.maxSize &&
     knapsack.currentSize + item.size <= knapsack.maxSize
@@ -56,6 +43,7 @@ for (let item in items) {
     knapsack.currentSize += item.size;
     knapsack.totalValue += item.value;
   }
-}
+});
 
 console.log('KNAPSACK:\n', knapsack);
+
