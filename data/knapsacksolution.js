@@ -207,3 +207,7 @@ Output for node knapsacksolution.js large1.txt 10
   size: 10,
   chosen: [ 104, 107, 239, 370, 432, 561, 671, 737 ]}
 */
+
+//cat large1.txt shows file
+
+//  node knapsacksolution.js large1.txt 2 shows { value: 180, size: 2, chosen: [ 104, 671 ] }
