@@ -7,17 +7,21 @@ const input = process.argv[2];
 arr = fs.readFileSync(input, 'utf8').trim().split('\n');
 
 let t1 = Date.now();
-let firstSpace;
-let secondSpace;
-let cost;
-let value;
+// let firstSpace;
+// let secondSpace;
+// let cost;
+// let value;
+let matched;
 
 arr = arr.map(item => {
-   firstSpace = item.indexOf(' ');
-   secondSpace = item.lastIndexOf(' ');
-   cost = +item.slice(firstSpace + 1, secondSpace);
-   value = +item.slice(secondSpace + 1);
-   return [value / cost, value, cost, +item.slice(0, firstSpace)];
+   // firstSpace = item.indexOf(' ');
+   // secondSpace = item.lastIndexOf(' ');
+   // cost = +item.slice(firstSpace + 1, secondSpace);
+   // value = +item.slice(secondSpace + 1);
+   // return [value / cost, value, cost, +item.slice(0, firstSpace)];
+
+   matched = item.match(/([0-9]+) ([0-9]+) ([0-9]+)/);
+   return [+matched[3] / +matched[2], +matched[3], +matched[2], +matched[1]];
 })
 
 arr.sort((a, b) => b[0] - a[0]);
