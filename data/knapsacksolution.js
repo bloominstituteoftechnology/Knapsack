@@ -27,8 +27,12 @@ function knapsackRecursive(items, capacity) {
    
     
     function recur(i, size) {
-        if (i == 0 || size == 0) {
-            return 0;
+        if (i == 0) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            };
         }
 
         else if (items[i].size > size) {
@@ -36,10 +40,18 @@ function knapsackRecursive(items, capacity) {
         }
 
         else {
-            return Math.max(
-                recur(i - 1, size),
-                recur(i - 1, size - items[i].size) + items[i].value
-            );
+                const r0 = recur(i - 1, size);
+                const r1 = recur(i - 1, size - items[i].size) 
+                
+                r1.value += items[i].value
+
+                if (r0.value > r1.value) {
+                    return r0;
+                } else {
+                    r1.size += items[i].size;
+                    r1.chosen = r1.chosen.concat(i); // Make a copy
+                    return r1;
+                }
         }
     }
 
@@ -188,3 +200,10 @@ Output for node knapsacksolution.js large1.txt 10
 
 // Recursive test returns 630
 
+// Output from node knapsacksolution.js large1.txt 10 from modification
+
+/*
+{ value: 630,
+  size: 10,
+  chosen: [ 104, 107, 239, 370, 432, 561, 671, 737 ]}
+*/
