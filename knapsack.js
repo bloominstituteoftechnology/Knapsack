@@ -21,14 +21,12 @@ const getData = () => fs.readFileSync(filename, 'utf-8');
 const file = getData();
 let lines = file.trim().split('\n');
 
-const n = lines.length; //number of items
-
 const start = Date.now();
 const preProcess = [];
 const subProcess = [];
 const goodResults = [];
 
-for(let i = 0; i < n; i++) {
+for(let i = 0; i < lines.length; i++) {
     const line = lines[i].split(' ');
     preProcess.push(line);
     subProcess.push(line);
@@ -43,13 +41,13 @@ preProcess.map((x, i) => {
     subProcess.forEach(function(el, j) {
 
         if(x !== el){
-            console.log('   SubProcess:', subProcess[j]);
+            // console.log('   SubProcess:', subProcess[j]);
 
             if(sizeResult < threshold && parseInt(preProcess[i][1]) < threshold){
 
                 sizeResult = parseInt(preProcess[i][1]) + parseInt(subProcess[j][1]) + sizeResult;
 
-                console.log('   sizeResult',  sizeResult);
+                // console.log('   sizeResult',  sizeResult);
 
                 if(sizeResult <= threshold){
 
@@ -78,8 +76,20 @@ preProcess.map((x, i) => {
 
 });
 
-console.log('goodResults::: ', goodResults);
+goodResults.forEach(function(el, i) {
 
+    console.log('goodResult element', el);console.log('');
+
+    let rsp = 0;
+
+    el.forEach(item => { rsp = parseInt(item[2]) + rsp });
+
+    goodResults[i].push(rsp);
+
+    console.log('rsp::', goodResults);
+
+
+});
 
 const end = Date.now();
 
