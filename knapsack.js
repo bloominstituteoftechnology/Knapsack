@@ -49,49 +49,79 @@ const items = [];
 //   return recur(items.length - 1, capacity);
 // }
 
-function knapSackRecursiveMemo(items, capacity) {
+// function knapSackRecursiveMemo(items, capacity) {
 
-  let resultsMem = Array(items.length);
+//   let resultsMem = Array(items.length);
 
-  for (let s = 0; s < items.length; s++) {
-    resultsMem[s] = Array(capacity + 1).fill(null);
+//   for (let s = 0; s < items.length; s++) {
+//     resultsMem[s] = Array(capacity + 1).fill(null);
+//   }
+
+//   function recurMemo(i, size) {
+//     let v = resultsMem[i][size];
+
+//     if (v === null) {
+//       v = recur(i, size);
+//       resultsMem[i][size] = Object.assign({}, v);
+//     }
+//     return v;
+//   }
+
+//   function recur(i, size) {
+//     if (i === 0) {
+//       return {
+//         value: 0,
+//         size: 0,
+//         chosen: [],
+//       };
+//     } else if (items[i].size > size) {
+//       return recurMemo(i - 1, size);
+//     } else {
+//       const r0 = recurMemo(i - 1, size);
+//       const r1 = recurMemo(i - 1, size - items[i].size);
+
+//       r1.value += items[i].value;
+
+//       if (r0.value > r1.value) {
+//         return r0;
+//       } else {
+//         r1.size += items[i].size;
+//         r1.chosen = r1.chosen.concat(i);
+//         return r1;
+//       }
+//     }
+//   }
+//   return recur(items.length - 1, capacity);
+// }
+
+function knapsackGreedy(items, capacity) {
+  const result = {
+    value: 0,
+    size: 0,
+    chosen: [],
   }
 
-  function recurMemo(i, size) {
-    let v = resultsMem[i][size];
+  items = items.slice(1);
 
-    if (v === null) {
-      v = recur(i, size);
-      resultsMem[i][size] = Object.assign({}, v);
-    }
-    return v;
+  items.sort((i0, i1) => {
+    const r0 = i0.value / i0.size;
+    const r1 = i1.value / i1.size;
+
+    return r1 - r0;
+  });
+
+  for (let i = 0; i < items.length && capacity > 0; i++) {
+    const item = items[i];
+
+    if (item.size <= capacity) {
+      result.value += item.value;
+      result.size += item.size;
+      result.chosen.push(item.index);
+      
+      capacity -= item.size;
+    };
   }
-
-  function recur(i, size) {
-    if (i === 0) {
-      return {
-        value: 0,
-        size: 0,
-        chosen: [],
-      };
-    } else if (items[i].size > size) {
-      return recurMemo(i - 1, size);
-    } else {
-      const r0 = recurMemo(i - 1, size);
-      const r1 = recurMemo(i - 1, size - items[i].size);
-
-      r1.value += items[i].value;
-
-      if (r0.value > r1.value) {
-        return r0;
-      } else {
-        r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i);
-        return r1;
-      }
-    }
-  }
-  return recur(items.length - 1, capacity);
+  return result;
 }
 
 if (args.length < 1) {
@@ -124,7 +154,8 @@ for (let item of treasure) {
 
 console.time('Process Time');
 // const result = knapSackRecursive(items, sackSize);
-const result = knapSackRecursiveMemo(items, sackSize);
+// const result = knapSackRecursiveMemo(items, sackSize);
+const result = knapsackGreedy(items, sackSize);
 
 console.log(`${sackSize} slots total in knapsack.`);
 console.log(`Chosen: ${result.chosen}`);
