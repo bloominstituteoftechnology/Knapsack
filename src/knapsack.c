@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG_TREASURE_SIZE 30
+#define DEBUG_TREASURE_SIZE 1000
 
 int knapsack(int W, int wt[], int val[], int n);
  
@@ -30,11 +30,13 @@ int knapsack(int W, int wt[], int val[], int n)
   return K[n][W];
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char *argv[]) 
 {
   int indexNum[DEBUG_TREASURE_SIZE] = {0};
   int weight[DEBUG_TREASURE_SIZE] = {0};//TODO:  Use malloc with info from command line
   int value[DEBUG_TREASURE_SIZE] = {0};
+  int threshold;
+  char filename[20];
 
   FILE *fptr;
   printf("File name is %s\n", argv[1]);
@@ -45,15 +47,18 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-  fptr = fopen(argv[1], "r");
+  strcpy(filename, "../data/");
+  strcat(filename, argv[1]);
+
+  fptr = fopen(filename, "r");
   
-  if ((fptr = fopen(argv[1], "r")) == NULL) {
+  if (fptr == NULL) {
     printf("Error! opening file\n");
 
     exit(1);
   }
 
-  int threshold = atoi(argv[2]);
+  threshold = atoi(argv[2]);
 
   if (threshold < 1) {
     printf("Threshold min: 1\n");
@@ -62,7 +67,7 @@ int main(int argc, char **argv)
   }
 
 
-  int num;
+  int num = 0;
 
   int counter = 0;
   int index = -1;//index starts at -1 becuase it increments before use
@@ -75,6 +80,7 @@ int main(int argc, char **argv)
     {
       case 0: 
         index++;
+        // threshold++;
         indexNum[index] = num;
         break;
       case 1: 
@@ -110,7 +116,7 @@ int main(int argc, char **argv)
 
   // Brute force - Check every possible combination and pick the best one.
                                   //knapSack(W, wt, val, n)
-  printf("The solution is %d\n", knapsack(debugSize, weight, value, DEBUG_TREASURE_SIZE));
+  printf("The solution is %d\n", knapsack(debugSize, weight, value, threshold));
 
   return 0;
 }
