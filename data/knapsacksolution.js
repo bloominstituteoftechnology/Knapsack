@@ -23,6 +23,29 @@
 
 // console.log(items);
 
+function knapsackRecursive(items, capacity) {
+   
+    
+    function recur(i, size) {
+        if (i == 0 || size == 0) {
+            return 0;
+        }
+
+        else if (items[i].size > size) {
+            return recur(i - 1, size);
+        }
+
+        else {
+            return Math.max(
+                recur(i - 1, size),
+                recur(i - 1, size - items[i].size) + items[i].value
+            );
+        }
+    }
+
+    return recur(items.length - 1, capacity);
+}
+//---> Main
 const fs = require("fs");
 const args = process.argv.slice(2); // node is the first argument
 
@@ -50,9 +73,10 @@ for (let l of lines) {
     };
 }
 
-console.log(items);
+const value = knapsackRecursive(items, capacity);
 
-knapsackRecursive(items, capacity);
+console.log(value);
+
 
 /*
 Output for node knapsacksolution.js large1.txt 10
