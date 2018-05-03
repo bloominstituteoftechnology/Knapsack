@@ -33,67 +33,55 @@ let end = Date.now();
 
 console.log('First for 1: ', ((end - start) / 1000).toFixed(4));
 
-// for(let i = 0; i < n; i++) {
-//
-//     let sizeResult = 0;
-//     let res = [];
-//     subProcess.forEach(function(el, j) {
-//         if(preProcess[i] !== el){
-//             if(sizeResult < threshold && parseInt(preProcess[i][1]) < threshold){
-//                 sizeResult = parseInt(preProcess[i][1]) + parseInt(subProcess[j][1]) + sizeResult;
-//                 if(sizeResult <= threshold){
-//                     if(res.length === 0){
-//                         res.push(preProcess[i]);
-//                     }
-//                     res.push(el);
-//                 }
-//             }
-//             if(preProcess[i][1] === threshold && res.length === 0){
-//                 res.push(preProcess[i]);
-//             }
-//             if(res.length > 0){
-//                 // console.log('res', res);
-//             }
-//         }
-//     });
-//
-//     goodResults.push(res);
-// }
 
 start = Date.now();
 
-// This is O(n^2) should be lighter
-preProcess.map((x, i) => {
+const saveResults = (dataResults) => {
+
+    return true;
+}
+
+
+let line = [];
+const saveTarget = (dataLine, index) => {
+
+    return line.push(dataLine);
+
+}
+
+
+const recursiveProcess = (rtr = false, index = 0) =>{
     let sizeResult = 0;
     let res = [];
 
-    console.log('MAIN RECORD: ', x);
-    subProcess.forEach(function(el, j) {
-        if(x !== el){
-            if(sizeResult < threshold && parseInt(preProcess[i][1]) < threshold){
-                sizeResult = parseInt(preProcess[i][1]) + parseInt(subProcess[j][1]) + sizeResult;
-                if(sizeResult <= threshold){
-                    if(res.length === 0){
-                        res.push(x);
-                    }
-                    res.push(el);
-                }
-            }
-            if(preProcess[i][1] === threshold && res.length === 0){
-                res.push(preProcess[i]);
-            }
-            if(res.length > 0){
-                // console.log('res', res);
-            }
+    if(index === 0){
+
+    }
+
+    preProcess.forEach((x, i) => {
+
+        console.log('Line', x, i);
+
+        if(index === 0){
+            saveTarget(x, i);
         }
+
+
     });
 
-    goodResults.push(res);
-});
+};
+
+recursiveProcess();
+
+
+
+
 
 end = Date.now();
 
 console.log('Process & PreProcess O(n^2): ', ((end - start) / 1000).toFixed(4));
+
+process.exit(0);
 
 // Sum the values of each good combination.
 goodResults.forEach(function(el, i) {
