@@ -30,25 +30,39 @@ int knapsack(int W, int wt[], int val[], int n)
   return K[n][W];
 }
 
-int main() 
+int main(int argc, char **argv) 
 {
   int indexNum[DEBUG_TREASURE_SIZE] = {0};
   int weight[DEBUG_TREASURE_SIZE] = {0};//TODO:  Use malloc with info from command line
   int value[DEBUG_TREASURE_SIZE] = {0};
-  
-  //From the command line, get the filename to load
-  char *debugFile = "../data/medium1.txt";//TODO: Get file name from the command line
-  printf("File name is %s\n", debugFile);
-
-  int num;
 
   FILE *fptr;
+  printf("File name is %s\n", argv[1]);
+
+  if (argc < 3) {
+    printf("usage: ./knapsack filename.txt threshold\n");
+
+    exit(1);
+  }
+
+  fptr = fopen(argv[1], "r");
   
-  if ((fptr = fopen(debugFile, "r")) == NULL) {
+  if ((fptr = fopen(argv[1], "r")) == NULL) {
     printf("Error! opening file\n");
 
     exit(1);
   }
+
+  int threshold = atoi(argv[2]);
+
+  if (threshold < 1) {
+    printf("Threshold min: 1\n");
+    
+    exit(1);
+  }
+
+
+  int num;
 
   int counter = 0;
   int index = -1;//index starts at -1 becuase it increments before use
@@ -85,7 +99,7 @@ int main()
 
   
   // Start with the most valuable and go from there
-  
+
 
 
   // Start with the smallest weight and go from there
