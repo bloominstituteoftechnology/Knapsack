@@ -18,11 +18,20 @@ const Main = () => {
 
   let arr = file.trim().split('\n');
   const n = arr.length;
+  values.push(0);
+  weights.push(0);
   for(let e = 0; e < n; e++) {
     out = arr[e].split( ' ' );
     values.push(+out[2]);
     weights.push(+out[1]);
   }
+  // const lines = file.trim().split(/[\r\n]+/); //----- alt version, slightly slower (probably regex)
+  // const n = lines.length;
+  // for (let l of lines) {
+    //   const [index, weight, value] = l.split(/\s+/);
+    //   values.push(+value);
+    //   weights.push(+weight);
+    // }
 
   const start = Date.now();
   for(let i = 0; i < n; i++) {
@@ -32,6 +41,7 @@ const Main = () => {
   for(let j = 0; j < capacity; j++) {
     table[0][j] = 0;
   }
+  // console.log('TABLE: ', table);
 
   for(let i = 1; i < n; i++) {
     for(let j = 0; j < capacity; j++) {
