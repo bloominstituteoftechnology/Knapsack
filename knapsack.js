@@ -24,21 +24,62 @@ let lines = file.trim().split('\n');
 const n = lines.length; //number of items
 
 const start = Date.now();
+const preProcess = [];
+const subProcess = [];
+const goodResults = [];
+
 for(let i = 0; i < n; i++) {
-
-    values.push(parseInt(lines[i].split(' ')[2]));
-    sizes.push(parseInt(lines[i].split(' ')[1]));
-    table[i] = [];
-
+    const line = lines[i].split(' ');
+    preProcess.push(line);
+    subProcess.push(line);
 }
 
-for(let j = 0; j < threshold ; j++) {
-    table[0][j] = 0;
-}
+preProcess.map((x, i) => {
 
-for(let i = 1; i < n; i++) {
+    let sizeResult = 0;
+    let res = [];
+    console.log('Main:',preProcess[i]);
 
-}
+    subProcess.forEach(function(el, j) {
+
+        if(x !== el){
+            console.log('   SubProcess:', subProcess[j]);
+
+            if(sizeResult < threshold && parseInt(preProcess[i][1]) < threshold){
+
+                sizeResult = parseInt(preProcess[i][1]) + parseInt(subProcess[j][1]) + sizeResult;
+
+                console.log('   sizeResult',  sizeResult);
+
+                if(sizeResult <= threshold){
+
+                    if(res.length === 0){
+                        res.push(x);
+                    }
+
+                    res.push(el);
+
+                }
+
+            }
+
+            if(preProcess[i][1] === threshold && res.length === 0){
+                res.push(preProcess[i]);
+            }
+
+            if(res.length > 0){
+                console.log('res', res);
+            }
+        }
+    });
+
+    goodResults.push(res)
+
+
+});
+
+console.log('goodResults::: ', goodResults);
+
 
 const end = Date.now();
 
