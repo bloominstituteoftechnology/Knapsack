@@ -52,6 +52,8 @@ for (let l of lines) {
 
 console.log(items);
 
+knapsackRecursive(items, capacity);
+
 /*
 Output for node knapsacksolution.js large1.txt 10
 
