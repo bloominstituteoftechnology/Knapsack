@@ -39,7 +39,7 @@ let m = []; // maximum value grid
 const v = []; // Values 
 const s = []; // Sizes
 const n = grid.length - 1; // Number of distinct items.
-const W = args[1]; // Knapsack capacity;
+const W = +args[1]; // Knapsack capacity;
 
 
 for (let x = 0; x < n; x++) {
@@ -47,12 +47,16 @@ for (let x = 0; x < n; x++) {
 	s.push(grid[x][1]);
 }
 
-for (let j = 0; j < W; j++) {
-	m.push(Array(n).fill(0))
+for (let j = 0; j < n+1; j++) {
+	m.push(Array(W+1).fill(0));
 }
 
 for (let i = 1; i <= n; i++) {
 	for (let k = 0; k < W; k++) {
+		if (isNaN(m[i-1][k])) {
+			console.log({'item':i})
+			console.log({'size':s[i]});
+		}
 		if (s[i] > k) {
 			m[i][k] = m[i-1][k]
 		} else if (m[i-1][k] > m[i-1][k-s[i]] + v[i]) {
