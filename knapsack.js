@@ -75,7 +75,39 @@ function knapsackRecursiveMemoized (items, capacity) {
     return recur(items.length - 1, capacity);
 }
 
-function timeRun (name, f, items, capacity) {
+function knapsackGreedy(items, capacity) {
+    const result = {
+        value: 0,
+        size: 0,
+        chosen: []
+    };
+
+    // Change from 1-based to 0-based
+    items = items.slice(1);
+
+    items.sort((i0, i1) => {
+        const r0 = i0.value / i0.size;
+        const r1 = i1.value / i1.size;
+
+        return r1 - r0;
+    });
+
+    for (let i = 0; i < items.length && capacity > 0; i++) {
+        const item = items[i];
+
+        if (item.size <= capacity) {
+            // Pack it in
+            result.value += item.value;
+            result.size += item.size;
+            result.chosen.push(item.index);
+
+            capacity -= item.size;
+        }
+    }
+    return result;
+}
+
+function timedRun (name, f, items, capacity) {
     let t0 = Date.now();
     let result = f(items, capacity);
     let t1 = Date.now();
@@ -114,5 +146,6 @@ for (let l of lines) {
         value: value
     };
 }
-timeRun("Recursive", knapsackRecursive, items, capacity);
-timeRun("Recursive Memoized", knapsackRecursiveMemoized, items, capacity);
+// timedRun("Recursive", knapsackRecursive, items, capacity);
+timedRun("Recursive Memoized", knapsackRecursiveMemoized, items, capacity);
+timedRun("Greedy", knapsackGreedy, items, capacity);
