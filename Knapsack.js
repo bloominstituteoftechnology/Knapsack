@@ -1,25 +1,13 @@
 const fs = require('fs');
-
-const threshold = 300;
+const threshold = 100;
 let arr = [];
 
 const input = process.argv[2];
 arr = fs.readFileSync(input, 'utf8').trim().split('\n');
 
 let t1 = Date.now();
-// let firstSpace;
-// let secondSpace;
-// let cost;
-// let value;
 let matched;
-
 arr = arr.map(item => {
-   // firstSpace = item.indexOf(' ');
-   // secondSpace = item.lastIndexOf(' ');
-   // cost = +item.slice(firstSpace + 1, secondSpace);
-   // value = +item.slice(secondSpace + 1);
-   // return [value / cost, value, cost, +item.slice(0, firstSpace)];
-
    matched = item.match(/([0-9]+) ([0-9]+) ([0-9]+)/);
    return [+matched[3] / +matched[2], +matched[3], +matched[2], +matched[1]];
 })
@@ -29,8 +17,8 @@ let totalCost = 0;
 let totalValue = 0;
 let itemsToSelect = [];
 for (let i = 0; i < arr.length; i++) {
-   let newCost = arr[i][2];
-   if (totalCost + newCost >= threshold) continue;
+   const newCost = arr[i][2];
+   if (totalCost + newCost > threshold) continue;
    totalCost += newCost;
    totalValue += arr[i][1];
    itemsToSelect.push(arr[i][3]);
@@ -44,6 +32,14 @@ console.log(
    Time to run: ${((t2 - t1) / 1000).toFixed(4)}`
 );
 
+// alternative Greedy
+// let capacity = threshold;
+// if (newCost <= capacity) { // this creates better results?
+//    totalCost += newCost;
+//    totalValue += arr[i][1];
+//    itemsToSelect.push(arr[i][3]);
+//    capacity -= newCost;
+// }
 
 // // Beej's solution
 // // run using `node knapsack.js .txt size#`
@@ -65,6 +61,7 @@ console.log(
 
 //    // more info returned
 //    function recur(i, size) {
+//       console.log('recur i & size & items[i].size is', i, size);
 //       if (i == 0) {
 //          return {
 //             value: 0,
@@ -88,50 +85,8 @@ console.log(
 //          }
 //       }
 //    }
-
 //    return recur(items.length - 1, capacity);
 // }
-
-// function timedRun(name, f, items, capacity) {
-//    let t0 = Date.now();
-//    let result = f(items, capacity);
-//    let t1 = Date.now();
-//    let td = t1 - t0;
-
-//    console.log('Function: ' + name);
-//    console.log('Time: ' + (td /1000).toFixed(4));
-//    console.log('Size: ' + result.size);
-//    console.log('Value: ' + result.value);
-//    console.log('Chosen: ' + result.chosen);
-// }
-
-// const args = process.argv.slice(2);
-// if (args.length != 2) {
-//    console.error("usage: knapsack infile capacity");
-//    process.exit(1);
-// }
-// const filename = args[0];
-// const capacity = args[1];
-// const filedata = fs.readFileSync(filename, "utf8");
-// const lines = filedata.trim().split(/[\rn\n]+/);
-// const items = [];
-
-// for (let l of lines) {
-//    const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
-//    items[index] = {
-//       index: index,
-//       size: size,
-//       value: value
-//    };
-// }
-
-// timedRun("Recursive", knapsackRecursive, items, capacity);
-
-// // const value = knapsackRecursive(items, capacity);
-// // console.log(value);
-
-
-
 // Beej's memoized solution
 
 // function knapSackRecursiveMemoized(items, capacity) {
@@ -176,7 +131,47 @@ console.log(
 //          }
 //       }
 //    }
+//    return recur(items.length - 1, capacity);
 // }
+
+// function timedRun(name, f, items, capacity) {
+//    let t0 = Date.now();
+//    let result = f(items, capacity);
+//    let t1 = Date.now();
+//    let td = t1 - t0;
+   
+//    console.log('Function: ' + name);
+//    console.log('Time: ' + (td /1000).toFixed(4));
+//    console.log('Size: ' + result.size);
+//    console.log('Value: ' + result.value);
+//    console.log('Chosen: ' + result.chosen);
+// }
+
+// const args = process.argv.slice(2);
+// if (args.length != 2) {
+//    console.error("usage: knapsack infile capacity");
+//    process.exit(1);
+// }
+// const filename = args[0];
+// const capacity = +args[1];
+// const filedata = fs.readFileSync(filename, "utf8");
+// const lines = filedata.trim().split(/[\rn\n]+/);
+// const items = [];
+
+// for (let l of lines) {
+//    const [index, size, value] = l.split(/\s+/).map(n => parseInt(n));
+//    items[index] = {
+//       index: index,
+//       size: size,
+//       value: value
+//    };
+// }
+
+// timedRun("Recursive", knapsackRecursive, items, capacity);
+// timedRun("Recursive", knapSackRecursiveMemoized, items, capacity);
+
+// // const value = knapsackRecursive(items, capacity);
+// // console.log(value);
 
 
 
@@ -216,6 +211,7 @@ console.log(
 //   }
 
 //   for(let i = 1; i < n; i++) {
+//     console.log('table is', [table]);
 //     for(let j = 0; j < capacity; j++) {
 //       if(weights[i] > j) {
 //         table[i][j] = table[i - 1][j];
@@ -226,11 +222,40 @@ console.log(
 //   }
 
 //   // console.log('arr: ', arr);
-//   console.log('val: ', values);
-//   console.log('wgt: ', weights);
-//   console.log('TABLE: ', table);
+// //   console.log('val: ', values);
+// //   console.log('wgt: ', weights);
+// //   console.log('TABLE: ', table);
 //   // console.log(((end - start) / 1000).toFixed(4));
 //   console.log('OPTIMAL: ', table[n - 1][capacity - 1]);
 // };
 
 // Main();
+
+
+// Beej's greedy solution
+// function knapsackGreedy(items, capacity) {
+//    const result = {
+//       value: 0,
+//       size: 0,
+//       chosen: []
+//    };
+//    items = items.slice(1); // changes 1 to 0 index
+//    items.sort((i0, i1) => {
+//       const r0 = i0.value / i0.size;
+//       const r1 = i1.value / i1.size;
+
+//       return r1 - r0;
+//    });
+//    for (let i = 0; i < items.length && capacity > 0; i++) {
+//       const item = items[i];
+
+//       if (item.size <= capacity) {
+//          result.value += item.value;
+//          result.size += item.size;
+//          result.chosen.push(item.index);
+//          capacity -= item.size;
+//       }
+//    }
+
+//    return result;
+// }
