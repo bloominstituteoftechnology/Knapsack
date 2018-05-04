@@ -71,6 +71,8 @@ preProcess.map((x, i) => {
     subProcess.forEach(function(el, j) {
         if(x !== el){
             if(sizeResult < threshold && parseInt(preProcess[i][1]) < threshold){
+
+                console.log('   Less than threshold', el)
                 sizeResult = parseInt(preProcess[i][1]) + parseInt(subProcess[j][1]) + sizeResult;
                 if(sizeResult <= threshold){
                     if(res.length === 0){

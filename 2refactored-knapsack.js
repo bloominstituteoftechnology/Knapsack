@@ -22,6 +22,8 @@ let start = Date.now();
 const preProcess = [];  const goodResults = []; const subProcess = [];
 const n = lines.length;
 
+console.log(n)
+
 // O(n)
 for(let i = 0; i < n; i++) {
     const line = lines[i].split(' '); // O(1)
@@ -41,39 +43,66 @@ const saveResults = (dataResults) => {
     return true;
 }
 
-
-let line = [];
-const saveTarget = (dataLine, index) => {
-
-    return line.push(dataLine);
-
-}
+let lineTarget = [];
 
 
-const recursiveProcess = (rtr = false, index = 0) =>{
-    let sizeResult = 0;
-    let res = [];
 
-    if(index === 0){
+let sizeResult = 0;
+let res = [];
 
-    }
+function recursiveProcess(){
 
-    preProcess.forEach((x, i) => {
+    const saveTarget = (dataLine, index = 0) => {
 
-        console.log('Line', x, i);
+        return lineTarget.push({
+            'data': dataLine,
+            'index': index,
+        });
 
-        if(index === 0){
-            saveTarget(x, i);
+    };
+
+    const myRecursion = (rtr = false, indexTarget = 0) =>  {
+        
+        for(let i = 0; i < n; i++) {
+
+            if (indexTarget === 0) {
+                if (i === 0)
+
+                    saveTarget(preProcess[0], i);
+
+                // console.log('first time',lineTarget[0].data, preProcess[i]);
+
+            } else {
+                if (i === 0)
+                    saveTarget(preProcess[indexTarget], indexTarget);
+
+                // console.log(lineTarget[indexTarget].data, preProcess[i]);
+            }
+
+
         }
 
+        if(lineTarget.length > 0){
 
-    });
+            if(n === lineTarget.length){
+                return;
+            }else{
+
+                return myRecursion(false, lineTarget[indexTarget].index + 1);
+
+            }
+
+        }
+
+    };
+
+    return myRecursion();
 
 };
 
+console.log('recursing...');
 recursiveProcess();
-
-
+console.log('Finished');
 
 
 
