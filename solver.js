@@ -241,7 +241,7 @@ function timedRun(name, f, items, capacity) {
 const argv = process.argv.slice(2);
 
 if (argv.length != 2) {
-  console.error("usage: knapsack capacity");
+  console.error("usage: filename capacity");
   process.exit(1);
 }
 
