@@ -37,43 +37,125 @@ const lines = filedata.trim().split(/[\r\n]+/g);
 // oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 // oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
-// ========= RATIO SOLUTION - Cesar -- FASTEST (7ms on large)======= //
+// ========= NATIVE SOLUTION - Sean ======== //
 
-const startTime = Date.now();
+// process the lines
 
-const items = lines.map(line => {
-  const [index, size, value] = line.split(' ');
-  const vsratio = value / size;
-  return { index, size, value, vsratio };
-});
+const items = [];
 
-// console.log('ITEMS', items);
+// turns above strings into actual 'number' data types -- see console.log('ITEMS', items);
+// This is called a 'for...of' statement: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
+// Essentially 'l' or whatever is placed between `let` and `of` is going to represent the value
+// of each of the elements in the array/object placed after `of`
+// Additionally, Sean uses something that looks like deconstruction, which assigns each of the three elements
+// in each line to the fields `index`, `size`, and `value`.
+for (let l of lines) {
+  const [index, size, value] = l
+    .toString() // Just to be explicit that `l` is a typeof string
+    .split(' ')
+    .map(n => parseInt(n));
+  console.log(`INDEX: ${index} vs. FULL LINE: ${[index, size, value]}`);
 
-items.sort((a, b) => {
-  return b.vsratio - a.vsratio;
-});
-
-const ratioKnapsack = {
-  selectedIndices: [],
-  totalSize: Number(0),
-  totalValue: Number(0),
-  remainingCapacity: Number(capacity)
-};
-
-for (let i = 0; i < items.length; i++) {
-  if (items[i].size <= ratioKnapsack.remainingCapacity) {
-    ratioKnapsack.selectedIndices.push(items[i].index);
-    ratioKnapsack.totalSize += Number(items[i].size);
-    ratioKnapsack.totalValue += Number(items[i].value);
-    ratioKnapsack.remainingCapacity -= Number(items[i].size);
-    console.log('ratioKnapsack.capacity:', ratioKnapsack.capacity);
-  }
+  // Adds field/keys
+  items[index] = {
+    index,
+    size,
+    value
+  };
 }
 
-const endTime = Date.now();
+function naiveKnapsack(items, capacity) {
+  // what is the value we have when we don't pick up any items
+  // value[0, w] = 0
+  // vaue[i, w] = value[i-1,w] if W[i] > w
 
-console.log(ratioKnapsack);
-console.log('Process time:', endTime - startTime, 'milliseconds');
+  // recursive solution:
+  function recurse(i, size) {
+    // i being the index of the item we are trying to put in our bag
+    // base case
+    // Sean uses double equals here so that...
+    if (i == 0) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: []
+      };
+    }
+
+    // how do we move towards our base case?
+    // Example:
+    // recurse(items.length, capacity)
+    // recurse(items.length -1, capacity)
+    // recurse(items.length -2, capacity)
+
+    // === You pick up an item, what are the possible cases? === //
+
+    // CASE #1: The item does not fit
+    else if (items[i].size > size) {
+      return recurse(i - 1, size);
+    }
+    // CASE #2: The item does fit, BUT might not be worth as much
+    // as the sum of values of items we currently have in our bag.
+    else {
+      // the max value we've accumulated so far
+      const r0 = recurse(i - 1, size);
+      // the max value we could have if we added the new item we picked,
+      // but evicted others
+      const r1 = recurse(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i);
+        return r1;
+      }
+    }
+  }
+  return recurse(items.length - 1, capacity);
+}
+
+console.log('Naive Recursive implementation', naiveKnapsack(items, capacity));
+
+// // ========= RATIO SOLUTION - Cesar -- FASTEST (7ms on large)======= //
+
+// const startTime = Date.now();
+
+// const items = lines.map(line => {
+//   const [index, size, value] = line.split(' ');
+//   const vsratio = value / size;
+//   return { index, size, value, vsratio };
+// });
+
+// // console.log('ITEMS', items);
+
+// items.sort((a, b) => {
+//   return b.vsratio - a.vsratio;
+// });
+
+// const ratioKnapsack = {
+//   selectedIndices: [],
+//   totalSize: Number(0),
+//   totalValue: Number(0),
+//   remainingCapacity: Number(capacity)
+// };
+
+// for (let i = 0; i < items.length; i++) {
+//   if (items[i].size <= ratioKnapsack.remainingCapacity) {
+//     ratioKnapsack.selectedIndices.push(items[i].index);
+//     ratioKnapsack.totalSize += Number(items[i].size);
+//     ratioKnapsack.totalValue += Number(items[i].value);
+//     ratioKnapsack.remainingCapacity -= Number(items[i].size);
+//     console.log('ratioKnapsack.capacity:', ratioKnapsack.capacity);
+//   }
+// }
+
+// const endTime = Date.now();
+
+// console.log(ratioKnapsack);
+// console.log('Process time:', endTime - startTime, 'milliseconds');
 
 // // ========= GREEDY SOLUTION -- EricHech -- 2nd Place ======== //
 
