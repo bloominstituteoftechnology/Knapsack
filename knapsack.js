@@ -1,3 +1,5 @@
+// ============ PROVIDED CODE =============== //
+
 // Need this to access data using the fs.readFileSync method
 const fs = require('fs');
 
@@ -28,6 +30,12 @@ const filedata = fs.readFileSync(filename, 'utf8');
 
 // regEx carraige Return, creating new line for each data set
 const lines = filedata.trim().split(/[\r\n]+/g);
+
+//  ========  END OF PROVIDED CODE ======= //
+// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
 // ========= RATIO SOLUTION - Cesar -- FASTEST (7ms on large)======= //
 
