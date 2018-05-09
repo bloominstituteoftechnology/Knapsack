@@ -76,10 +76,12 @@ function smartKnapsack(items, capacity) {
     chosen: []
   };
 
+  // exhaustive answer: for loop that pushes (i, where i = 0) then fills sack
+  //if sack.size > capacity, starts again on (i++)
+
   knapsack.chosen.push(analyzedItems[0].index);
   knapsack.value = knapsack.value + analyzedItems[0].value;
   knapsack.size = knapsack.size + analyzedItems[0].size;
-
 
   for (let i = 1; i < analyzedItems.length; i++) {
     if (analyzedItems[i].size + knapsack.size <= capacity) {
