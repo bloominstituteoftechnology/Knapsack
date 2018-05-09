@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "knapsack-js": "^1.0.2",
+    "thenby": "^1.2.3"
+  }
+}
