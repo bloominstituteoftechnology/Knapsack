@@ -1,62 +1,39 @@
 const fs = require('fs');
 
-function naiveKnapsack(items, capacity) {
-  // what is the value we have when we don't pick up any items
-  // value[0, w] = 0
-  // value[i, w] = value[i-1, w] if W[i] > w
+function betterKnapsack(items, capacity) {
+  let result = {
+    val: 0,
+    size: 0,
+    indeces: []
+  };
+  let currentIndex = 0;
 
-  // recursive solution
-  function recurse(i, size) {
-    // base case
-    if (i == 0) {
-      return {
-        value: 0,
-        size: 0,
-        chosen: []
-      };
-    }
+  for (let i = 0; result.size + items[i].size <= capacity; i++) {
+    let current = items[i];
 
-    // how do we move towards our base case?
-    // recurse(items.length, capacity)
-    // recurse(items.length - 1, capacity)
-    // recurse(items.length - 2, capacity)
+    result.size += current.size;
+    result.indeces.push(current.index);
+    result.val += current.value;
+    currentIndex = i;
+  }
 
-    // Pick up an item
-    // case: item doesn't fit
+  for (let i = currentIndex; i < items.length - 1; i++) {
+    let current = items[i];
 
-    else if (items[i].size > size) {
-      return recurse(i - 1, size);
-    }
-
-    // case: item does fit, but it might not be worth
-    // as much as the sum of values of items we currently
-    // have in our bag
-    else {
-      // the max value we've accumulated so far
-      const r0 = recurse(i - 1, size);
-      // the max value we could have if we added the new item we picked
-      // but evicted some others
-      const r1 = recurse(i - 1, size - items[i].size);
-
-      r1.value += items[i].value;
-
-      if (r0.value > r1.value) {
-        return r0;
-      } else {
-        r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i);
-        return r1;
-      }
+    if (result.size + current.size <= capacity) {
+      result.size += current.size;
+      result.indeces.push(current.index);
+      result.val += current.value;
     }
   }
 
-  return recurse(items.length - 1, capacity);
+  return result;
 }
 
 const argv = process.argv.slice(2);
 
 // add an error check to check the number of params
-if (argv.length != 2) {
+if (argv.length !== 2) {
   console.error('usage: [filename] [capacity]');
   process.exit(1);
 }
@@ -81,7 +58,12 @@ for (let l of lines) {
     index,
     size,
     value,
+    ratio: value / size
   };
 }
 
-console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
+const selectedItems = items.sort((a, b) => b.ratio - a.ratio);
+
+console.log(selectedItems);
+
+console.log("Naive Recursive implementation: ", betterKnapsack(items, capacity));
