@@ -53,6 +53,45 @@ function naiveKnapsack(items, capacity) {
   return recurse(items.length - 1, capacity);
 }
 
+function smartKnapsack(items, capacity) {
+  //fill array with items that you can carry and their ratio
+  //fill from best ratio first
+  //if doesn't fit go to next one
+  //if bag isn't full by end start from index 1
+
+  const analyzedItems = [];
+
+  for (let i = 1; i < items.length; i++) {
+    if (items[i].size < capacity) {
+      //put into array (can optimize w/ data structure, maybe max heap)
+      analyzedItems.push({ ...items[i], svRatio: items[i].value / items[i].size, })
+    }
+  }
+  
+  analyzedItems.sort((b, a) => parseFloat(a.svRatio) - parseFloat(b.svRatio));
+
+  const knapsack = {
+    value: 0,
+    size: 0,
+    chosen: []
+  };
+
+  knapsack.chosen.push(analyzedItems[0].index);
+  knapsack.value = knapsack.value + analyzedItems[0].value;
+  knapsack.size = knapsack.size + analyzedItems[0].size;
+
+
+  for (let i = 1; i < analyzedItems.length; i++) {
+    if (analyzedItems[i].size + knapsack.size <= capacity) {
+      knapsack.chosen.push(analyzedItems[i].index);
+      knapsack.value = knapsack.value + analyzedItems[i].value;
+      knapsack.size = knapsack.size + analyzedItems[i].size;
+    }
+  }
+
+return knapsack;
+}
+
 const argv = process.argv.slice(2);
 
 // add an error check to check the number of params
@@ -84,4 +123,5 @@ for (let l of lines) {
   };
 }
 
-console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
+//console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
+console.log("Smart implementation: ", smartKnapsack(items, capacity));
