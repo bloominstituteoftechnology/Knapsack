@@ -59,12 +59,25 @@ const customKnapsack = (items, capacity) => {
       avaliableSpace -= size;
     }
   }
-
+  // checkDifference(results, avaliableSpace);
   return results;
 };
 
-const checkDifference = (obj, diff) => {
-  for (let i = 0; i < 10; i++) {}
+const checkDifference = (results, diff) => {
+  // get list of all items in the results that have a size of diff + 0
+  const filteredResults = results.chosen.filter(
+    item => items[item].size === diff
+  );
+  // get list of all items in the items that have a size of diff + 1
+  const filteredItems = items.filter(item => item.size === diff + 1);
+  // filter new items list by ratio
+  ratioSort(filteredItems);
+  // compare value first item in list to the values of the items in the results list
+  // if items is larger, replace it with the item in the results
+  // remove the index from the chosen array
+  // subtract the value and zise
+  // add the new item to the chosen array
+  // add the value and size
 };
 
 // add an error check to check the number of params
