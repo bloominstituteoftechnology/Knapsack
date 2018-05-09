@@ -10,12 +10,19 @@ function naiveKnapsack(items, capacity) {
   let totalValue = 0;
 
   items.forEach(item => {
-    if (item.size < capacity - totalSize) {
+    let room = capacity - totalSize;
+    if (item.size < room) {
       chosen.push(item);
       totalSize += item.size;
       totalValue += item.value;
-    } else return;
-  }); return (chosen);
+    } else if (item.size < capacity){
+      let toBeRemoved = 0;
+      let removedValue = 0;
+      let removedWeight = 0;
+      //take out from knapsack and compare to next item
+    }
+  }); console.log(totalSize+totalValue);
+  return (chosen);
 }
 
 const argv = process.argv.slice(2);
