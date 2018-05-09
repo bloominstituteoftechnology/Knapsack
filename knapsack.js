@@ -1,61 +1,6 @@
 // Need this to access data using the fs.readFileSync method
 const fs = require('fs');
 
-// write a naive solution function:
-
-function naiveKnapsack(items, capacity) {
-  // what is the value we have when we don't pick up any items
-  // value[0, w] = 0
-  // vaue[i, w] = value[i-1,w] if W[i] > w
-
-  // recursive solution:
-  function recurse(i, size) {
-    // i being the index of the item we are trying to put in our bag
-    // base case
-    // Sean uses double equals here so that...
-    if (i == 0) {
-      return {
-        value: 0,
-        size: 0,
-        chosen: []
-      };
-    }
-
-    // how do we move towards our base case?
-    // Example:
-    // recurse(items.length, capacity)
-    // recurse(items.length -1, capacity)
-    // recurse(items.length -2, capacity)
-
-    // === You pick up an item, what are the possible cases? === //
-
-    // CASE #1: The item does not fit
-    else if (items[i].size > size) {
-      return recurse(i - 1, size);
-    }
-    // CASE #2: The item does fit, BUT might not be worth as much
-    // as the sum of values of items we currently have in our bag.
-    else {
-      // the max value we've accumulated so far
-      const r0 = recurse(i - 1, size);
-      // the max value we could have if we added the new item we picked,
-      // but evicted others
-      const r1 = recurse(i - 1, size - items[i].size);
-
-      r1.value += items[i].value;
-
-      if (r0.value > r1.value) {
-        return r0;
-      } else {
-        r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i);
-        return r1;
-      }
-    }
-  }
-  return recurse(items.length - 1, capacity);
-}
-
 console.log('PROCESS', process);
 
 // process.argv returns:
@@ -66,7 +11,6 @@ console.log('PROCESS', process);
 // Since you only need access to the filename and capacity values passed in when
 // your node command is initiated, only the last two parameters above are needed.
 const argv = process.argv.slice(2);
-
 console.log('ARGV', argv);
 
 // add an error to check the number of params
@@ -103,7 +47,6 @@ console.log('LINES - strings', lines); // should see data in array:
 // process the lines
 
 const items = [];
-
 // turns above strings into actual 'number' data types -- see console.log('ITEMS', items);
 for (let l of lines) {
   const [index, size, value] = l.split(' ').map(n => parseInt(n));
@@ -117,12 +60,10 @@ for (let l of lines) {
 }
 
 // shift off the undefined element at index 0
-// items.shift();
-// items[0] = null;
+// items.shift(); // This messes with the output somehow
+// items[0] = null; // This doesn't change anything - empty vs null
 console.log('ITEMS', items);
 console.log('length of ITEMS', items.length);
-
-console.log('Naive Recursive implementation', naiveKnapsack(items, capacity));
 
 // PSEUDO:
 

@@ -1,6 +1,6 @@
 # Knapsack
 
-![xkcd "NP-Complete"](https://imgs.xkcd.com/comics/np_complete.png "General solutions get you a 50% tip.")
+![xkcd "NP-Complete"](https://imgs.xkcd.com/comics/np_complete.png 'General solutions get you a 50% tip.')
 
 Suppose you are Indiana Jones, and you have found the secret entrance to the
 Temple of Doom. Before you is a multitude of artifacts and treasures - pots,
@@ -27,7 +27,7 @@ Audience: students and algorithms enthusiasts
 
 ## Getting started
 
-This exercise can be completed in just about any language.  Each solution will be different, depending on the specifics of the language chosen.  
+This exercise can be completed in just about any language. Each solution will be different, depending on the specifics of the language chosen.
 
 Before starting, check with your instructor about the language you are using.
 
@@ -60,7 +60,7 @@ cost is below some threshold. That is, the output should be a set of items
 outputting the total cost and value of these items. This can all just be printed
 and may look something like below.
 
-This is *not* a solution, just an example:
+This is _not_ a solution, just an example:
 
 ```
 Items to select: 2, 8, 10
