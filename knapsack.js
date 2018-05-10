@@ -108,6 +108,66 @@ function ratioKnapsack(items, capacity) {
   console.log(results);
   return results;
 }
+
+function timedRun(name, func, items, capacity) {
+  const startTime = Date.now();
+  const result = func(items, capacity);
+  const endTime = Date.now();
+  const diffTime = endTime - startTime;
+
+  console.log(name);
+  console.log(`Time: ${(diffTime / 1000).toFixed(4)}`);
+  console.log(`Answer: ${result}`);
+  console.log();
+}
+
+function dynamicKnapsack(items, capacity) {
+  items.shift();
+  // let cache = [...Array(items.length)].map(element =>
+  // Array(items.length).fill(0)
+  // );
+  let cache = [];
+  for (let i = 0; i <= items.length; i++) {
+    for (let j = 0; j <= capacity; j++) {
+      if (i === 0 || j === 0) {
+        if (!cache[i]) cache[i] = [{}];
+        cache[i][j] = { value: 0, size: 0, chosen: [] };
+        // console.log(cache);
+      } else if (items[i - 1].size <= j) {
+        let value;
+        let chosen;
+        let currentResult =
+          items[i - 1].value + cache[i - 1][j - items[i - 1].size].value;
+        let prevResult = cache[i - 1][j].value;
+        if (currentResult > prevResult) {
+          value = currentResult;
+          chosen = i - 1;
+        } else {
+          value = prevResult;
+        }
+        cache[i][j] = {
+          value: value,
+          size: j
+        };
+        if (chosen) {
+          cache[i][j].chosen = [...cache[i - 1][j].chosen, chosen];
+        } else {
+          cache[i][j].chosen = cache[i - 1][j].chosen;
+        }
+      } else {
+        cache[i][j] = cache[i - 1][j];
+      }
+    }
+  }
+  let results = {
+    value: 0,
+    size: 0,
+    chosen: []
+  };
+  console.log(cache[items.length][capacity]);
+  return JSON.stringify(cache[items.length][capacity]);
+}
+
 const argv = process.argv.slice(2);
 
 // add an error check to check the number of params
@@ -140,4 +200,5 @@ for (let l of lines) {
 }
 
 // console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
-console.log("Ratio implementation: ", ratioKnapsack(items, capacity));
+// console.log("Ratio implementation: ", ratioKnapsack(items, capacity));
+timedRun("Dynamic", dynamicKnapsack, items, capacity);
