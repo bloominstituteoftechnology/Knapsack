@@ -74,6 +74,9 @@ function greedyAlg(items,capacity){
       answer.items.push(list[ratios[i]].index);
       answer.value += list[ratios[i]].value;
     }
+    else{
+      break;
+    }
   }
   answer.size = current;
   return answer;
@@ -110,7 +113,7 @@ for (let l of lines) {
   };
 }
 let t0 = present();
-console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
+//console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
 t1 = present();
 console.log('\ntook ' + (t1 - t0) + ' milliseconds');
 t0 = present();
