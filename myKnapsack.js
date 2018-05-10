@@ -1,9 +1,15 @@
 const fs = require('fs');
 const firstBy = require('thenby');
 
+
 function loopSack(items, capacity) {
 
+        
+        // console.log('preshift', items)
 
+        items.shift()
+
+        // console.log('postshiftpresort', items)
 
         items.sort(function(item1, item2){
 
@@ -12,46 +18,39 @@ function loopSack(items, capacity) {
             return item1ValSize < item2ValSize ? 1 : -1;
         });
 
+        // console.log('postshiftpostsort', sortedItems)
+
+        // console.log('items size', items.size);
+
         let knap = {
             value: 0,
             size: 0,
-            capacity,
+            weight: capacity,
             sack: []
         };
 
-        
-        // while(knap.size <= capacity ){
-
-        // let sack = knap.sack
-        // let knapSize = knap.size += items.size;
-  
         for(let i = 0; i < items.length; i++) {
 
-            if(knap.capacity > items[i].size ){
+            if(knap.weight > items[i].size){
+
                 knap.sack.push(items[i].index);
+
                 knap.value += items[i].value;
+
                 knap.size += items[i].size;
-                knap.capacity += items[i].size;
+
+                knap.weight -= items[i].size;
+
+            }
+          
             }
 
-            return knap;
+        return knap;
 
 
-
-            // knap.sack = items.slice([i, 1]);
-
-            // for(let l = 0; l < knap.sack.length; l++){
-            //     knap.size += knap.sack[l].size;
-            // }
-
-            // if(knap.size === capacity){
-            //     return knap;
-            // }
-
-        }
-
+        // knap.sack.pop()
+        
         // return knap;
-    // }
 }
 
 const argv = process.argv.slice(2);
@@ -83,6 +82,7 @@ for (let l of lines) {
     size,
     value,
   };
+  
 }
 
 console.log("loopSack implementation: ", loopSack(items, capacity));
