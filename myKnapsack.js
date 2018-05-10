@@ -27,15 +27,26 @@ function loopSack(items, capacity) {
   
         for(let i = 0; i < items.length; i++) {
 
-            knap.sack = items.slice([i, 1]);
-
-            for(let l = 0; l < knap.sack.length; l++){
-                knap.size += knap.sack[l].size;
+            if(knap.capacity > items[i].size ){
+                knap.sack.push(items[i].index);
+                knap.value += items[i].value;
+                knap.size += items[i].size;
+                knap.capacity += items[i].size;
             }
 
-            if(knap.size === capacity){
-                return knap;
-            }
+            return knap;
+
+
+
+            // knap.sack = items.slice([i, 1]);
+
+            // for(let l = 0; l < knap.sack.length; l++){
+            //     knap.size += knap.sack[l].size;
+            // }
+
+            // if(knap.size === capacity){
+            //     return knap;
+            // }
 
         }
 
