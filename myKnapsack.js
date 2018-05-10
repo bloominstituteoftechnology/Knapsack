@@ -42,6 +42,7 @@ function loopKnapsack(items, capacity) {
     )
 
         let knap = {
+            value: 0,
             size: 0,
             sack: []
         };
@@ -51,8 +52,10 @@ function loopKnapsack(items, capacity) {
              for(let i = 0; i < items.length; i++) {
 
                return knap.sack = items.slice([i]);
-               
+
             }
+
+        return knap;    
     }
 
         // for(let i = 0; i < knap.sack.length; i++){
