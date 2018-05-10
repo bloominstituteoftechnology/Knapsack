@@ -70,7 +70,7 @@ function smartKnapsack(items, capacity) {
   
   analyzedItems.sort((b, a) => parseFloat(a.svRatio) - parseFloat(b.svRatio));
 
-  const knapsack = {
+  const cachedKnapsack = {
     value: 0,
     size: 0,
     chosen: []
@@ -78,20 +78,31 @@ function smartKnapsack(items, capacity) {
 
   // exhaustive answer: for loop that pushes (i, where i = 0) then fills sack
   //if sack.size > capacity, starts again on (i++)
+  for (let i = 0; i < analyzedItems.length; i++) {
 
-  knapsack.chosen.push(analyzedItems[0].index);
-  knapsack.value = knapsack.value + analyzedItems[0].value;
-  knapsack.size = knapsack.size + analyzedItems[0].size;
+  const knapsack = {
+    value: 0,
+    size: 0,
+    chosen: []
+  };
 
-  for (let i = 1; i < analyzedItems.length; i++) {
-    if (analyzedItems[i].size + knapsack.size <= capacity) {
-      knapsack.chosen.push(analyzedItems[i].index);
-      knapsack.value = knapsack.value + analyzedItems[i].value;
-      knapsack.size = knapsack.size + analyzedItems[i].size;
+  knapsack.chosen.push(analyzedItems[i].index);
+  knapsack.value = knapsack.value + analyzedItems[i].value;
+  knapsack.size = knapsack.size + analyzedItems[i].size;
+
+  for (let j = i + 1; j < analyzedItems.length; j++) {
+    if (analyzedItems[j].size + knapsack.size <= capacity) {
+      knapsack.chosen.push(analyzedItems[j].index);
+      knapsack.value = knapsack.value + analyzedItems[j].value;
+      knapsack.size = knapsack.size + analyzedItems[j].size;
     }
   }
 
-return knapsack;
+  if (knapsack.value > cachedKnapsack.value) cachedKnapsack = knapsack;
+  if (knapsack.size === capacity) return knapsack;
+}
+
+return cachedKnapsack;
 }
 
 const argv = process.argv.slice(2);
