@@ -113,4 +113,9 @@ let t0 = present();
 console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
 t1 = present();
 console.log('\ntook ' + (t1 - t0) + ' milliseconds');
-console.log(greedyAlg(items,capacity));
+t0 = present();
+console.log('\ngreedy implementation', greedyAlg(items,capacity));
+t1 = present();
+console.log('\ntook ' + (t1 - t0) + ' milliseconds');
+
+
