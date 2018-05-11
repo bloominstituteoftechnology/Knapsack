@@ -25,7 +25,7 @@ Audience: students and algorithms enthusiasts
 * Try a variety of algorithmic approaches
 * Learn about performance/benchmarking, play with some actual data
 
-## Getting started
+## Getting Started
 
 This exercise can be completed in just about any language.  Each solution will be different, depending on the specifics of the language chosen.  
 
@@ -72,3 +72,5 @@ For first steps, just think a bit about how you might naively solve this with
 brute force. The above data is small enough that such a solution should work, so
 give it a go. More to come soon - larger problems that will require more
 sophisticated approaches.
+
+The `answers.txt` file includes the expected answers for each of the data files. Note that all the runs used a capacity of 100. 
