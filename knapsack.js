@@ -1,112 +1,20 @@
 // ============ PROVIDED CODE =============== //
 
-// Need this to access data using the fs.readFileSync method
-// This is 'reading in files using Node.js' - grab the node.fs module
 const fs = require('fs');
-
-// process.argv returns:
-// [ '/usr/local/bin/node',
-//      '/Users/admin/Desktop/Project Files/GitHub/lambdaSchool/Knapsack/knapsack.js',
-//      'data/small1.txt',
-//      '100' ]
-// Since you only need access to the filename and capacity values passed in when
-// your node command is initiated, only the last two parameters above are needed.
-const argv = process.argv.slice(2);
-// console.log('ARGV', argv);
-// Now we are getting the correct parameters from argv
-
-// add an error to check the number of params
-if (argv.length != 2) {
-  console.error('usage: [filename] [capacity]');
-  process.exit(1);
-}
-
-// Thus, `filename` will be assigned whatever filename is given in your node command AND
-// `capacity` will be assigned to whatever max capacity value you assign.
-const filename = argv[0];
-const capacity = argv[1];
-
-// read the file ('filename') that was passed to our program
-// use readFileSync method (can do this async as well), passing filename, and the format
-// that we are going to read this data in --> 'utf8'
-const filedata = fs.readFileSync(filename, 'utf8');
-// console.log('FILEDATA:', filedata);
-
-// regEx carraige Return, creating new line for each data set
-// creates a new object, where each line of filedata is given
-// its own line.
-const lines = filedata.trim().split(/[\r\n]+/g);
-// console.log(lines) // expect and array with all the data on seperate lines - strings
-
-//  ========  END OF PROVIDED CODE ======= //
-// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-// oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-
-// ========= NATIVE SOLUTION - Sean ======== //
-
-// ========== SETUP =========== //
-
-// process the lines
-
-const items = [];
-
-// turns above strings into actual 'number' data types -- see console.log('ITEMS', items);
-// This is called a 'for...of' statement: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
-// Essentially 'l' or whatever is placed between `let` and `of` is going to represent the value
-// of each of the elements in the array/object placed after `of`
-// Additionally, Sean uses something that looks like deconstruction, which assigns each of the three elements
-// in each line to the fields `index`, `size`, and `value`.
 console.log(
-  `000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
+  `WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW`
 );
-console.log(`lines array before index, size, and value added: ${lines}`);
-for (let l of lines) {
-  // assigns three values in each string 'l' to these three fields.
-  // This DOES NOT change the 'lines' array, but creates a NEW array.
-  const [index, size, value] = l
-    .toString() // Just to be explicit that `l` is a typeof string -- not necessary though
-    .split(' ')
-    .map(n => parseInt(n));
-
-  // console.log(`INDEX: ${index} vs. FULL LINE: [${(index, size, value)}]`);
-
-  // creates `items` object from the above array
-  // console.log(`items: ${items}`); // Shows items object being created.
-  // console.log(`index before items[index] defined: ${index}`); // expect:
-  // console.log(`size before items[index] defined: ${size}`);
-  // console.log(`value before items[index] defined: ${value}`);
-
-  items[index] = {
-    index,
-    size,
-    value
-  };
-}
-
-console.log(
-  `lines array unadjusted after index, size, and value added: ${lines}`
-);
-
-// ============================== NAIVE KNAPSACK: ACTUAL FUNCTION ============================== //
 
 function naiveKnapsack(items, capacity) {
   // what is the value we have when we don't pick up any items
   // value[0, w] = 0
-  // vaue[i, w] = value[i-1,w] if W[i] > w
-  console.log('ITEMS', items);
+  // value[i, w] = value[i-1, w] if W[i] > w
 
-  // recursive solution:
+  // recursive solution
   function recurse(i, size) {
-    // console.log(`recurse() beginning: CURRENT INDEX IS: ${i}`);
-    // CASE #1: i being the index of the item we are trying to put in our bag
     // base case
-    // Sean uses double equals here so that...
-    if (i === 0) {
-      // console.log('i inside Case #1:', i);
-      // console.log('CASE #1');
-
+    if (i == 0) {
+      // console.log(`index === 0`);
       return {
         value: 0,
         size: 0,
@@ -115,92 +23,79 @@ function naiveKnapsack(items, capacity) {
     }
 
     // how do we move towards our base case?
-    // Example:
     // recurse(items.length, capacity)
-    // recurse(items.length -1, capacity)
-    // recurse(items.length -2, capacity)
+    // recurse(items.length - 1, capacity)
+    // recurse(items.length - 2, capacity)
 
-    // === You pick up an item, what are the possible cases? === //
-
-    // CASE #2: The item does not fit
+    // Pick up an item
+    // case: item doesn't fit
     else if (items[i].size > size) {
-      // console.log(`CASE #2: i = ${i}`);
-      // console.log(`${items[i].size} is greater than ${size}`);
-      // console.log(`call recurse function again of i - 1 = one less than ${i}`);
       return recurse(i - 1, size);
     }
-    // CASE #3: The item does fit AND index does not equal 0, BUT the item might not be worth as much
-    // as the sum of values of items we currently have in our bag.
-    else if (i !== 0) {
-      console.log(`CASE #3`);
+
+    // case: item does fit, but it might not be worth
+    // as much as the sum of values of items we currently
+    // have in our bag
+    else {
       // the max value we've accumulated so far
       const r0 = recurse(i - 1, size);
-
-      // the max value we could have if we added the new item we picked,
-      // but evicted others - this will compare with all elements
+      // the max value we could have if we added the new item we picked
+      // but evicted some others
       const r1 = recurse(i - 1, size - items[i].size);
-      // console.log(`i`, i);
-      console.log(`value of bag if new item is added: ${r1.value}`);
-      console.log(
-        `items[${i}].value(which equals ${items[i].value}) added to r1.value(${
-          r1.value
-        })`
-      );
 
       r1.value += items[i].value;
-      console.log(`updated r1.value (plus new item's value) is ${r1.value}`);
 
-      // console.log(
-      //   `COMPARE: If the value of current items in the bag was: ${
-      //     r0.value
-      //   }
-      //   greater than the value if the item at index ${i} with value ${
-      //     items[i].value
-      //   } were added to the bag: ${r1.value}?`
-      // );
-      console.log(
-        `CURRENT state of bag's contents is [({r0.value: ${
-          r0.value
-        }, r0.size: ${r0.size}, r0.chosen: [ ${r0.chosen} ]})]`
-      );
       if (r0.value > r1.value) {
-        console.log(`CASE #3.1: The current total value of the bag (${
-          r0.value
-        } is greater than the value
-        of the bag if the new item(${
-          r1.value
-        }) were added.  SO, DO NOT PUT TREASURE at index ${i} in BAG)`);
-        console.log(
-          `CASE #3.1: Current state of bag = ({r0.value: ${
-            r0.value
-          }, r0.size: ${r0.size}, r0.chosen: [ ${r0.chosen} ]})`
-        );
+        console.log(`r0 wins: r0.value = ${r0.value}`);
         return r0;
       } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i);
         console.log(
-          `No it is not --> CASE #3.2 [PUT TREASURE at index ${i} in cue for adding: ({r1.value: ${
-            r1.value
-          }, r1.size: ${r1.size}, r1.chosen: [ ${r1.chosen} ]})`
-        );
-        console.log(
-          `CASE #3.2: Current state of bag = ({r0.value: ${
-            r0.value
-          }, r0.size: ${r0.size}, r0.chosen: [ ${r0.chosen} ]})`
+          `r1 wins: r1.value = ${r1.value}, r1.size = ${r1.size}, r1.chosen = ${
+            r1.chosen
+          }`
         );
         return r1;
       }
     }
   }
-  console.log(
-    `START of nested "recurse" function: "recurse" will run as many times as it needs to until the base case is reached --> i == 0`
-  );
-  // The minus 1 here is what moves us closer to our base case
-  const lastItemInItems = items.length - 1;
-  console.log('lastItemInItemsINPUT', lastItemInItems); // returns: 10
-  return recurse(lastItemInItems, capacity);
+
+  return recurse(items.length - 1, capacity);
 }
 
-console.log('Naive Recursive implementation', naiveKnapsack(items, capacity));
+const argv = process.argv.slice(2);
+
+// add an error check to check the number of params
+if (argv.length != 2) {
+  console.error('usage: [filename] [capacity]');
+  process.exit(1);
+}
+
+const filename = argv[0];
+const capacity = argv[1];
+
+// read the file that was passed to our program
+
+const filedata = fs.readFileSync(filename, 'utf8');
+
+const lines = filedata.trim().split(/[\r\n]+/g);
+
+// process the lines
+
+const items = [];
+
+for (let l of lines) {
+  const [index, size, value] = l.split(' ').map(n => parseInt(n));
+
+  items[index] = {
+    index,
+    size,
+    value
+  };
+}
+
+console.log('Naive Recursive implementation: ', naiveKnapsack(items, capacity));
 
 // // ========= RATIO SOLUTION - Cesar -- FASTEST (7ms on large) ======= //
 
