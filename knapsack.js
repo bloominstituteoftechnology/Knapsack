@@ -51,5 +51,5 @@ let ActiveArray = [];
 for (let i = 0; i < knapSize; i++) {
   ActiveArray.push(0);
 }
-return knapSack(ActiveArray,capacity,knapSize)
+return knapSack(ActiveArray,capacity,knapSize);
 
