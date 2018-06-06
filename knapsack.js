@@ -42,7 +42,7 @@ for (let l of lines) {
       return rat.sort((a,b) => a.total - b.total)
   }
 //GOAL: FIND THE GREATEST VALUE WITH A WEIGHT UNDER CAPACITY
-  function greedyPoo(items, capacity) {
+  function greedyPoo(items) {
     var resultsGreed = [];
     let currentSize = 0;
     let currentValue = 0;
@@ -58,10 +58,35 @@ for (let l of lines) {
   }
 
   function recursive(items, capacity) {
+    function recurse(i, size) {
+        if ( i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            };
+        }
+        else if(items[i].size > size) {
+            return recurse(i-1, size);
+        }
+        else{
+            const r0 = recurse(i-1, size);
+            const r1 = recurse(i-1, size - items[i].size);
 
+            r1.value += items[i].value;
+            if(r0.value > r1.value) {
+                return r0;
+            }else {
+                r1.size += items[i].size;
+                r1.chosen = r1.chosen.concat(i + 1);
+                return r1;
+            }
+        }
+    }
+    return recurse(items.length -1, capacity);
   }
 
   function iterativeFoo(items, capacity) {
   }
-
   console.log(greedyPoo());
+  console.log(recursive(items, capacity));
