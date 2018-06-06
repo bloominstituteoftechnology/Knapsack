@@ -1,5 +1,40 @@
 const fs = require('fs');
 
+/* Naive Recursive Approach */
+function naiveKnapsack(items, capacity) {
+  function recurse(i, size) {
+    // base case
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: [],
+      };
+    }
+
+    // check to see if the item fits
+    else if (items[i].size > size) {
+      return recurse(i - 1, size);
+    }
+    // Item fits, but might not be worth as much as items in there already
+    else {
+      const r0 = recurse(i - 1, size);
+      const r1 = recurse(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i+1);
+        return r1;
+      }
+    }
+  }
+  return recurse(items.length - 1, capacity);
+}
+
 /*
   Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity
@@ -8,6 +43,35 @@ const fs = require('fs');
   are at the top of the array of items
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
+const greedyAlgo = (items, capacity) => {
+  const result = {
+    size: 0,
+    value: 0,
+    chosen: [],
+  };
+
+  // items = items.filter(item => item.size < capacity);
+  items.sort((i1, i2) => {
+    const r1 = i1.value / i1.size;
+    const r2 = i2.value / i2.size;
+
+    return r2 - r1;
+  });
+  // loop through our items array, checking to see if the
+  // item's size <= our total capacity
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].size <= capacity) {
+      // if it is, add it to our final result
+      result.size += items[i].size;
+      result.value += items[i].value;
+      result.chosen.push(items[i].index);
+      // don't forget to decrement our total capacity
+      capacity -= items[i].size;
+    }
+  }
+
+  return result;
+};
 
 const argv = process.argv.slice(2);
 
@@ -37,107 +101,5 @@ for (let l of lines) {
   });
 }
 
-// console.log(items);
-
-// const itemsFiltered = []
-
-// items.forEach(item => {
-//     if(item.value > item.size) {
-//         itemsFiltered.push(item)
-//     }
-// })
-
-
-// itemsFiltered.sort(function (a, b) {
-//     return a.size - b.size
-// })
-
-// let size = 0;
-// let value = 0;
-// let chosen = [];
-
-// for(let i = 0; i < itemsFiltered.length; i++) {
-//     if(size + itemsFiltered[i].size < 100) {
-//         value += itemsFiltered[i].value
-//         size += itemsFiltered[i].size
-//         chosen.push(itemsFiltered[i].index)
-//     } else {
-//         continue;
-//     }
-// }
-// console.log('lol', itemsFiltered)
-
-// console.log("\n", "Chosen:", chosen);
-// console.log("\n", "Size:", size);
-// console.log("\n", "Value: ", value);
-
-
-const greedyAlgo = (items, capacity) => {
-    const result = {
-        size: 0,
-        value: 0,
-        chosen: []
-    }
-
-    // items = items.filter(item => item.size < capacity);
-    items.sort((i1, i2) => {
-        const r1 = i1.value / i1.size;
-        const r2 = i2.value /i2.size;
-
-        return r2 - r1
-    })
-    //loop throgh our items array
-    //To see if size <= capacity
-    for(let i = 0; i < items.length; i++) {
-        if(items[i].size <= capacity) {
-
-            //if it is, add to final result
-            result.size += items[i].size;
-            result.value += items[i].value;
-            result.chosen.push(items[i].index)
-
-
-            //decrement total copacity
-            capacity -= items[i].size
-        }
-    }
-
-    return result;
-}
-
-
-function naiveKnapsack(items, capacity) {
-    function recurse(i, size) {
-        if(i === -1) {
-            return {
-                value: 0,
-                size: 0,
-                chosen: [],
-            };
-        }
-
-        else if(items[i].size > size) {
-            return recurse(i-1, size)
-        }
-
-        else {
-            const r0 = recurse(i-1, size);
-            const r1 = recurse(i-1, size - items[i].size)
-
-            r1.value += items[i].value
-
-
-            if(r0.value > r1.value) {
-                return r0;
-            } else {
-                r1.size += items[i].size
-                r1.chosen = r1.chosen.concat(i+1);
-                return r1;
-            }
-        }
-    }
-    return recurse(items.length - 1, capacity)
-}
-// console.log(greedyAlgo(items, capacity))
-
-console.log(naiveKnapsack(items, capacity))
+// console.log(greedyAlgo(items, capacity));
+console.log(naiveKnapsack(items, capacity));
