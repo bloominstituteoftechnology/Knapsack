@@ -39,13 +39,14 @@ for (let l of lines) {
 }
 
 
-const newItems = items.filter(item => item.size <= capacity);
-// console.log(newItems);
-const scoringItems = newItems.sort((a, b) => b.score - a.score)
-// console.log(scoringItems);
 
-const knapsack = (scoringItems, capacity) => {
-  let knapsackItems = [];
+
+const knapsack = (items, capacity) => {
+
+	const newItems = items.filter(item => item.size <= capacity);
+	const scoringItems = newItems.sort((a, b) => b.score - a.score)
+	let knapsackItems = [];
+	
   for (let i = 0; i < scoringItems.length; i++) {
     if (scoringItems[i].size < capacity) {
       capacity -= scoringItems[i].size;
@@ -55,4 +56,4 @@ const knapsack = (scoringItems, capacity) => {
 	return knapsackItems;
 }
 
-console.log(knapsack(scoringItems, capacity))
+console.log(knapsack(items, capacity))
