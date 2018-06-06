@@ -63,7 +63,7 @@ while (!full) {
 
 
 // while (!full) {
-//     let filtered = rated.filter(obj => obj.size < (capacity - knapsacksize));
+//     let filtered = rated.filter(obj => obj.size <= (capacity - knapsacksize));
 //     if (filtered.length > 0) {
 //         filtered.sort((a, b) => compare(a.rating, b.rating));
 //         knapsacksize += filtered[0].size;
