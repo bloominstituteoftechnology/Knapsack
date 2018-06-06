@@ -37,4 +37,15 @@ for (let l of lines) {
   });
 }
 
-console.log(items)
+console.log(items);
+
+const itemsFiltered = []
+
+items.forEach(item => {
+    if(item.value > item.size) {
+        itemsFiltered.push(item)
+    }
+})
+
+
+console.log("\n", "\n", itemsFiltered)
