@@ -57,3 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# misc
+example.js
+ex2.txt
+
