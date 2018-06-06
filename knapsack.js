@@ -9,6 +9,50 @@ const fs = require('fs');
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
 
+const printOut = (knapsack) => {
+  let items = `Items to Select: `;
+  let totalCost = 0;
+  let totalValue = 0;
+
+  knapsack.forEach(item => {
+    items += `${item.index} `;
+    totalCost += item.size;
+    totalValue += item.value;
+  });
+  return `${items}\nTotal cost: ${totalCost}\nTotal value: ${totalValue}`;
+}
+
+const greedyAlgo = (items) => {
+  const result = items.filter(item => {
+    return item.size < 101;
+  });
+
+  result.forEach(item => {
+    return item.score = item.value / item.size;
+  });
+
+  result.sort((a, b) => {
+    return b.score - a.score;
+  })
+  console.log("scored items: ", result);
+
+  const knapsack = [];
+  let threshold = 100;
+  let index = 0;
+  while (threshold > 0 && index < result.length) {
+    const item = result[index];
+    if (threshold - (item.size) < 0) {
+      index++;
+    } else {
+      knapsack[index] = result[index];
+      threshold -= result[index].size;
+      index++; 
+    }
+  }
+  console.log("threshold: ", threshold);
+  return printOut(knapsack);
+}
+
 const argv = process.argv.slice(2);
 
 if (argv.length != 2) {
@@ -36,3 +80,5 @@ for (let l of lines) {
     value: value,
   });
 }
+
+console.log(greedyAlgo(items));
