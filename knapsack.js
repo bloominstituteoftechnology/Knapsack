@@ -37,4 +37,17 @@ for (let l of lines) {
   });
 }
 
-console.log(items);
+const greedyStrategy = (arr) => {
+  let result = [];
+  let cap = capacity;
+  arr = items.filter(item => item.size <= cap).sort((a, b) => (b.value / b.size) - (a.value / a.size));
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].size <= cap) {
+      result.push(arr[i]);
+      cap -= arr[i].size;
+    }
+  }
+  return result;
+}
+
+greedyStrategy(items);
