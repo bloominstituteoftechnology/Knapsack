@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 
 /* Naive Recursive Approach */
 function naiveKnapsack(items, capacity) {
@@ -8,7 +8,7 @@ function naiveKnapsack(items, capacity) {
       return {
         value: 0,
         size: 0,
-        chosen: [],
+        chosen: []
       };
     }
 
@@ -27,7 +27,7 @@ function naiveKnapsack(items, capacity) {
         return r0;
       } else {
         r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i+1);
+        r1.chosen = r1.chosen.concat(i + 1);
         return r1;
       }
     }
@@ -47,7 +47,7 @@ const greedyAlgo = (items, capacity) => {
   const result = {
     size: 0,
     value: 0,
-    chosen: [],
+    chosen: []
   };
 
   // items = items.filter(item => item.size < capacity);
@@ -97,9 +97,9 @@ for (let l of lines) {
   items.push({
     index: index,
     size: size,
-    value: value,
+    value: value
   });
 }
 
-// console.log(greedyAlgo(items, capacity));
-console.log(naiveKnapsack(items, capacity));
+console.log(greedyAlgo(items, capacity));
+// console.log(naiveKnapsack(items, capacity));
