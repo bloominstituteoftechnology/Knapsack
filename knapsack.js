@@ -45,30 +45,25 @@ for (let l of lines) {
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
 
-const greedy = (items) => {
-    const filtered = items.filter(item => item.size < capacity);
-
-    for(item of filtered) {
-        const score =  item.value/item.size;
-        const temp = Object.assign(item, {score})
+const greedy = (items, capacity) => {
+    const result = {
+        size: 0,
+        value: 0,
+        chosen: []
     }
 
-    filtered.sort((a, b) => b.score - a.score);
+    items.sort((a, b) => b.value/b.size - a.value/a.size);
 
-    let size = 0
-    let value = 0;
-    const chosen = [];
-    let tracker = capacity;
-
-    for(item of filtered) {
-        if(size <= capacity && tracker >= item.size) {
-            tracker -= item.size;
-            size += item.size;
-            value += item.value;
-            chosen.push(item.index);
+    for(item of items) {
+        if(item.size <= capacity) {
+            capacity -= item.size;
+            result.size += item.size;
+            result.value += item.value;
+            result.chosen.push(item.index);
         }
     }
-    console.log( { size, value, chosen })
+    console.log(result);
+    return result;
 }
 
-greedy(items);
+greedy(items, capacity);
