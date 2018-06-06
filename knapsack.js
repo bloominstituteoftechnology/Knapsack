@@ -37,37 +37,72 @@ for (let l of lines) {
   });
 }
 
-console.log(items);
+// console.log(items);
 
-const itemsFiltered = []
+// const itemsFiltered = []
 
-items.forEach(item => {
-    if(item.value > item.size) {
-        itemsFiltered.push(item)
+// items.forEach(item => {
+//     if(item.value > item.size) {
+//         itemsFiltered.push(item)
+//     }
+// })
+
+
+// itemsFiltered.sort(function (a, b) {
+//     return a.size - b.size
+// })
+
+// let size = 0;
+// let value = 0;
+// let chosen = [];
+
+// for(let i = 0; i < itemsFiltered.length; i++) {
+//     if(size + itemsFiltered[i].size < 100) {
+//         value += itemsFiltered[i].value
+//         size += itemsFiltered[i].size
+//         chosen.push(itemsFiltered[i].index)
+//     } else {
+//         continue;
+//     }
+// }
+// console.log('lol', itemsFiltered)
+
+// console.log("\n", "Chosen:", chosen);
+// console.log("\n", "Size:", size);
+// console.log("\n", "Value: ", value);
+
+
+const greedyAlgo = (items, capacity) => {
+    const result = {
+        size: 0,
+        value: 0,
+        chosen: []
     }
-})
+
+    // items = items.filter(item => item.size < capacity);
+    items.sort((i1, i2) => {
+        const r1 = i1.value / i1.size;
+        const r2 = i2.value /i2.size;
+
+        return r2 - r1
+    })
+    //loop throgh our items array
+    //To see if size <= capacity
+    for(let i = 0; i < items.length; i++) {
+        if(items[i].size <= capacity) {
+
+            //if it is, add to final result
+            result.size += items[i].size;
+            result.value += items[i].value;
+            result.chosen.push(items[i].index)
 
 
-itemsFiltered.sort(function (a, b) {
-    return a.size - b.size
-})
-
-let size = 0;
-let value = 0;
-let chosen = [];
-
-for(let i = 0; i < itemsFiltered.length; i++) {
-    if(size + itemsFiltered[i].size < 100) {
-        value += itemsFiltered[i].value
-        size += itemsFiltered[i].size
-        chosen.push(itemsFiltered[i].index)
-    } else {
-        continue;
+            //decrement total copacity
+            capacity -= items[i].size
+        }
     }
+
+    return result;
 }
 
-console.log("\n", "Chosen:", chosen);
-console.log("\n", "Size:", size);
-console.log("\n", "Value: ", value);
-
-const newItems = items.filter(item => item.size <= capacity);
+console.log(greedyAlgo(items, capacity))
