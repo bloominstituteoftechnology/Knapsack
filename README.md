@@ -74,3 +74,13 @@ give it a go. More to come soon - larger problems that will require more
 sophisticated approaches.
 
 The `answers.txt` file includes the expected answers for each of the data files. Note that all the runs used a capacity of 100. 
+
+
+/*
+  Greedy Strategy
+  0. Go through our items and filter out any items whose size > knapsack's capacity
+  1. 'Score' each item by determining its value/weight ratio
+  2. Sort the items array by each item's ratio such that the items with the best ratio
+  are at the top of the array of items
+  3. Grab items off the top of the items array until we reach our knapsack's full capacity
+*/
