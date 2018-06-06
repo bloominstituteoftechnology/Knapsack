@@ -105,4 +105,39 @@ const greedyAlgo = (items, capacity) => {
     return result;
 }
 
-console.log(greedyAlgo(items, capacity))
+
+function naiveKnapsack(items, capacity) {
+    function recurse(i, size) {
+        if(i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: [],
+            };
+        }
+
+        else if(items[i].size > size) {
+            return recurse(i-1, size)
+        }
+
+        else {
+            const r0 = recurse(i-1, size);
+            const r1 = recurse(i-1, size - items[i].size)
+
+            r1.value += items[i].value
+
+
+            if(r0.value > r1.value) {
+                return r0;
+            } else {
+                r1.size += items[i].size
+                r1.chosen = r1.chosen.concat(i+1);
+                return r1;
+            }
+        }
+    }
+    return recurse(items.length - 1, capacity)
+}
+// console.log(greedyAlgo(items, capacity))
+
+console.log(naiveKnapsack(items, capacity))
