@@ -34,12 +34,9 @@ for (let l of lines) {
     index: index,
     size: size,
 		value: value,
-		score: parseInt((value / size))
+		score: (value / size)
   });
 }
-
-
-
 
 const knapsack = (items, capacity) => {
 
@@ -48,7 +45,7 @@ const knapsack = (items, capacity) => {
 	let knapsackItems = [];
 	
   for (let i = 0; i < scoringItems.length; i++) {
-    if (scoringItems[i].size < capacity) {
+    if (scoringItems[i].size <= capacity) {
       capacity -= scoringItems[i].size;
       knapsackItems.push(scoringItems[i]);
     }
