@@ -35,7 +35,7 @@ for (let l of lines) {
   const retValue = value / size
   return { index, size, value, retValue }
 }
-// - Sort
+// - Sorting Items than return remaing capacity
 items.sort((a, b) => {
   return b.retValue - a.retValue
 })
