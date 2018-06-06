@@ -57,15 +57,10 @@ function getResulust() {
     while (cap < capacity) {
 
         let item = copyRatio.shift();
-        if (cap + item.size > capacity) {
-          cap = capacity + 1;
-        }
-        else {
-            cap += item.size;
-            // console.log(item);
-            result.push(item);
-            // console.log('cap',cap);
-        }
+        if (cap + item.size > capacity) break;
+
+        result.push(item);
+        cap += item.size;
     }
 
     return result;
