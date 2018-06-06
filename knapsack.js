@@ -1,5 +1,7 @@
 const fs = require("fs");
 
+/* Naive Recursive approach  */
+
 /*
   Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity
@@ -8,6 +10,36 @@ const fs = require("fs");
   are at the top of the array of items
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
+
+function naiveKnapsack(items, capacity) {
+  function recurse(i, size) {
+    //base case
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: []
+      };
+    }
+    //check to see if item fits
+    else if (items[i].size > size) {
+      return recurse(i - 1, size);
+    } else {
+      //the item fits, but may not be worth the as much
+      const result0 = recurse(i - 1, size);
+      const result1 = recurse(i - 1, size - items[i].size);
+      result1.value += items[i].value;
+      if (result0.value > result1.value) {
+        return result0;
+      } else {
+        r1.size += items[i].size;
+        result1.chosen = result1.chosen.concat(i +1);
+        return result1;
+      }
+    }
+  }
+  return recurse(items.length -1,capacity);
+}
 
 const argv = process.argv.slice(2);
 
@@ -37,23 +69,21 @@ for (let l of lines) {
   });
 }
 console.log(items);
-
-const itemsNew = items.filter(item => item.size <= capacity);
-const sortedItems = itemsNew.sort((a, b) => {
+const sortedItems = items.sort((a, b) => {
   return b.value / b.size - a.value / a.size;
 });
-const knapSack = (items, capacity) => {
+const greedy = (items, capacity) => {
   let memo = [];
 
   for (let i = 0; i < items.length; i++) {
     if (items[i].size <= capacity) {
       capacity -= items[i].size;
       memo.push(items[i]);
-
     }
   }
- console.log(memo)
+
   return memo;
- 
 };
-knapSack(sortedItems, capacity)
+greedy(sortedItems, capacity);
+
+console.log(naiveKnapsack())
