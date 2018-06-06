@@ -9,6 +9,34 @@ const fs = require('fs');
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
 
+const greedyAlgo = (items, capacity) => {
+    const result = {
+        size: 0,
+        value,
+        chosen: [],
+    };
+
+    //items = items.filter(item => item.size < capacity);
+    items.sort((i1, i2) => {
+        const r1 = i1.value / i1.size;
+        const r2 = i2.value / i2.size;
+
+        return r2 - r1;
+    });
+
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].size <= capacity) {
+            result.size += items[i].size;
+            result.value += items[i].value;
+            result.chosen.push(items[i].index);
+
+            capacity -= items[i].size;
+        }
+    }
+
+    return result;
+}
+
 const argv = process.argv.slice(2);
 
 if (argv.length != 2) {
