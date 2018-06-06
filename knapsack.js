@@ -49,18 +49,22 @@ function setup() {
     });
 }
 
-function getResulust() {
+function getResults() {
 
     const result = [];
     const copyRatio = weightRatio;
     let cap = 0;
-    while (cap < capacity) {
+    while (cap < capacity &&  copyRatio.length !== 0) {
+
 
         let item = copyRatio.shift();
-        if (cap + item.size > capacity) break;
+        let sum = cap + item.size;
+        if (sum <= capacity) {
+            result.push(item);
+            cap += item.size;
+        }
 
-        result.push(item);
-        cap += item.size;
+
     }
 
     return result;
@@ -72,5 +76,5 @@ setup();
 // console.log('\n');
 // console.log(weightRatio);
 // console.log('\n');
-console.log(getResulust());
+console.log(getResults());
 
