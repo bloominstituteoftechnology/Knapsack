@@ -48,4 +48,24 @@ items.forEach(item => {
 })
 
 
-console.log("\n", "\n", itemsFiltered)
+itemsFiltered.sort(function (a, b) {
+    return a.size - b.size
+})
+
+let size = 0;
+let value = 0;
+let chosen = [];
+
+for(let i = 0; i < itemsFiltered.length; i++) {
+    if(size + itemsFiltered[i].size < 100) {
+        value += itemsFiltered[i].value
+        size += itemsFiltered[i].size
+        chosen.push(itemsFiltered[i].index)
+    } else {
+        continue;
+    }
+}
+
+console.log("\n", chosen)
+
+const newItems = items.filter(item => item.size <= capacity);
