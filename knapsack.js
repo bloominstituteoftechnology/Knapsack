@@ -25,12 +25,43 @@ for (let l of lines) {
       value: value,
     });
   }
+
+  const ratioStuff = e => {
+      const total = e.size/e.value
+      return Object.assign({}, e, {total})
+  }
+  const greedItems = items.map(e => ratioStuff(e));
+
+  const sortedStuff = greedItems => {
+      const rat = greedItems.map(item => {
+          return {
+              ...item,
+              total: item.size/item.value
+          }
+      })
+      return rat.sort((a,b) => a.total - b.total)
+  }
 //GOAL: FIND THE GREATEST VALUE WITH A WEIGHT UNDER CAPACITY
-  function greedyPoo(items, capactiy) {
+  function greedyPoo(items, capacity) {
     var resultsGreed = [];
-    var sorter = items.sort(function(a,b) {
-        return (b.value/b.size) - (a.value/ a.size);
-    });
+    let currentSize = 0;
+    let currentValue = 0;
+   
+    sortedStuff(greedItems).forEach(item => {
+        if(currentSize + item.size <= capacity) {
+            resultsGreed.push(item.index);
+            currentSize += item.size;
+            currentValue += item.value;
+        } 
+    })
+    return {resultsGreed, currentSize, currentValue};
   }
 
-  console.log(greedyPoo(items));
+  function recursive(items, capacity) {
+
+  }
+
+  function iterativeFoo(items, capacity) {
+  }
+
+  console.log(greedyPoo());
