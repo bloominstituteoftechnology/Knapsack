@@ -25,10 +25,12 @@ for (let l of lines) {
       value: value,
     });
   }
-
+//GOAL: FIND THE GREATEST VALUE WITH A WEIGHT UNDER CAPACITY
   function greedyPoo(items, capactiy) {
     var resultsGreed = [];
-   
+    var sorter = items.sort(function(a,b) {
+        return (b.value/b.size) - (a.value/ a.size);
+    });
   }
 
-  console.log(items);
+  console.log(greedyPoo(items));
