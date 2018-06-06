@@ -34,7 +34,7 @@ for (let l of lines) {
     index: index,
     size: size,
 		value: value,
-		score: Math.round(value / size)
+		score: (value / size)
   });
 }
 
@@ -42,15 +42,50 @@ const knapsack = (items, capacity) => {
 
 	const newItems = items.filter(item => item.size <= capacity);
 	const scoringItems = newItems.sort((a, b) => b.score - a.score)
-	let knapsackItems = [];
+	const knapsackItems = {
+    value: 0,
+    size: 0,
+    chosen: []
+  };
 	
   for (let i = 0; i < scoringItems.length; i++) {
     if (scoringItems[i].size <= capacity) {
       capacity -= scoringItems[i].size;
-      knapsackItems.push(scoringItems[i]);
+      knapsackItems.value += scoringItems[i].value;
+      knapsackItems.size += scoringItems[i].size;
+      knapsackItems.chosen.push(scoringItems[i].index);
     }
   }
 	return knapsackItems;
 }
+
+function naiveKnapsack(items, capacity) {
+  function recurse(i, size) {
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: [],
+      }
+    } else if (items[i].size > size) {
+        return recurse(i - 1, size);
+    } else {
+      const r0 = recurse(i - 1, size);
+      const r1 = recurse(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i + 1);
+        return r1;
+      }
+    }
+  }
+  return recurse(items.length - 1, capacity);
+}
+
 
 console.log(knapsack(items, capacity))
