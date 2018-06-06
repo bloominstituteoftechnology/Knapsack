@@ -66,6 +66,8 @@ for(let i = 0; i < itemsFiltered.length; i++) {
     }
 }
 
-console.log("\n", chosen)
+console.log("\n", "Chosen:", chosen);
+console.log("\n", "Size:", size);
+console.log("\n", "Value: ", value);
 
 const newItems = items.filter(item => item.size <= capacity);
