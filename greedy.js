@@ -13,30 +13,36 @@ const filedata = fs.readFileSync(filename, 'utf8');
 // split input data by line
 const lines = filedata.trim().split(/[\r\n]+/g);
 
-const items = lines.map(line => {
-  const [index, size, value] = line.split(' ');
-  const relVal = value / size;
-  return { index, size, value, relVal };
+let mutated = lines.map((line, index) => {
+  let lineArr = line.split(' ');
+  if (index < 3) console.log(lineArr);
+  lineArr.push(Number(lineArr[2]) / Number(lineArr[1]));
+  if (index < 3) console.log(lineArr);
+  return lineArr;
 });
 
-items.sort((a, b) => {
-  return b.relVal - a.relVal;
+let mutateArr = mutated.map((line, index) => {
+  if (index < 3) console.log(line);
+  return { index: index, ratio: line[3] };
 });
 
-const greedy = {
-  contains: [],
-  totalSize: Number(0),
-  totalValue: Number(0),
-  currCap: Number(capacity),
+mutateArr.sort(function compareNumbers(a, b) {
+  return b.ratio - a.ratio;
+});
+
+let costSum = 0;
+let totalPayoff = 0;
+let i = 0;
+
+while (i <= lines.length - 1) {
+  costSum += Number(mutated[mutateArr[i].index][1]);
+  totalPayoff += Number(mutated[mutateArr[i].index][2]);
+  if (costSum > 100) {
+    costSum -= Number(mutated[mutateArr[i].index][1]);
+    totalPayoff -= Number(mutated[mutateArr[i].index][2]);
+  }
+  i++;
 };
 
-for (let i = 0; i < items.length; i++) {
-  if (items[i].size <= greedy.currCap) {
-    greedy.contains.push(items[i].index);
-    greedy.totalSize += Number(items[i].size);
-    greedy.totalValue += Number(items[i].value);
-    greedy.currCap -= Number(items[i].size);
-  }
-}
-
-return greedy;
+console.log(totalPayoff);
+console.log(costSum);
