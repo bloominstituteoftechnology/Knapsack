@@ -34,7 +34,7 @@ for (let l of lines) {
     index: index,
     size: size,
 		value: value,
-		score: (value / size)
+		score: Math.round(value / size)
   });
 }
 
