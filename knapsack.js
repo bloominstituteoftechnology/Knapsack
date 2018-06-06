@@ -19,33 +19,32 @@ lines.forEach(line => {
   items.push(data);
 });
 
-console.log(items);
-
 /*
 Strategy 1 - Greedy Strategy
   1. "score" each item by determining its value/weight ratio
   2. sort the items array by each item's ratio where the best ratio items are first
   3. grab items off the top of the array until out knapsack is full
 */
-const ratio = array => {
-  const addRatio = array.map(item => ({ ...item, ratioSV: item.size / item.value }));
-  return addRatio.sort((a, b) => a.ratioSV - b.ratioSV);
-}
 
 const greedy = () => {
-  let itemsIndex = [], 
-      totalCost = 0, 
-      totalValue = 0;
+  let chosenItems = [], totalCost = 0, totalValue = 0;
+  
+  const withRatio = items.map(item => ({ ...item, ratioSV: item.size / item.value }));
+  const sortedWithRatio = withRatio.sort((a, b) => a.ratioSV - b.ratioSV);
 
-  ratio(items).forEach(item => {
+  sortedWithRatio.forEach(item => {
     if (totalCost + item.size <= capacity) {
-      itemsIndex.push(item.index);
+      chosenItems.push(item.index);
       totalCost += item.size;
       totalValue += item.value;
     }
   });
 
-  return { itemsIndex, totalCost, totalValue };
+  return { chosenItems, totalCost, totalValue };
 }
 
 console.log(greedy());
+
+/*
+Strategy 2 - Iterative Bottom-Up
+*/
