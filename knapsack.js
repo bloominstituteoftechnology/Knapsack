@@ -2,8 +2,10 @@ const fs = require('fs');
 
 /* Naive Recursive Approach */
 function naiveKnapsack(items, capacity) {
+    // i is the interation number of the item we're currently looking and deciding if we want to take that item
     function recurse(i, size) {
       // base case
+      // return our empty result object 
       if (i === -1) {
         return {
           value: 0,
@@ -18,7 +20,16 @@ function naiveKnapsack(items, capacity) {
       }
       // Item fits, but might not be worth as much as items in there already
       else {
+        // the Value we get from not taking the item
         const r0 = recurse(i - 1, size);
+        /* 
+            r0 = {
+                size, 
+                value,
+                chose,
+            }
+        */
+        // the value we get from taking the item
         const r1 = recurse(i - 1, size - items[i].size);
   
         r1.value += items[i].value;

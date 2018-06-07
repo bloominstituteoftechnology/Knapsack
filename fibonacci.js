@@ -9,7 +9,7 @@ function naiveNthFib(n) {
 //Runtime Complexity: O(2^n)
 
 /* 
-  Memoized Recursive Strategy 
+  Memoized Recursive / Dynamic Programming Strategy 
   The idea: we'll use the same naive recursive logic but augment it 
   with the ability to save work we've already done. This doesn't actually
   improve the theoretical runtime complexity over the naive recursive 
@@ -21,13 +21,18 @@ function naiveNthFib(n) {
   5. Return the value that the memoized function returns
 */
 function nthFib(n) {
-    const cache = Array(n); //cache to store results
+    const cache = Array(n+1); //cache to store results
+    let counter = 0;
+
     //Helper function 
     function nthFibMemo(n) {
+        //check the cache for the answer
         let value = cache[n];
     
         if (!value) {
+            //if no answer in cache, fall back on our naive logic
           value = naiveNthFib(n);
+          // put the answer we found using the naive logic in the cahce
           cache[n] = value;
         }
         return value;
@@ -37,6 +42,7 @@ function nthFib(n) {
         if (n === 0 || n === 1) {
           return n;
         }
+        // instead of calling the naive function itself, call the memoized helper
         return nthFibMemo(n-1) + nthFibMemo(n-2);
       }
     
@@ -58,7 +64,7 @@ function nthFib(n) {
   5. Return cache[n]
 */
 function nthFibIterative(n) {
-    const cache = Array(n);
+    const cache = Array(n+1);
     cache[0] = 0;
     cache[1] = 1;
   
