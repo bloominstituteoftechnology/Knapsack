@@ -58,4 +58,78 @@ const greedy = (items, capacity) => {
   displayItems(pack);
 }
 
-greedy(items, capacity);
+//greedy(items, capacity);
+
+/* 
+  Memoized Recursive Strategy 
+  The idea: we'll use the same naive recursive logic but augment it 
+  with the ability to save work we've already done. This doesn't actually
+  improve the theoretical runtime complexity over the naive recursive 
+  approach, but it does significantly improve the actual running time.
+  1. Initialize a cache (can be an object or an array)
+  2. Write a helper function that checks the cache for the answer we're looking for
+  3. If the answer is not found, fall back on our naive logic
+  4. The naive helper needs to recursively call the memoized version, not itself
+  5. Return the value that the memoized function returns
+*/
+
+function knapsackRecursiveMemoized(items, capacity) {
+
+  // Allocate an array to hold memoized results
+  let resultsMem = Array(items.length);
+
+  for (let s = 0; s < items.length; s++) {
+    resultsMem[s] = Array(capacity + 1).fill(null);
+  }
+
+  // Just like the normal recursive call, but first checks to see if the
+  // results have already been computed. If so, just returns them.
+  function recurMemoize(i, size) {
+    let v = resultsMem[i][size];
+
+    if (v === null) {
+      v = recur(i, size);
+      resultsMem[i][size] = Object.assign({}, v); // Make a copy
+    }
+
+    return v;
+  }
+
+  // Direct implementation of the definition, above, except calls
+  // recurMemoize() to see if the results have already been obtained.
+  function recur(i, size) {
+
+    // Base case
+    if (i == 0) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: []
+      };
+    }
+
+    // Item doesn't fit
+    else if (items[i].size > size) {
+      return recurMemoize(i - 1, size);
+    }
+    
+    // Item fits, but might not be worth as much as items in there
+    // already
+    else {
+      const r0 = recurMemoize(i - 1, size);
+      const r1 = recurMemoize(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+      
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i); // Make a copy
+        return r1;
+      }
+    }
+  }
+  
+  return recur(items.length - 1, capacity);
+}
