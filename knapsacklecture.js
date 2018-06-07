@@ -43,7 +43,6 @@ for (let l of lines) {
 
   items.push({ index: index, size: size, value: value });
 }
-
 console.log(items);
 
 /* =============================LECTURE EXAMPLE ======================================= */
