@@ -118,5 +118,29 @@ const memoized = (items, capacity) => {
 
 }
 
-greedy();
-// memoized(items, capacity)
+// Iterative Strategy
+const iterative = (items, capacity) => {
+  const cache = [];
+  cache[0] = Array(capacity + 1).fill(0);
+  let counter = 0;
+
+  for (let i = 1; i <= items.length; i++) {
+    cache[i] = [];
+    let { size, value } = items[i - 1];
+
+    for (let j = 0; j <= capacity; j++) {
+      counter++;
+      if (size <= j)
+        cache[i][j] = Math.max(cache[i - 1][j], value + cache[i - 1][j - size]);
+      else cache[i][j] = cache[i - 1][j];
+    }
+  }
+  let result = cache[cache.length - 1][capacity];
+  console.log("\nIterative");
+  console.log("Total value: ", result);
+  console.log("Times called: ", counter, "\n");
+};
+
+// greedy();
+// memoized(items, capacity);
+iterative(items, capacity);
