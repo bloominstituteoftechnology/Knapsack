@@ -56,29 +56,8 @@ for (let l of lines) {
     })
     return {resultsGreed, currentSize, currentValue};
   }
-  const memoize = (fn) => {
-    let cache = {};
-      return (...args) => {
-          let n = args[0];
-          if (n in cache) {
-              console.log('Fetching from cache');
-              return cache[n];
-          }
-          else {
-              console.log('Calculating result');
-              let result = fn(n);
-              cache[n] = result;
-              return result;
-          }
-      }
-  }
   function recursive(items, capacity) {
     function recurse(i, size) {
-         const Cache = {
-          value: 0,
-          size: 0,
-          chosen: []
-      };
         if ( i === -1) {
             return {
                 value: 0,
@@ -105,10 +84,70 @@ for (let l of lines) {
     }
     return recurse(items.length -1, capacity);
   }
+  function memoizedKnapsack(items, capacity) {
+    // console.log(items.length, capacity);
+    // initalize cache (in this, it will be a matrix)
+    const cache = Array(items.length);
+  
+    // add the second dimension
+    for (let i = 0; i < items.length; i++) {
+      cache[i] = Array(capacity + 1).fill(null);
+    }
+  
+    function recurseMemo(i, capacityLeft) {
+      if (i === -1) {
+        return {
+          value: 0,
+          size: 0,
+          chosen: [],
+        };
+      }
+  
+      let value = cache[i][capacityLeft];
+  
+      if (!value) {
+        value = recurseNaive(i, capacityLeft);
+        cache[i][capacityLeft] = Object.assign({}, value);    // make a copy
+      }
+  
+      return value;
+    }
+  
+    function recurseNaive(i, capacityLeft) {
+      if (i === -1) {
+        return {
+          value: 0,
+          size: 0,
+          chosen: [],
+        };
+      }
+      // check to see if the item fits
+      else if (items[i].size > capacityLeft) {
+        return recurseMemo(i - 1, capacityLeft);
+      }
+      // Item fits, but might not be worth as much as items in there already
+      // But is it worth taking? Does it positively affect our value?
+      else {
+        // The value we get from not taking the item
+        const r0 = recurseMemo(i - 1, capacityLeft);
+        const r1 = recurseMemo(i - 1, capacityLeft - items[i].size)
+  
+        r1.value += items[i].value;
+  
+        if (r0.value > r1.value) {
+          return r0;
+        } else {
+          r1.size += items[i].size;
+          r1.chosen = r1.chosen.concat(items[i].index);
+          return r1;
+        }
+      }
+    }
+    return recurseMemo(items.length - 1, capacity); 
+  }
 
   function iterativeFoo(items, capacity) {
   }
-  const memoizedKnap = memoize(recursive);
-  console.log(memoizedKnap(items, capacity))
+  console.log(memoizedKnapsack(items, capacity))
   console.log(greedyPoo());
   console.log(recursive(items, capacity));
