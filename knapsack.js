@@ -37,34 +37,38 @@ for (let l of lines) {
   });
 }
 
-for (let i = 0; i < items.length; i++) {
-    let ratio = items[i].size / items[i].value;
-    items[i].ratio = ratio;
-}
+function Greedy() {
 
-items.sort( function (a, b) {
-    return a.ratio - b.ratio;
-});
+    for (let i = 0; i < items.length; i++) {
+        let ratio = items[i].size / items[i].value;
+        items[i].ratio = ratio;
+    };
 
-let selection = [];
-let totalSize = 0;
-for (let i = 0; i < items.length; i++) {
-    if (items[i].size + totalSize <= capacity) {
-        selection.push(items[i]);
-        totalSize += items[i].size;
-    }
-}
-let results = {
-    items: [],
-    cost: 0,
-    value: 0,
+    items.sort( function (a, b) {
+        return a.ratio - b.ratio;
+    });
+
+    let selection = [];
+    let totalSize = 0;
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].size + totalSize <= capacity) {
+            selection.push(items[i]);
+            totalSize += items[i].size;
+        };
+    };
+    let results = {
+        items: [],
+        cost: 0,
+        value: 0,
+    };
+    for (let i = 0; i < selection.length; i++) {
+        results.items.push(selection[i].index);
+        results.cost += selection[i].size;
+        results.value += selection[i].value;
+    };
+    return results;
 };
-for (let i = 0; i < selection.length; i++) {
-    results.items.push(selection[i].index);
-    results.cost += selection[i].size;
-    results.value += selection[i].value;
-}
 
 // console.log(items);
 // console.log('selection', selection);
-console.log('results', 'total cost:', results.cost, 'total value', results.value);
+console.log(Greedy());
