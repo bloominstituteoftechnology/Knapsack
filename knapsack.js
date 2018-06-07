@@ -66,4 +66,87 @@ const greedy = (items, capacity) => {
     return result;
 }
 
-greedy(items, capacity);
+// greedy(items, capacity);
+
+/* Naive Recursive Approach */
+function naiveKnapsack(items, capacity) {
+    function recurse(i, size) {
+        // base case
+        if(i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            }
+        } 
+
+        else if(items[i].size > size) {
+            return recurse(i - 1, size);
+        }
+
+        else {
+            const r0 = recurse(i - 1, size);
+            const r1 = recurse(i - 1, size - items[i].size);
+
+            r1.value += items[i].value;
+            if(r0.value > r1.value) {
+                return r0;
+            } else {
+                r1.size += items[i].size;
+                r1.chosen = r1.chosen.concat(i);
+                return r1;
+            }
+        }
+    }
+    return recurse(items.length - 1, capacity)
+}
+
+/*   Memoized Recursive Strategy */
+function memoizedKnapsack(items, capacity) {
+  const cache = Array(items.length);
+  for(let i = 0; i < items.length; i++){
+      cache[i] = Array(capacity + 1).fill(null);
+  }
+
+  function recursiveMemoizedKnapsack(i, size) {
+    let value = cache[i][size];
+
+    if (!value) {
+      value = naiveKnapsack(i, size);
+      cache[i][size] = value;
+    }
+    return value;
+  }
+
+  function naiveKnapsack(i, size) {
+      if (i === 0) {
+          return {
+              value: 0,
+              size: 0,
+              chosen: []
+          }
+      }
+
+      else if (items[i].size > size) {
+          return recursiveMemoizedKnapsack(i - 1, size);
+      }
+
+      else {
+          const r0 = recursiveMemoizedKnapsack(i - 1, size);
+          const r1 = recursiveMemoizedKnapsack(i - 1, size - items[i].size);
+
+          r1.value += items[i].value;
+          if (r0.value > r1.value) {
+              return r0;
+          } else {
+              r1.size += items[i].size;
+              r1.chosen = r1.chosen.concat(i);
+              return r1;
+          }
+      }
+  }
+    console.log(recursiveMemoizedKnapsack(items.length - 1, capacity));
+    return recursiveMemoizedKnapsack(items.length-1, capacity);
+}
+
+memoizedKnapsack(items, capacity);
