@@ -40,7 +40,7 @@ for (let l of lines) {
 let originalItems = Array.from(items);
 let originalCapacity = capacity;
 
-const greedy = () => {
+const greedy = (items, capacity) => {
   let knapsack = [];
   let value = 0;
   let cost = 0;
@@ -104,5 +104,5 @@ const recursive = (items, capacity) => {
   return result;
 };
 
-greedy();
-recursive(originalItems, originalCapacity);
+greedy(items, capacity);
+recursive(items, capacity);
