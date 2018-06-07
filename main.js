@@ -38,6 +38,7 @@ for (let l of lines) {
 }
 
 let originalItems = Array.from(items);
+let originalCapacity = capacity;
 
 const sorter = () => {
   items.forEach(n => {
@@ -48,12 +49,12 @@ const sorter = () => {
   });
 };
 
-sorter();
 const greedy = () => {
   let knapsack = [];
   let value = 0;
   let cost = 0;
 
+  sorter();
   items.forEach(item => {
     if (item.size <= capacity) {
       knapsack.push(item.index);
@@ -106,4 +107,4 @@ const recursive = (items, capacity) => {
   return result;
 };
 greedy();
-recursive(originalItems, capacity);
+recursive(originalItems, originalCapacity);
