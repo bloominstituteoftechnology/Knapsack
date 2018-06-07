@@ -44,6 +44,7 @@ const greedy = (items, capacity) => {
   let knapsack = [];
   let value = 0;
   let cost = 0;
+  let counter = 0;
 
   items.forEach(n => {
     n["score"] = n.value / n.size;
@@ -53,6 +54,7 @@ const greedy = (items, capacity) => {
   });
 
   items.forEach(item => {
+    counter++;
     if (item.size <= capacity) {
       knapsack.push(item.index);
       capacity -= item.size;
@@ -63,11 +65,14 @@ const greedy = (items, capacity) => {
   console.log("\nGreedy method");
   console.log("Items to select:", knapsack);
   console.log("Total Cost: ", cost);
-  console.log("Total value: ", value, "\n");
+  console.log("Total value: ", value);
+  console.log("Times called: ", counter, "\n");
 };
 
 const recursive = (items, capacity) => {
+  let counter = 0;
   const recurse = (i, spaceLeft) => {
+    counter++;
     // build from this
     if (i === -1) {
       return {
@@ -100,9 +105,33 @@ const recursive = (items, capacity) => {
   console.log("\nRecursive method");
   console.log("Items to select:", result.knapsack);
   console.log("Total Cost: ", result.cost);
-  console.log("Total value: ", result.value, "\n");
+  console.log("Total value: ", result.value);
+  console.log("Times called: ", counter, "\n");
   return result;
+};
+
+const iterative = (items, capacity) => {
+  const cache = [];
+  cache[0] = Array(capacity + 1).fill(0);
+  let counter = 0;
+
+  for (let i = 1; i <= items.length; i++) {
+    cache[i] = [];
+    let { size, value } = items[i - 1];
+
+    for (let j = 0; j <= capacity; j++) {
+      counter++;
+      if (size <= j)
+        cache[i][j] = Math.max(cache[i - 1][j], value + cache[i - 1][j - size]);
+      else cache[i][j] = cache[i - 1][j];
+    }
+  }
+  let result = cache[cache.length - 1][capacity];
+  console.log("\nIterative");
+  console.log("Total value: ", result);
+  console.log("Times called: ", counter, "\n");
 };
 
 greedy(items, capacity);
 recursive(items, capacity);
+iterative(items, capacity);
