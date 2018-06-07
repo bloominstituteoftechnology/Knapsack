@@ -20,22 +20,31 @@
 */
 
 function nthFib(n) {
+  // initialize cache
   let cache = Array(n);
 
+  // use to cache data and call from cache
   function nthFibMemo(n) {
+    // grab data from cache
     let value = cache[n];
 
+    // if data exists
     if (!value) {
+      // fall back on naiveNthFib
       value = naiveNthFib(n);
       cache[n] = value;
     }
     return value;
   }
 
+  // fallback naive function
   function naiveNthFib(n) {
-    if (n=== 0 || n === 1) {
+    // base case
+    if (n === 0 || n === 1) {
+      // first assignment of number in array
       return n;
     }
+    // call nthFibMemo to chack cache for stored data
     return nthFibMemo(n - 1) + nthFibMemo(n - 2);
   } 
 
@@ -68,5 +77,5 @@ function nthFibIterative(n) {
   return cache[n];
 }
 
-console.log(nthFibIterative(100));
+console.log(nthFib(10));
 
