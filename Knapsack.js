@@ -41,9 +41,26 @@ const scoredItems = noFatItems.map(item => scoreItem(item))
 const sortedScoredItems = scoredItems.sort((a, b) => b.score - a.score)
 
 class Knapsack {
-  constructor(threshold){
+  constructor(threshold) {
     this.threshold = threshold
+    this.currentWeight = 0
+    this.storage = []
   }
-  
+  addToSack(item) {
+    if (
+      this.currentWeight < this.threshold &&
+      this.currentWeight + item.size < this.threshold
+    ) {
+      this.currentWeight += item.size
+      this.storage.push(item)
+    }
+  }
+
+  get items() {
+    return [...this.storage]
+  }
 }
-console.log(sortedScoredItems)
+
+const TheKnapsack = new Knapsack(capacity)
+scoredItems.map(val => TheKnapsack.addToSack(val))
+console.log(TheKnapsack.items)
