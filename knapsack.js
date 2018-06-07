@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-//Naive Recursive Approach
+//Naive Recursive Approach (lots of repeditive/unnecessary calculations)
 function naiveKnapsack(items, capacity) {
     function recurse(i, size) {
         //base case
@@ -76,7 +76,7 @@ const moreItems = items.filter(item => item.size <= capacity);
 
 const scoreItems = moreItems.sort((a, b) => b.score - a.score);
 
-const knapsack = (scoreItems, capacity) => {
+const greedyKnapsack = (scoreItems, capacity) => {
     let knapsackItems = []; 
     for (let i = 0; i < scoreItems.length; i++) {
         if (scoreItems[i].size < capacity) {
@@ -86,4 +86,31 @@ const knapsack = (scoreItems, capacity) => {
     }
     return knapsackItems; 
 }
-console.log(knapsack(scoreItems, capacity)); 
+console.log('Greedy Method ', greedyKnapsack(scoreItems, capacity)); 
+
+//iterative method
+
+const cacheKnapsack = (items, capacity) => {
+    let cache = [[]]
+    for (let i = 0; i <= capacity; i++) {
+      cache[0][i] = 0
+    }
+  
+    for (let i = 1; i < items.length; i++) {
+      cache[i] = []
+      const { value, size } = items[i - 1]
+      for (let cap= 0; cap<= capacity; cap++) {
+        if (size <= cap) {
+          cache[i][cap] = Math.max(cache[i - 1][cap], value + cache[i - 1][cap- size])
+        } else {
+          cache[i][cap] = cache[i -1][cap]
+        }
+      }
+    }
+     return cache.pop()[capacity];
+  }
+//Just returns the sum of values rather than all array indexes chosen 
+  console.log("Cache Method ", cacheKnapsack(items, capacity)); 
+
+//Ex to run in terminal: node knapsack.js data/small1.txt 100
+module.exports = { naiveKnapsack, greedyKnapsack, cacheKnapsack }
