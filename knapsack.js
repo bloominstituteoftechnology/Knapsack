@@ -49,6 +49,84 @@ function naiveKnapsack(items, capacity) {
   return recurse(items.length - 1, capacity);
 }
 
+// Memoized Recursive / Dynamic Programming Strategy
+function memoizedKnapsack(items, capacity) {
+    // initialize cache (in this, it will be a matrix)
+    const cache = Array(items, length);
+
+    //add the second dimension
+    for (let i = 0; i < items.length; i++) {
+        cache[i] = Array(capacity + 1).fill(null);
+    }
+
+    function recurseMemo(i, size) {
+        let value = cache[i] [size];
+
+        if (!value) {
+            value = recurseNaive(i, size);
+            cache[i][size] = Object.assign({}, value);   // make a copy
+        }
+
+        return value;
+    }
+
+    function recurseNaive(i, capacityLeft) {
+        if (i === -1) {
+        return {
+            value: 0,
+            size: 0,
+            chosen: [],
+        };
+    }
+    
+    
+    }
+}
+
+// Iterative Approach
+function knapsackIterative(items, capacity) {
+    const cache = Array(items.length);
+
+    for (let i = 0; i < items.length; i++) {
+        cache[i] = Array(capacity + 1).fill(null);
+    }
+
+    // seed the cache with some initial values
+    for (let i = 0; i <= capacity; i++) {
+        cache[0][i] = {
+            size: 0,
+            value: 0,
+            chosen: []
+        };
+    }
+
+    // Loop through all of the the items in our items array
+    for (let i = 1; i < items.length; i++) {
+        // Loop through all of the capacities
+        for (let j = 0; j <= capacity; j++) {
+            if (items[i].size > j) {
+            // if the item is too large, use the previous value
+            cache[i][j] = cache[i-1][j];
+            } else {
+                // item fits
+                const r0 = cache[i-1][j];
+                const r1 = Object.assign({}, cache[i-1][j - items[i].size]);
+
+                r1.value += items[i].value;
+
+                if (r0.value > r1.value) {
+                    cache[i][j] = r0;
+                } else {
+                    r1.size += items[i].size;
+                    r1.chosen = r1.chosen.concat(items[i].index);
+                    cache[i][j] = r1;
+                }
+            }
+        }
+    }
+    return cache[cache.length-1]
+}
+
 /*
   Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity
@@ -115,5 +193,5 @@ for (let l of lines) {
   });
 }
 
-// console.log(greedyAlgo(items, capacity));
-console.log(naiveKnapsack(items, capacity));
+ console.log(greedyAlgo(items, capacity));
+// console.log(naiveKnapsack(items, capacity));
