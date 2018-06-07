@@ -1,5 +1,39 @@
 const fs = require("fs");
 
+/* Naive Recursive Approach */
+function naiveKnapsack(items, capacity) {
+  function recurse(i, size) {
+    // base case
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: []
+      };
+    }
+
+    // check to see if the item fits
+    else if (items[i].size > size) {
+      return recurse(i - 1, size);
+    }
+    // Item fits, but might not be worth as much as items in there already
+    else {
+      const r0 = recurse(i - 1, size);
+      const r1 = recurse(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i + 1);
+        return r1;
+      }
+    }
+  }
+  return recurse(items.length - 1, capacity);
+}
 /*
   Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity

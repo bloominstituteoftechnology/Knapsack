@@ -4,7 +4,7 @@ function naiveNthFib(n) {
   }
   return naiveNthFib(n - 1) + naiveNthFib(n - 2);
 }
-
+console.log(naiveNthFib(50));
 /* 
   Memoized Recursive Strategy 
   The idea: we'll use the same naive recursive logic but augment it 
