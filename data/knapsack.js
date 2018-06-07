@@ -9,6 +9,19 @@ const fs = require('fs');
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
 
+function naiveKnapsack(items, capacity) {
+    function recurse(i, size) {
+      // base case
+      if (i === -1) {
+        return {
+          value: 0,
+          size: 0,
+          chosen: [],
+        };
+      }
+    }
+}
+
 const greedyAlgo = (items, capacity) => {
     const result = {
         size: 0,
