@@ -53,7 +53,7 @@ const greedy = () => {
   };
 
   sorter();
-  console.log(items);
+  // console.log(items);
 
   let knapsack = [];
   let value = 0;
@@ -107,9 +107,16 @@ const memoized = (items, capacity) => {
         return untakenItem;
       }
     }
-  }
-  return recurse(items.length - 1, capacity)
+  } 
+  result = recurse(items.length - 1, capacity)
+  console.log("\nMemoized Recursive method");
+  console.log("Items to select:", result.takenItems);
+  console.log("Total Size: ", result.size);
+  console.log("Total Value: ", result.value, "\n");
+  return result;
+  
+
 }
 
-// greedy();
-console.log(memoized(items, capacity));
+greedy();
+// memoized(items, capacity)
