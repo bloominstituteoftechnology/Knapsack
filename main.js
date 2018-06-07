@@ -40,21 +40,18 @@ for (let l of lines) {
 let originalItems = Array.from(items);
 let originalCapacity = capacity;
 
-const sorter = () => {
+const greedy = () => {
+  let knapsack = [];
+  let value = 0;
+  let cost = 0;
+
   items.forEach(n => {
     n["score"] = n.value / n.size;
   });
   items.sort((a, b) => {
     return b.score - a.score;
   });
-};
 
-const greedy = () => {
-  let knapsack = [];
-  let value = 0;
-  let cost = 0;
-
-  sorter();
   items.forEach(item => {
     if (item.size <= capacity) {
       knapsack.push(item.index);
@@ -106,5 +103,6 @@ const recursive = (items, capacity) => {
   console.log("Total value: ", result.value, "\n");
   return result;
 };
+
 greedy();
 recursive(originalItems, originalCapacity);
