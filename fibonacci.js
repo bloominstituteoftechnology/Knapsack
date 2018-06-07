@@ -1,12 +1,14 @@
-// const nthFib = n => {
-//   if (n === 0 || n === 1) return n;
-//   return nthFib(n - 1) + nthFib(n - 2);
-// }
+const nthFib = n => {
+  if (n === 0 || n === 1) return n;
+  return nthFib(n - 1) + nthFib(n - 2);
+}
+
+// console.log(nthFib(5))
 
 //////////////////////////////////////////////////////////////////////////////
 
-const nthFib = n => {
-  let cache = Array(n);
+const nthFibMemoized = n => {
+  let cache = Array(n + 1);
 
   const nthFibMemo = n => {
     let value = cache[n];
@@ -22,12 +24,12 @@ const nthFib = n => {
   const naiveNthFib = n => {
     if (n === 0 || n === 1) return n;
     return nthFibMemo(n - 1) + nthFibMemo(n - 2);
-  } // n === 0 || n === 1 ? n : nthFibMemo(n - 1) + nthFibMemo(n - 2);
+  }
 
   return nthFibMemo(n);
 }
 
-// console.log(nthFib(10))
+// console.log(nthFibMemoized(10))
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,4 +45,4 @@ const nthFibIterative = n => {
   return cache[n];
 }
 
-console.log(nthFibIterative(50))
+// console.log(nthFibIterative(50))

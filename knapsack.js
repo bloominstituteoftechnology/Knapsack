@@ -19,6 +19,8 @@ lines.forEach(line => {
   items.push(data);
 });
 
+console.log(items)
+
 /*
 Strategy 0 - Naive Recursive Strategy
   * complexity - O(2^n) - each recursive call is met with two more recursive calls
@@ -36,10 +38,10 @@ const naive = (items, capacity) => {
 
     // the item fits, but might not be worth as much as items in there already
     else {
-      const r0 = recurse(index - 1, size);
-      const r1 = recurse(index - 1, size - items[index].size);
+      const r0 = recurse(index - 1, size); // index 9 size 94 value 19
+      const r1 = recurse(index - 1, size - items[index].size); // index 9 size 94 - 34 = 60
 
-      r1.value += items[index].value;
+      r1.value += items[index].value; // index 9 value 19 + 12 = 31
 
       if (r0.value > r1.value) return r0;
 
@@ -54,7 +56,7 @@ const naive = (items, capacity) => {
   return recurse(items.length - 1, capacity);
 }
 
-console.log(naive(items, capacity));
+// console.log(naive(items, capacity));
 
 /*
 Strategy 1 - Greedy Strategy - O(n log(n) + n)
@@ -66,9 +68,9 @@ Strategy 1 - Greedy Strategy - O(n log(n) + n)
 const greedy = array => {
   let chosenItems = [], totalCost = 0, totalValue = 0;
   
-  const sortedWithRatio = array.sort((a, b) => (b.value / b.size) - (a.value / a.size));
+  const sortedByRatio = array.sort((a, b) => (b.value / b.size) - (a.value / a.size));
 
-  sortedWithRatio.forEach(item => {
+  sortedByRatio.forEach(item => {
     if (totalCost + item.size <= capacity) {
       chosenItems.push(item.index);
       totalCost += item.size;
@@ -95,6 +97,10 @@ Strategy 2 - Iterative Bottom-Up
   5. return cache[n]
 */
 
+const iterative = (items, capacity) => {
+  let cache = Array(items.length - 1);
+}
+
 
 /*
 Strategy 3 - Memoized Recursive Strategy
@@ -110,3 +116,28 @@ Strategy 3 - Memoized Recursive Strategy
   4. the naive helper must recursively call the memoized version, NOT itself
   5. return the value that the memoized function returns
 */
+
+const memoized = (items, capacity) => {
+
+  const recurse = (index, remainingSize) => {
+    if (index === -1) return { value: 0, size: 0, chosenItems: [] };
+    if (items[index].size > remainingSize) return recurse(index - 1, remainingSize);
+
+    const r0 = recurse(index - 1, remainingSize);
+    const r1 = recurse(index - 1, remainingSize - items[index].size);
+
+    r1.value += items[index].value;
+
+    if (r0.value > r1.value) return r0;
+
+    else {
+      r1.size += items[index].size;
+      r1.chosenItems.push(index + 1);
+      return r1;
+    }
+  }
+
+  return recurse(items.length - 1, capacity);
+}
+
+// console.log(memoized(items, capacity))
