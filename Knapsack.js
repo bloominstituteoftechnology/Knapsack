@@ -1,12 +1,12 @@
+// node knapsack.js data/small1.txt 100
+
 const fs = require('fs');
 
-/*
-  Naive Recursive Approach
-*/
+/* Naive Recursive Approach */
 function naiveKnapsack(items, capacity) {
   function recurse(i, size) {
     // base case
-    if(i === -1) {
+    if (i === -1) {
       return {
         value: 0,
         size: 0,
@@ -16,29 +16,29 @@ function naiveKnapsack(items, capacity) {
 
     // check to see if the item fits
     else if (items[i].size > size) {
-      return recurse(i-1, size);
+      return recurse(i - 1, size);
     }
     // Item fits, but might not be worth as much as items in there already
     else {
-      const ro = recurse(i-1, size);
+      const r0 = recurse(i - 1, size);
       const r1 = recurse(i - 1, size - items[i].size);
 
       r1.value += items[i].value;
 
-      if(r0.value > r1.value) {
+      if (r0.value > r1.value) {
         return r0;
       } else {
         r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i);
+        r1.chosen = r1.chosen.concat(i+1);
         return r1;
       }
     }
   }
+  return recurse(items.length - 1, capacity);
 }
 
-
+//   Greedy Strategy
 /*
-  Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity
   1. 'Score' each item by determining its value/weight ratio
   2. Sort the items array by each item's ratio such that the items with the best ratio
@@ -78,8 +78,79 @@ function greedyStrategy(items, capacity) {
   return inventory;
 }
 
+//   Memoized Recursive Strategy 
+/*
+  Uses the naive logic, but augments it with work that's already been done and saved.
+  This does not save time, but saves work, thereby saving time.
+
+  1.  Initialize a cache (can be an object or an array)
+  2.  Write a helper function that checks the cache for the answer we're looking for
+  3.  If the answer is not found, fall back on our naive logic
+  4.  The naive helper needs to recursively call the memoized version, not itself
+  5.  Return the value that the memoized function returns
+*/
+function memoizedRecursive(items, capacity) {
+  let cache = Array(items);
+
+  function nthFibMemo(items) {
+    let value = cache[items]
+
+    if(!value) {
+      value = naiveNthFib(items);
+      cache[items] = value;
+    }
+    return value;
+  }
+
+  function naiveNthFib(items) {
+    if(items === 0 || items === 1) {
+      return items;
+    }
+    return nthFibMemo(items-1) + nthFibMemo(items-2)
+  }
+  return nthFibMemo(items);
+}
 
 
+// Iterative strategy
+function iterativeStrategy(items, capacity) {
+  const cache = Array (items.length);
+
+  for(let i = 0; i < items.length; i++){
+    cache[i] = Array(capacity + 1).fill(null);
+  }
+
+  for (let i = 0; i <= capacity; i++) {
+    cache[0][i] = {
+      size: 0,
+      value: 0,
+      chosen: []
+    };
+  }
+
+  for(let i = 1; i < items.length; i++) {
+    for (let j = 0; j <= capacity; j++) {
+      if(items[i].size > j) {
+        cache[i][j] = cache[i-1][j];
+      } else {
+        const r0 = cache[i-1][j];
+        const r1 = Object.assign({}, cache[i-1][j - items[i].size]);
+
+        r1.value += items[i].value;
+
+        if(r0.value > r1.value) {
+          cache[i][j] = r0;
+        } else {
+          r1.size += items[i].size;
+          r1.chosen = r1.chosen.concat(i);
+          cache[i][j] = r1;
+        }
+      }
+    }
+  }
+}
+
+// setup of incoming data
 
 const argv = process.argv.slice(2);
 
@@ -110,4 +181,10 @@ for (let l of lines) {
   });
 }
 
-greedyStrategy(items, capacity);
+// greedyStrategy(items, capacity);
+
+// console.log(naiveKnapsack(items, capacity));
+
+// console.log(memoizedRecursive(items, 100));
+
+console.log(iterativeStrategy(items, 100));
