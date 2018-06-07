@@ -26,6 +26,43 @@ for (let line of lines) {
     });
 }
 
+
+const naiveKnapsack = (items, capacity) =>{
+    const recurse = (i, size) => {
+        // base case
+        if (i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: [],
+            };
+        }
+
+        // check to see if the item fits
+        else if (items[i].size > size) {
+            return recurse(i - 1, size);
+        }
+        // Item fits, but might not be worth as much as items in there already
+        else {
+            const r0 = recurse(i - 1, size);
+            const r1 = recurse(i - 1, size - items[i].size);
+
+            r1.value += items[i].value;
+
+            if (r0.value > r1.value) {
+                return r0;
+            } else {
+                r1.size += items[i].size;
+                r1.chosen = r1.chosen.concat(i+1);
+                return r1;
+            }
+        }
+    };
+    return recurse(items.length - 1, capacity);
+};
+// console.log(naiveKnapsack(items, capacity));
+
+
 const weightRatio = [];
 
 function setup() {
@@ -52,6 +89,11 @@ function setup() {
 function getResults() {
 
     const result = [];
+    const r = {
+        Value: 0,
+        Size: 0,
+        Chosen: []
+    };
     const copyRatio = weightRatio;
     let cap = 0;
     while (cap < capacity &&  copyRatio.length !== 0) {
@@ -60,21 +102,24 @@ function getResults() {
         let item = copyRatio.shift();
         let sum = cap + item.size;
         if (sum <= capacity) {
-            result.push(item);
+            // result.push(item);
+            r.Value += item.value;
+            r.Size += item.size;
+            r.Chosen.push(item.index);
             cap += item.size;
         }
 
 
     }
 
-    return result;
+    return r;
 }
 
 setup();
 
-// console.log(items);
-// console.log('\n');
-// console.log(weightRatio);
-// console.log('\n');
+// // console.log(items);
+// // console.log('\n');
+// // console.log(weightRatio);
+// // console.log('\n');
 console.log(getResults());
 
