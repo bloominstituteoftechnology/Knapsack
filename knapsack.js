@@ -102,10 +102,14 @@ const greedyAlgo = (items, capacity) => {
 
 const memoizedRecursive = (items, capacity) => {
   //creates array of length n, so it knows how long the array will be before making it
+  for (let i of items) {
+    i.worth = i.value / i.size;
+  }
+  items.sort((a, b) => a.worth - b.worth);
   const cache = Array(items.length);
 
   function memoized(i, size) {
-    console.log(cache[i]);
+    // console.log(cache[i]);
     let value = cache[i];
     if (!value) {
       value = recurse(i, size);
@@ -115,6 +119,7 @@ const memoizedRecursive = (items, capacity) => {
   }
   function recurse(i, size) {
     // base case
+    // console.log("recurse called");
     if (i === -1) {
       return {
         value: 0,
@@ -124,7 +129,7 @@ const memoizedRecursive = (items, capacity) => {
     }
     // check to see if the item fits
     else if (items[i].size > size) {
-      return recurse(i - 1, size);
+      return memoized(i - 1, size);
     }
     // Item fits, but might not be worth as much as items in there already
     else {
@@ -137,7 +142,7 @@ const memoizedRecursive = (items, capacity) => {
         return r0;
       } else {
         r1.size += items[i].size;
-        r1.chosen = r1.chosen.concat(i + 1);
+        r1.chosen = r1.chosen.concat(items[i].index);
         return r1;
       }
     }
