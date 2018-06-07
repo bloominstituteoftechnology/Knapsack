@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { greedy, recursive } = require('./strategies')
+const { greedy, recursive, iterative } = require('./strategies')
 
 const argv = process.argv.slice(2);
 
@@ -30,4 +30,5 @@ for (let l of lines) {
 }
 
 // greedy(items, capacity)
-recursive(items, capacity)
+// recursive(items, capacity)
+iterative(items, capacity)

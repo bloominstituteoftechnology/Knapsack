@@ -59,9 +59,28 @@ const recursive = (items, capacity) => {
 }
 
 const iterative = (items, capacity) => {
+  let cache = [[]]
+  for (let i = 0; i <= capacity; i++) {
+    cache[0][i] = 0
+  }
 
+  for (let i = 1; i < items.length; i++) {
+    cache[i] = []
+    const { value, size } = items[i - 1]
+    for (let c = 0; c <= capacity; c++) {
+      if (size <= c) {
+        cache[i][c] = Math.max(cache[i - 1][c], value + cache[i - 1][c - size])
+      } else {
+        cache[i][c] = cache[i -1][c]
+      }
+    }
+  }
+  
+  console.log(cache.pop()[capacity])
 }
 
 module.exports = {
   greedy,
+  recursive,
+  iterative
 }
