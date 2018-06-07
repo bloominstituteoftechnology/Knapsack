@@ -56,9 +56,29 @@ for (let l of lines) {
     })
     return {resultsGreed, currentSize, currentValue};
   }
-
+  const memoize = (fn) => {
+    let cache = {};
+      return (...args) => {
+          let n = args[0];
+          if (n in cache) {
+              console.log('Fetching from cache');
+              return cache[n];
+          }
+          else {
+              console.log('Calculating result');
+              let result = fn(n);
+              cache[n] = result;
+              return result;
+          }
+      }
+  }
   function recursive(items, capacity) {
     function recurse(i, size) {
+         const Cache = {
+          value: 0,
+          size: 0,
+          chosen: []
+      };
         if ( i === -1) {
             return {
                 value: 0,
@@ -88,5 +108,7 @@ for (let l of lines) {
 
   function iterativeFoo(items, capacity) {
   }
+  const memoizedKnap = memoize(recursive);
+  console.log(memoizedKnap(items, capacity))
   console.log(greedyPoo());
   console.log(recursive(items, capacity));
