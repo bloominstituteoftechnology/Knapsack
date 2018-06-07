@@ -133,3 +133,60 @@ function knapsackRecursiveMemoized(items, capacity) {
   
   return recur(items.length - 1, capacity);
 }
+
+/**
+ * Iterative bottom-up dynamic programming
+ */
+function knapsackBottomUp(items, capacity) {
+
+  // Build an array to hold all the results
+  let results = Array(items.length);
+  
+  for (let i = 0; i < items.length; i++) {
+    results[i] = Array(capacity + 1);
+  }
+
+  // Initialize the first row to zero
+  for (let i = 0; i <= capacity; i++) {
+    results[0][i] = {
+      size: 0,
+      value: 0,
+      chosen: []
+    };
+  }
+  
+  // Go through all items
+  for (let i = 1; i < items.length; i++) {
+
+    // And all capacities
+    for (j = 0; j <= capacity; j++) {
+
+      if (items[i].size > j) {
+
+        // If the item doesn't fit, just use the previous best value
+        results[i][j] = results[i-1][j];
+      } else {
+
+        // Item does fit
+
+        // Look at previous best value, and value that we'd get if we
+        // chose this item. Choose the best one.
+
+        const r0 = results[i-1][j];
+        const r1 = Object.assign({}, results[i-1][j - items[i].size]); // Make a copy
+
+        r1.value += items[i].value;
+
+        if (r0.value > r1.value) {
+          results[i][j] = r0;
+        } else {
+          r1.size += items[i].size;
+          r1.chosen = r1.chosen.concat(i); // Make a copy
+          results[i][j] = r1;
+        }
+      }
+    }
+  }
+
+  return results[results.length - 1][capacity];
+}
