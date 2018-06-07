@@ -9,48 +9,54 @@ const fs = require('fs');
   3. Grab items off the top of the items array until we reach our knapsack's full capacity
 */
 
-const printOut = (knapsack) => {
-  let items = `Items to Select: `;
-  let totalCost = 0;
-  let totalValue = 0;
+// const printOut = (knapsack) => {
+//   let items = `Items to Select: `;
+//   let totalCost = 0;
+//   let totalValue = 0;
 
-  knapsack.forEach(item => {
-    items += `${item.index} `;
-    totalCost += item.size;
-    totalValue += item.value;
-  });
-  return `${items}\nTotal cost: ${totalCost}\nTotal value: ${totalValue}`;
-}
+//   knapsack.forEach(item => {
+//     items += `${item.index} `;
+//     totalCost += item.size;
+//     totalValue += item.value;
+//   });
+//   return `${items}\nTotal cost: ${totalCost}\nTotal value: ${totalValue}`;
+// }
 
 const greedyAlgo = (items) => {
-  const result = items.filter(item => {
-    return item.size < 101;
-  });
+  const result = {
+    items: "",
+    totalCost: 0,
+    totalValue: 0
+  }
 
-  result.forEach(item => {
-    return item.score = item.value / item.size;
-  });
-
-  result.sort((a, b) => {
+  items.sort((a, b) => {
+    // establish scores for each item
+    a.score = a.value / a.size;
+    b.score = b.value / b.size;
+    // order items from highest score to lowest score
     return b.score - a.score;
   })
-  console.log("scored items: ", result);
+  // console.log("scored items: ", items);
 
-  const knapsack = [];
   let threshold = 100;
   let index = 0;
-  while (threshold > 0 && index < result.length) {
-    const item = result[index];
+  while (threshold > 0 && index < items.length) {
+    // current item
+    const item = items[index];
     if (threshold - (item.size) < 0) {
+      // when current item is too large, move on to the next one
       index++;
     } else {
-      knapsack[index] = result[index];
-      threshold -= result[index].size;
-      index++; 
+      result.items += `${item.index}, `;
+      result.totalCost += item.size;
+      result.totalValue += item.value;
+      threshold -= items[index].size;
+      index++;
     }
   }
-  console.log("threshold: ", threshold);
-  return printOut(knapsack);
+  // trim off excess spacing
+  result.items = result.items.slice(0, -2);
+  return result;
 }
 
 const argv = process.argv.slice(2);
