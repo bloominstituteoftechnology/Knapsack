@@ -5,17 +5,78 @@ function naiveKnapsack(items, capacity) {
   function recurse(i, size) {
     // base case
     if (i === -1) {
+      // hit once recursion 'bottoms out'
       return { value: 0, size: 0, chosen: [] }
     }
     // check to see if the item fits
     else if (items[i].size > size) {
+      // Effectively skips item
       return recurse(i - 1, size);
     }
     // Item fits, but might not be worth as much as items in there already
     else {
+      // Option 1: Item not taken
       const r0 = recurse(i - 1, size);
+      // Option 2: Take item and decrement space left in bag and add  value
       const r1 = recurse(i - 1, size - items[i].size);
+      r1.value += items[i].value;
 
+      // Compare variants and take larger value
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        // Add to recusive return object while 'uncoiling'
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i+1);
+        return r1;
+      }
+    }
+  }
+  // Return most optimal option
+  return recurse(items.length - 1, capacity);
+}
+
+/* 
+  Memoized Recursive Strategy 
+  The idea: we'll use the same naive recursive logic but augment it 
+  with the ability to save work we've already done. This doesn't actually
+  improve the theoretical runtime complexity over the naive recursive 
+  approach, but it does significantly improve the actual running time.
+  
+  1. Initialize a cache (can be an object or an array)
+  2. Write a helper function that checks the cache for the answer we're looking for
+  3. If the answer is not found, fall back on our naive logic
+  4. The naive helper needs to recursively call the memoized version, not itself
+  5. Return the value that the memoized function returns
+*/
+
+function memoKnapsack(items, capacity) {
+  const cache = Array(items.length).fill( Array(capacity + 1).fill(null));
+
+  // check cache for previously processed data
+  function checkCache(i, size) {
+    const value = cache[i][size];
+    // check if chached item exists
+    if (cache[i][size]) {
+      return cache[id];
+    }
+    // call recurse if no data if found in cache
+    else {
+      return cache[id] = recurse(i, size);
+    }
+  }
+
+  // fallback algo if no data is found in cache
+  function recurse(i, size) {
+    if (i === -1) {
+      return { value: 0, size: 0, chosen: [] }
+    }
+    else if (items[i].size > size) {
+      return recurse(i - 1, size);
+    }
+    else {
+      const r0 = recurse(i - 1, size);
+      const r1 = checkCache(i - 1, size - items[i].size);
       r1.value += items[i].value;
 
       if (r0.value > r1.value) {
@@ -27,8 +88,25 @@ function naiveKnapsack(items, capacity) {
       }
     }
   }
-  return recurse(items.length - 1, capacity);
+
+  return checkCache(items.length - 1, capacity);
 }
+
+/* 
+  Bottom Up Iterative 
+  The idea: Generally follow the same logic as the memoized recursive approach. We 
+  still make use of a cache to save prior data. In this case though, we seed the cache
+  with some initial values and then loop up to our input, along the way populating the
+  cache with the answer for the currennt iteration.
+
+  1. Initialize a cache (again, can be an object or array)
+  2. Seed the cache with initial values so that we can build up from there
+  3. Loop up to our input (don't forget to skip over the initial seed values)
+  4. Populate the cache with the answer for the current iteration
+  5. Return cache[n]
+*/
+
+
 
 /*
   Greedy Strategy
@@ -114,7 +192,9 @@ for (let l of lines) {
   });
 }
 
+// console.log(items);
+
 // console.log(greedyAlgo(items, 100));
 // console.log(greedyAlgoSolo(items, 100));
 
-console.log(naiveKnapsack(items, capacity));
+console.log(memoKnapsack(items, capacity));
