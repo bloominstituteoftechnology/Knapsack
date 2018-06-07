@@ -74,4 +74,34 @@ for (let i = 0; i < items.length; i++) {
   }
 }
 
-console.log(knapsack);
+const knapsackRecursive = (items, capacity) => {
+  const recur = (i, size) => {
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        content: []
+      };
+    } else if (items[i].size > size) {
+      return recur(i - 1, size);
+    } else {
+      const r0 = recur(i - 1, size);
+      const r1 = recur(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        console.log("r0 value:" + r0.value);
+        return r0;
+      } else {
+        console.log("r1 value: " + r1.value);
+        r1.size += items[i].size;
+        r1.content = r1.content.concat(i + 1);
+        return r1;
+      }
+    }
+  };
+  return recur(items.length - 1, capacity);
+};
+
+console.log(knapsackRecursive(items, capacity));
