@@ -84,8 +84,8 @@
   ```
 
 ## O(2^n)
-  * each iteration spawns at least one more than the last
-  * ex. recursive algos
+  * each recursive call is met with two more recursive calls
+  * ex. recursive algos such as naive fibonacci
   ```
   const fib = num => {
     if (num === 0 || num === 1) return num;
