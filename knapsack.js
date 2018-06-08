@@ -87,5 +87,95 @@ function naiveKnapsack(items, capacity) {
   return recurse(items.length - 1, capacity);
 }
 
+// memoized recursive
 
-console.log(knapsack(items, capacity))
+function memoKnapsack(items, capacity) {
+  let cache = Array(items.length)
+
+  for (let i = 0; i < items.length; i++) {
+    cache[i] = Array(capacity + 1).fill(null);
+  }
+
+  function recurseMemo(i, size) {
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: [],
+      }
+    }
+    let value = cache[i][size];
+    if (!value) {
+      value = recurseNaive(i, size);
+      cache[i][size] = Object.assign({},value);
+    }
+    return value;
+  }
+  function recurseNaive(i, size) {
+    if (i === -1) {
+      return {
+        value: 0,
+        size: 0,
+        chosen: [],
+      }
+    } else if (items[i].size > size) {
+        return recurseMemo(i - 1, size);
+    } else {
+      const r0 = recurseMemo(i - 1, size);
+      const r1 = recurseMemo(i - 1, size - items[i].size);
+
+      r1.value += items[i].value;
+
+      if (r0.value > r1.value) {
+        return r0;
+      } else {
+        r1.size += items[i].size;
+        r1.chosen = r1.chosen.concat(i);
+        return r1;
+      }
+    }
+  }
+  return recurseMemo(items.length - 1, capacity);
+}
+
+
+// iterative
+
+function iterativeKnapsack(items, capacity) {
+  let cache = Array(items.length)
+
+  for (let i = 0; i < items.length; i++) {
+    cache[i] = Array(capacity + 1).fill(null);
+  }
+
+  for (let i = 0; i <= capacity; i++) {
+    cache[0][i] = {
+      size: 0,
+      value: 0,
+      chosen: []
+    };
+  }
+
+  for (let i = 1; i < items.length; i++) {
+    for (let j = 0; j <= capacity; j++) {
+      if (items[i].size > j) {
+        cache[i][j] = cache[i-1][j];
+      } else {
+        const r0 = cache[i-1][j];
+        const r1 = Object.assign({}, cache[i-1][j - items[i].size]);
+
+        r1.value += items[i].value;
+        if (r0.value > r1.value) {
+          cache[i][j] = r0;
+        } else {
+          r1.size += items[i].size;
+          r1.chosen = r1.chosen.concat(items[i].index);
+          cache[i][j] = r1;
+        }
+      }
+    }
+  }
+  return cache[cache.length-1][capacity];
+}
+
+console.log(iterativeKnapsack(items, capacity))
