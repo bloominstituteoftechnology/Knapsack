@@ -51,32 +51,33 @@ function naiveKnapsack(items, capacity) {
 */
 
 function memoKnapsack(items, capacity) {
-  const cache = Array(items.length).fill( Array(capacity + 1).fill(null));
-
+  // initialize cache
+  const cache = Array(items.length);
+  for (let i = 0; i < items.length; i++) {
+    cache[i] = Array(capacity + 1).fill(null);
+  }
   // check cache for previously processed data
   function checkCache(i, size) {
-    const value = cache[i][size];
-    // check if chached item exists
-    if (cache[i][size]) {
-      return cache[id];
+    if (i === -1) {
+      return { value: 0, size: 0, chosen: [] }
     }
-    // call recurse if no data if found in cache
-    else {
-      return cache[id] = recurse(i, size);
+
+    let value = cache[i][size];
+    if (!value) {
+      value = recurse(i, size);
+      cache[i][size] = Object.assign({}, value);
     }
+    return value;
   }
 
   // fallback algo if no data is found in cache
   function recurse(i, size) {
-    if (i === -1) {
-      return { value: 0, size: 0, chosen: [] }
-    }
-    else if (items[i].size > size) {
-      return recurse(i - 1, size);
-    }
-    else {
-      const r0 = recurse(i - 1, size);
+    if (items[i].size > size) {
+      return checkCache(i - 1, size);
+    } else {
+      const r0 = checkCache(i - 1, size);
       const r1 = checkCache(i - 1, size - items[i].size);
+
       r1.value += items[i].value;
 
       if (r0.value > r1.value) {
@@ -88,7 +89,6 @@ function memoKnapsack(items, capacity) {
       }
     }
   }
-
   return checkCache(items.length - 1, capacity);
 }
 
@@ -106,7 +106,44 @@ function memoKnapsack(items, capacity) {
   5. Return cache[n]
 */
 
+function iterateKnapsack(items, capacity) {
+  // initialize cache
+  const cache = Array(items.length);
+  for (let i = 0; i < items.length; i++) {
+    cache[i] = Array(capacity + 1).fill(null);
+  }
 
+  // seed the cache with some initial values
+  for (let i = 0; i <= capacity; i++) {
+    cache[0][i] = { size: 0, value: 0, chosen: [] };
+  }
+
+  // loop through all the items in our items array
+  for (let i = 1; i < items.length; i++) {
+    // loop through all the capacities
+    for (let j = 0; j <= capacity; j++) {
+      if (items[i].size > j) {
+        // if the item is too large, use the previous value
+        cache[i][j] = cache[i - 1][j];
+      } else {
+        // item fits
+        const r0 = cache[i - 1][j];
+        const r1 = Object.assign({}, cache[i - 1][j - items[i].size]);
+
+        r1.value += items[i].value;
+
+        if (r0.value > r1.value) {
+          cache[i][j] = r0;
+        } else {
+          r1.size += items[i].size;
+          r1.chosen = r1.chosen.concat(items[i].index);
+          cache[i][j] = r1;
+        }
+      }
+    }
+  }
+  return cache[cache.length - 1][capacity];
+}
 
 /*
   Greedy Strategy
@@ -192,9 +229,5 @@ for (let l of lines) {
   });
 }
 
-// console.log(items);
-
-// console.log(greedyAlgo(items, 100));
-// console.log(greedyAlgoSolo(items, 100));
-
 console.log(memoKnapsack(items, capacity));
+console.log(iterateKnapsack(items, capacity));
