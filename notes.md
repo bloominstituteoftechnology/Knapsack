@@ -1,6 +1,8 @@
 # Big-O Notation
 
-#### O(1) -> O(log(n)) -> O(n) -> O(n log(n)) -> O(n^2) -> O(2^n) -> O(n!)
+<h4 align="center">O(1)  ->  O(log(n))  ->  O(n)  ->  O(n log(n))  ->  O(n^2)  ->  O(2^n)  ->  O(n!)</h4>
+
+#
 
 ![](./big-0.png)
 
