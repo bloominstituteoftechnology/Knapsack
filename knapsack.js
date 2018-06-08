@@ -124,7 +124,7 @@ function knapsackIterative(items, capacity) {
             }
         }
     }
-    return cache[cache.length-1]
+    return cache[cache.length-1][capacity];
 }
 
 /*
