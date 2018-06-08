@@ -103,50 +103,56 @@ function naiveKnapsack(items, capacity) {
 
 /*   Memoized Recursive Strategy */
 function memoizedKnapsack(items, capacity) {
-  const cache = Array(items.length);
-  for(let i = 0; i < items.length; i++){
-      cache[i] = Array(capacity + 1).fill(null);
-  }
-
-  function recursiveMemoizedKnapsack(i, size) {
-    let value = cache[i][size];
-
-    if (!value) {
-      value = naiveKnapsack(i, size);
-      cache[i][size] = value;
+    // initialized the cache
+    const cache = Array(items.length);
+    for(let i = 0; i < items.length; i++){
+        cache[i] = Array(capacity + 1).fill(null);
     }
-    return value;
-  }
 
-  function naiveKnapsack(i, size) {
-      if (i === 0) {
-          return {
-              value: 0,
-              size: 0,
-              chosen: []
-          }
-      }
+    function recursiveMemoizedKnapsack(i, size) {
+        if (i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            }
+        }
+        let value = cache[i][size];
+        if (!value) {
+        value = naiveRecursiveKnapsack(i, size);
+        cache[i][size] = Object.assign({}, value);
+        }
+        return value;
+    }
 
-      else if (items[i].size > size) {
-          return recursiveMemoizedKnapsack(i - 1, size);
-      }
+    function naiveRecursiveKnapsack(i, size) {
+        if (i === -1) {
+            return {
+                value: 0,
+                size: 0,
+                chosen: []
+            }
+        }
 
-      else {
-          const r0 = recursiveMemoizedKnapsack(i - 1, size);
-          const r1 = recursiveMemoizedKnapsack(i - 1, size - items[i].size);
+        else if (items[i].size > size) {
+            return recursiveMemoizedKnapsack(i - 1, size);
+        }
 
-          r1.value += items[i].value;
-          if (r0.value > r1.value) {
-              return r0;
-          } else {
-              r1.size += items[i].size;
-              r1.chosen = r1.chosen.concat(i);
-              return r1;
-          }
-      }
-  }
-    console.log(recursiveMemoizedKnapsack(items.length - 1, capacity));
+        else {
+            const r0 = recursiveMemoizedKnapsack(i - 1, size);
+            const r1 = recursiveMemoizedKnapsack(i - 1, size - items[i].size);
+
+            r1.value += items[i].value;
+            if (r0.value > r1.value) {
+                return r0;
+            } else {
+                r1.size += items[i].size;
+                r1.chosen = r1.chosen.concat(i+1);
+                return r1;
+            }
+        }
+    }
     return recursiveMemoizedKnapsack(items.length-1, capacity);
 }
 
-memoizedKnapsack(items, capacity);
+console.log(memoizedKnapsack(items, capacity));
