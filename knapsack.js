@@ -1,23 +1,21 @@
 const fs = require("fs"); // file system
 
 const argv = process.argv.slice(2);
-// console.log(argv) // node knapsack.js data/filename.txt 100
 
 const filename = argv[0];
 const capacity = parseInt(argv[1]);
 
-// read the file
-const filedata = fs.readFileSync(filename, "utf8");
-const lines = filedata.trim().split(/[\r\n]+/g); // split the filedata on each new line
+const filedata2array = () => {
+  return fs
+    .readFileSync(filename, "utf8") // read the file
+    .trim().split(/[\r\n]+/g) // split the filedata on each new line
+    .reduce((acc, line) => {
+      const [index, size, value] = line.split(" ").map(numStr => +numStr);
+      return [...acc, { index, size, value }];
+    }, []);
+}
 
-// process the lines
-const items = [];
-
-lines.forEach(line => {
-  const [index, size, value] = line.split(" ").map(numStr => +numStr);
-  const data = { index, size, value };
-  items.push(data);
-});
+const items = filedata2array();
 
 console.log(items)
 
@@ -54,6 +52,7 @@ const naive = (items, capacity) => {
   }
 
   return recurse(items.length - 1, capacity);
+
 }
 
 // console.log(naive(items, capacity));
@@ -98,6 +97,7 @@ Strategy 2 - Iterative Bottom-Up
 */
 
 const iterative = (items, capacity) => {
+
   let cache = Array(items.length);
 
   // add second dimension to cache 
@@ -134,10 +134,10 @@ const iterative = (items, capacity) => {
   }
 
   return cache[cache.length - 1][capacity];
+
 }
 
-console.log(iterative(items, capacity));
-
+// console.log(iterative(items, capacity));
 
 /*
 Strategy 3 - Memoized Recursive Strategy
@@ -155,6 +155,7 @@ Strategy 3 - Memoized Recursive Strategy
 */
 
 const memoized = (items, capacity) => {
+
   let cache = Array(items.length);
 
   // add second dimension to cache 
@@ -163,7 +164,7 @@ const memoized = (items, capacity) => {
   }
 
   const memoHelper = (index, size) => {
-    // base case - negative one bc we want to include index 0
+    // base case - this will be the starting value when recursion begins to unwind
     if (index === -1) return { value: 0, size: 0, chosen: [] };
 
     let value = cache[index][size];
@@ -174,54 +175,15 @@ const memoized = (items, capacity) => {
     }
 
     return value;
+
   }
 
   const recurseNaive = (index, size) => {
-    // base case - negative one bc we want to include index 0
-    // if (index === -1) return { value: 0, size: 0, chosen: [] };
-
     // check to see if the item fits
+    // does the item fit the capacity requirements ? if not, move on to next index
     if (items[index].size > size) return memoHelper(index - 1, size);
 
     // the item fits, but might not be worth as much as items in there already
-    else {
-      const r0 = memoHelper(index - 1, size); // index 9 size 94 value 19
-      const r1 = memoHelper(index - 1, size - items[index].size); // index 9 size 94 - 34 = 60
-
-      r1.value += items[index].value; // index 9 value 19 + 12 = 31
-
-      if (r0.value > r1.value) return r0;
-
-      else {
-        r1.size += items[index].size;
-        r1.chosen = r1.chosen.concat(index + 1);
-        return r1;
-      }
-    }
-  }
-
-  return memoHelper(items.length - 1, capacity);
-  /*
-  let cache = Array(items.length);
-
-  const memoHelper = (index, size) => {  
-    let value = cache[index];
-
-    if (!value) {
-      value = recurse(index, size);
-      cache[index] = value;
-    }
-    // console.log("cache: ", cache)
-    return value;
-  }
-
-  const recurse = (index, size) => {
-    // base case - this will be the starting value when recursion begins to unwind
-    if (index === -1) return { value: 0, size: 0, chosenItems: [] };
-
-    // does the item fit the capacity requirements ? if not, move on to next index
-    else if (items[index].size > size) return memoHelper(index - 1, size);
-
     // there is room for this item in the knapsack
     else {
       // item that hasn't been claimed - value from not taking the item
@@ -232,18 +194,17 @@ const memoized = (items, capacity) => {
       itemsInKnapsack.value += items[index].value;
 
       if (availableItems.value > itemsInKnapsack.value) {
-        console.log("availableItems has been chosen: ", availableItems)
         return availableItems;
       } else {
         itemsInKnapsack.size += items[index].size;
-        itemsInKnapsack.chosenItems.push(index + 1);
-        console.log("itemsInKnapsack has been chosen: ", itemsInKnapsack)
+        itemsInKnapsack.chosenItems.push(index + 1); // r1.chosen = r1.chosen.concat(index + 1);
         return itemsInKnapsack;
       }
     }
-    
-  } */
-  // return memoHelper(items.length - 1, capacity);
+  }
+
+  return memoHelper(items.length - 1, capacity);
+  
 }
 
 // console.log(memoized(items, capacity))
