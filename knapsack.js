@@ -17,8 +17,6 @@ const filedata2array = () => {
 
 const items = filedata2array();
 
-console.log(items)
-
 /*
 Strategy 0 - Naive Recursive Strategy
   * complexity - O(2^n) - each recursive call is met with two more recursive calls
@@ -54,8 +52,6 @@ const naive = (items, capacity) => {
   return recurse(items.length - 1, capacity);
 
 }
-
-// console.log(naive(items, capacity));
 
 /*
 Strategy 1 - Greedy Strategy - O(n log(n) + n)
@@ -137,8 +133,6 @@ const iterative = (items, capacity) => {
 
 }
 
-// console.log(iterative(items, capacity));
-
 /*
 Strategy 3 - Memoized Recursive Strategy
   The idea: 
@@ -204,7 +198,12 @@ const memoized = (items, capacity) => {
   }
 
   return memoHelper(items.length - 1, capacity);
-  
+
 }
 
-// console.log(memoized(items, capacity))
+/* END OF KNAPSACK METHODS */
+
+console.log(items);
+console.log(naive(items, capacity));
+console.log(iterative(items, capacity));
+console.log(memoized(items, capacity))
