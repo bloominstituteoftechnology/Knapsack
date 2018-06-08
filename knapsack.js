@@ -43,74 +43,134 @@ let initial = parseInt(capacity);
 let betterValue = [];
 let sameValue = [];
 let worseValue = [];
-items.sort((a, b) => {
-  //b is an index above b
-  //a starts at index 1, doesn't have the last index
-  //b doesn't contain the first index
-  let valA = a.value/a.size;
-  let valB = b.value/b.size;
-  return valB - valA;
-  // if ((a.value/a.size) > (b.value/b.size)) {
-    //   // cost = a.size;
-    //   betterValue.push(a)
-    //   parseInt(cost)
-    //     // return a;
-    // } else if ((a.value/a.size) === (b.value/b.size)) {
-      //   sameValue.push(a)
-      // }
-      //  else {
-        //   worseValue.push(b)
-        
-        // cost = b.size
-        // return b;
-        // console.log('a value', a);
-  // console.log('typeof cost:', betterValue);
-  
-  // console.log('cost index',parseInt(netCostValue))
-});
-console.log('items:', items)
-// function quickSort(betterValue, left, right){
-  //   var len = arr.length, 
-  //   pivot,
-  //   partitionIndex;
-  
-  
-  //  if(left < right){
-    //    pivot = right;
-    //    partitionIndex = partition(arr, pivot, left, right);
-    
-    //   //sort left and right
-    //   quickSort(arr, left, partitionIndex - 1);
-    //   quickSort(arr, partitionIndex + 1, right);
-    //  }
-    //  return arr;
-    // }
-    // let netCostValue = ((capacity) - (cost));
-    console.log('btter sort', (betterValue))
-    console.log('worse sort', worseValue)
-    console.log('same value', sameValue)
-    
-    
-    const greedyAlgo = (items, initial) => {
-      
-      let cost = 0;
-      const result = {
-        value: [],
-        size: [],
-        chosen: []
-      };
-      for (i = 0; i < items.length ; i++) {
-        if (initial > items[i].size) {
-         result.size += items[i].size;
-         result.value += items[i].value;
-         result.chosen += items[i].index + ' ' ;
-         initial -= items[i].size;
-        }
-      }
+// items.sort((a, b) => {
+//   //b is an index above b
+//   //a starts at index 1, doesn't have the last index
+//   //b doesn't contain the first index
+//   let valA = a.value / a.size;
+//   let valB = b.value / b.size;
+//   return valB - valA;
+
+// });
 
 
-  return result;
+
+// const greedyAlgo = (items, initial) => {
+
+//   let cost = 0;
+//   const result = {
+//     value: [],
+//     size: [],
+//     chosen: []
+//   };
+//   for (i = 0; i < items.length; i++) {
+//     if (initial >= items[i].size) {
+//       result.size += items[i].size;
+//       result.value += items[i].value;
+//       result.chosen += items[i].index + ' ';
+//       initial -= items[i].size;
+//     }
+//   }
+
+
+//   return result;
+// }
+
+
+// console.log(greedyAlgo(items, initial))
+
+//<<<<<< >>>>>>>> <<<<<<<<<<< >>>>>>>>>>>>>>> <<<<<<<<< >>>>
+
+/* Naive Recursive Approach */
+function naiveKnapsack(items, capacity) {
+  // function recurse(i, size) {
+  //   // base case
+  //   if (i === -1) {
+  //     return {
+  //       value: 0,
+  //       size: 0,
+  //       chosen: [],
+  //     };
+  //   }
+
+  //   // check to see if the item fits
+  //   else if (items[i].size > size) {
+  //     return recurse(i - 1, size);
+  //   }
+  //   // Item fits, but might not be worth as much as items in there already
+  //   else {
+  //     const r0 = recurse(i - 1, size);
+  //     const r1 = recurse(i - 1, size - items[i].size);
+
+  //     r1.value += items[i].value;
+
+  //     if (r0.value > r1.value) {
+  //       return r0;
+  //     } else {
+  //       r1.size += items[i].size;
+  //       r1.chosen = r1.chosen.concat(i + 1);
+  //       return r1;
+  //     }
+  //   }
+  // }
+  // return recurse(items.length - 1, capacity);
+  
 }
 
 
-console.log(greedyAlgo(items,initial))
+
+//<<<<<< >>> <<< >>> <<<<<<<<<<< >>>>>>>>>>>>>>> <<<<<<<<< >>>>
+function Knapsack(items, initial) {
+  const cache = Array([items][initial]);
+  function memoKnapsack(items, initial) {
+    let cacheValue = cache[[items][initial]];
+    if (!cacheValue) {
+      cacheValue = naiveKnapsack(items, initial);
+      cache[[items][initial]] = cacheValue;
+      // return console.log('cacheValue null', initial)
+      // return cacheValue
+    }
+    // return console.log('cacheValue not null', initial)
+    return cacheValue;
+  }
+  function naiveKnapsack(items, initial) {
+    
+    function recurse(i, size) {
+      // base case
+      if (i === -1) {
+        return {
+          value: 0,
+          size: 0,
+          chosen: [],
+        };
+      }
+      // console.log('items inside naive', size, i, items, items[i].size < size, cache);
+  
+      // check to see if the item fits
+      // else if (items[i].size > size) {
+      //   return memoKnapsack(i - 1, size);
+      // }
+      // Item fits, but might not be worth as much as items in there already
+      else {
+        return console.log('else', items[i].size)
+        // const r0 = memoKnapsack(i - 1, size);
+        // const r1 = memoKnapsack(i - 1, size - items[i].size);
+  
+        // r1.value += items[i].value;
+  
+        // if (r0.value > r1.value) {
+        //   return r0;
+        // } else {
+        //   r1.size += items[i].size;
+        //   r1.chosen = r1.chosen.concat(i + 1);
+        //   return r1;
+        // }
+      }
+    }
+    return recurse(items.length - 1, initial);
+  }
+  return memoKnapsack(items, initial)
+}
+//Work on completing Memoization 
+//and Iteration for Knapsack when possible!
+console.log(Knapsack(items, initial));
