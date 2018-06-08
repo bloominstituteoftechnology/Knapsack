@@ -1,7 +1,7 @@
 # Big-O Notation
 
 <p align="center">
-  <h4>O(1) -> O(log(n)) -> O(n) -> O(n log(n)) -> O(n^2) -> O(2^n) -> O(n!)</h4>
+  <b><h4>O(1) -> O(log(n)) -> O(n) -> O(n log(n)) -> O(n^2) -> O(2^n) -> O(n!)</h4></b>
 </p>
 
 #
