@@ -14,7 +14,6 @@ const naiveStairs = n => {
          naiveStairs(n - 3);
 }
 
-/**************************************************************************/
 
 const memoizedStairs = (n, cache) => {
   if (n < 0) return 0;
@@ -28,4 +27,5 @@ const memoizedStairs = (n, cache) => {
   return cache[n];
 }
 
+console.log(naiveStairs(10))
 console.log(memoizedStairs(10, Array(11)))

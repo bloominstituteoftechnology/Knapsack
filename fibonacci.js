@@ -3,9 +3,6 @@ const nthFib = n => {
   return nthFib(n - 1) + nthFib(n - 2);
 }
 
-// console.log(nthFib(5))
-
-//////////////////////////////////////////////////////////////////////////////
 
 const nthFibMemoized = n => {
   let cache = Array(n + 1);
@@ -29,9 +26,6 @@ const nthFibMemoized = n => {
   return nthFibMemo(n);
 }
 
-// console.log(nthFibMemoized(10))
-
-//////////////////////////////////////////////////////////////////////////////
 
 const nthFibIterative = n => {
   let cache = Array(n);
@@ -45,4 +39,8 @@ const nthFibIterative = n => {
   return cache[n];
 }
 
-// console.log(nthFibIterative(50))
+/* END OF FIB METHODS */
+
+console.log(nthFib(5))
+console.log(nthFibMemoized(10))
+console.log(nthFibIterative(50))
