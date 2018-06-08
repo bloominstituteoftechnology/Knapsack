@@ -76,8 +76,6 @@ const greedy = array => {
   return { chosenItems, totalCost, totalValue };
 }
 
-// console.log(greedy(items)); // node knapsack.js data/filename.txt 100
-
 /*
 Strategy 2 - Iterative Bottom-Up
   The idea: 
@@ -203,7 +201,16 @@ const memoized = (items, capacity) => {
 
 /* END OF KNAPSACK METHODS */
 
+/* 
+  to run these algos in your terminal...
+  
+  ...node knapsack.js data/filename.txt capacity
+  
+  for example: node knapsack.js data/small1.txt 100
+*/
+
 console.log(items);
 console.log(naive(items, capacity));
+console.log(greedy(items));
 console.log(iterative(items, capacity));
-console.log(memoized(items, capacity))
+console.log(memoized(items, capacity));
