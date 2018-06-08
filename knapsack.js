@@ -144,6 +144,61 @@ console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
 // }
 
 /*
+  MEMOIZED RECURSIVE / DYNAMIC PROGRAMMING STRATEGY  
+  The idea: we'll use the same naive recursive logic but augment it
+  with the ability to save work we've already done. This doesn't actually
+  improve the theoretical runtime complexity 
+*/
+
+// function memoizedKnapsack(items, capacity) {
+//   //initialize cache (in this, it will be a matrix)
+//   const cache = Array(items.length);
+
+//   // add the second dimension
+//   for (let i = 0; i < items.length; i++) {
+//     cache[i] = Array(capacity + 1).fill(null);
+//   }
+
+//   function recurseMemo(i, size) {
+//     let value = cache[i][size];
+
+//     if (!value) {
+//       value = recurseNaive(i ,size);
+//       cache[i][size] = value;
+//     }
+//     return value;
+//   }
+//   function recurseNaive(i, size) {
+//         if (i === -1) {
+//           return {
+//             value: 0,
+//             size: 0,
+//             chosen: [],
+//           };
+//         }
+    
+//         else if (items[i].size > size) {
+//           return recurseMemo(i - 1, size);
+//         }
+//         else {
+//           const r0 = recurseMemo(i - 1, size);
+//           const r1 = recurseMemo(i - 1, size - items[i].size);
+    
+//           r1.value += items[i].value;
+    
+//           if (r0.value > r1.value) {
+//             return r0;
+//           } else {
+//             r1.size += items[i].size;
+//             r1.chosen = r1.chosen.concat(i+1);
+//             return r1;
+//           }
+//         }
+//       }
+//       return recurseMemo(items.length - 1, capacity);
+// }
+
+/*
   Greedy Strategy
   0. Go through our items and filter out any items whose size > knapsack's capacity
   1. 'Score' each item by determining its value/weight ratio
@@ -211,3 +266,4 @@ console.log("Naive Recursive implementation: ", naiveKnapsack(items, capacity));
 
 // console.log(greedyAlgo(items, capacity));
 // console.log(naiveKnapsack(items, capacity));
+// console.log(memoizedKnapsack(items, capacity));
