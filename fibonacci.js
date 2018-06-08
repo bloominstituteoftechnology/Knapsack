@@ -1,3 +1,4 @@
+// exponential time
 const nthFib = n => {
   if (n === 0 || n === 1) return n;
   return nthFib(n - 1) + nthFib(n - 2);

@@ -6,6 +6,8 @@
 
 ![](./big-0.png)
 
+![](https://i.pinimg.com/originals/90/12/98/901298ea802fb439ea19b4a55a685f08.png)
+
 ## O(1)
  * constant time
  * amount of input does not affect the runtime/space complexity 
