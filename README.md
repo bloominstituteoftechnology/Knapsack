@@ -57,7 +57,21 @@ Total cost: 98
 Total value: 117
 ```
 
+### Task 1: Implement a Brute Force Naive Solution
+
 For first steps, just think a bit about how you might naively solve this with brute force. The above data is small enough that such a solution should work, so give it a go. More to come soon - larger problems that will require more sophisticated approaches.
+
+### Task 2: Implement a Better Solution
+
+More specifically, try to use one (or more) of the algorithmic paradigms that were discussed in lecture, namely, memoization or bottom-up iterative.
+
+Another line of thinking you may wish to try is to come up with a heuristic, or a mental shortcut, that can be used to solve this particular problem. For example, what if we tried to rank each possible item by their value/weight ratio? :wink:
+
+### Stretch Goals
+
+If you've implemented a working solution to the knapsack problem using one of the paradigms we discussed in lecture, try implementing another solution using a different paradigm!
+
+---
 
 The `answers.txt` file includes the expected answers for each of the data files. Note that all the runs use a capacity of 100. 
 
