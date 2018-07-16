@@ -63,7 +63,7 @@ For first steps, just think a bit about how you might naively solve this with br
 
 ### Task 2: Implement a Better Solution
 
-More specifically, try to use one (or more) of the algorithmic paradigms that were discussed in lecture, namely, memoization or bottom-up iterative.
+More specifically, try to use one (or more) of the algorithmic paradigms that were discussed in lecture, namely, memoization or bottom-up iterative, in order to come up with a better solution that can handle larger inputs than what your brute force solution can handle.
 
 Another line of thinking you may wish to try is to come up with a heuristic, or a mental shortcut, that can be used to solve this particular problem. For example, what if we tried to rank each possible item by their value/weight ratio? :wink:
 
