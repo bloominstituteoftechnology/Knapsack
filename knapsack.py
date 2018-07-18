@@ -7,7 +7,7 @@ from itertools import chain, combinations
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 # Bruteforce Solution
-def knapsack_solver(items, capacity):
+def knapsack_solver_bruteforce(items, capacity):
   
   def powerset(iterable):
     "powerset([1,2,3]) --> (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
@@ -44,6 +44,33 @@ def knapsack_solver(items, capacity):
 
   return (f'Value: {max_value}\nSize: {cost_of_max}\nChosen: {str(items_of_max)[1:-1]}')
 
+# Bottom-Up Solution
+def knapsack_solver_bottomup(items, capacity):
+  costs = []
+  values = []
+  for item in items:
+    costs.append(item[1])
+    values.append(item[2])
+  n = len(items)
+
+  def knapSack(capacity, costs, values, n):
+    K = [[0 for x in range(capacity+1)] for x in range(n+1)]
+ 
+    # Build table K[][] in bottom up manner
+    for i in range(n+1):
+        for w in range(capacity+1):
+            if i==0 or w==0:
+                K[i][w] = 0
+            elif costs[i-1] <= w:
+                K[i][w] = max(values[i-1] + K[i-1][w-costs[i-1]],  K[i-1][w])
+            else:
+                K[i][w] = K[i-1][w]
+ 
+    return K[n][capacity]
+
+  return knapSack(capacity, costs, values, n)
+
+
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     capacity = int(sys.argv[2])
@@ -56,6 +83,6 @@ if __name__ == '__main__':
       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
     
     file_contents.close()
-    print(knapsack_solver(items, capacity))
+    print(knapsack_solver_bottomup(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
