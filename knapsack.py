@@ -11,15 +11,33 @@ def knapsack_solver(items, capacity):
   items_of_max = []
   cost_of_max = 0
 
-  for first_item in items:
-    running_value = first_item[2]
-    items_of_running = [first_item]
-    cost_of_running = first_item[1]
-    for second_item in items:
-      if first_item == second_item:
-        pass
-      else:
+  for starting_item in items:
+    # Don't run if the first item is over capacity
+    if starting_item[1] <= capacity:
+      running_value = starting_item[2]
+      items_of_running = [starting_item[0]]
+      cost_of_running = starting_item[1]
+      
+      for additional_item in items:
+        # Don't duplicate items
+        if starting_item == additional_item:
+          pass
         
+        # Don't go over capacity
+        elif cost_of_running + additional_item[1] > capacity:
+          pass
+
+        else:
+          running_value += additional_item[2]
+          items_of_running.append(additional_item[0])
+          cost_of_running += additional_item[1]
+
+          if running_value > max_value:
+            max_value = running_value
+            items_of_max = items_of_running
+            cost_of_max = cost_of_running
+
+  return (f'Value: {max_value}\nSize: {cost_of_max}\nChosen: {str(items_of_max)[1:-1]}')
   
 
 if __name__ == '__main__':
