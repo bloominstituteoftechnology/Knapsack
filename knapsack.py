@@ -8,7 +8,7 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
   def check_knapsack(i, size):
-    if items[i].size) > size:
+    if items[i].size > size:
       return check_knapsack(i - 1, size)
 
     elif( i == -1):
@@ -28,7 +28,7 @@ def knapsack_solver(items, capacity):
         item2.chosen = item1.chosen + (i + i)
         return item2
     
-    return check_knapsack(len(item) - 1, capacity)
+    #return check_knapsack(len(item) - 1, capacity)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
