@@ -6,8 +6,34 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  d = {}
+  for index, item in enumerate(items):
+    d.update({index:float(item[2]) / float(item[1])})
+  d_sorted = sorted(d.items(), key=lambda kv: kv[1], reverse=True)
+  cost_sum = 0
+  value_sum = 0 
+  chosen_list = []
+  for index, ratio_tuples in enumerate(d_sorted):
+    cost = items[ratio_tuples[0]][1]
+    value = items[ratio_tuples[0]][2]
+    chosen = items[ratio_tuples[0]][0]
+    if cost + cost_sum > capacity:
+      for ratio_tuples in d_sorted[index + 1:]:
+        if cost_sum >= capacity:
+          break
+        cost = items[ratio_tuples[0]][1]
+        value = items[ratio_tuples[0]][2]
+        chosen = items[ratio_tuples[0]][0]
+        if cost + cost_sum <= capacity:
+          cost_sum += cost
+          value_sum += value
+          chosen_list.append(chosen)
+      break
+    else:
+      cost_sum += cost
+      value_sum += value
+      chosen_list.append(chosen)
+  return (value_sum, cost_sum, chosen_list)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
