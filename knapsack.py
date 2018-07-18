@@ -11,6 +11,7 @@ def knapsack_solver(items, capacity):
   array = []
   result = []
   knapsack = capacity or 100
+
   for item in items:
     array.append(item.true_value)
 
@@ -20,6 +21,7 @@ def knapsack_solver(items, capacity):
     print("Temp", temp)
     if array == []:
       break
+
     for item in items:
       if item.true_value == temp:
         if item.size < knapsack:
