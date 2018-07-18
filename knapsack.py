@@ -1,4 +1,3 @@
-# Start
 #!/usr/bin/python
 
 import sys
@@ -6,9 +5,23 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
+# Start with brute force/recursive function that works with small data sets
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+
+  #Define recursive function
+
+  def check_knapsack(i, size):
+    if (items[i].size > size):
+      # Goes through each item in knapsack and returns their sizes
+      return check_knapsack(i - 1, size)
+
+    elif (i == -1):
+      # Returns empty if knapsack is empty
+      return 'Knapsack is empty'
+
+    else:
+      
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
