@@ -11,18 +11,15 @@ def knapsack_solver(items, capacity):
   chosen = []
 
   for default_item in items:
-    # Don't run if the first item is over capacity
     if default_item[1] <= capacity:
       total_value = default_item[2]
       total_items = [default_item[0]]
       total_cost = default_item[1]
       
       for another_item in items:
-        # Don't duplicate items
         if default_item == another_item:
           pass
         
-        # Don't go over capacity
         elif total_cost + another_item[1] > capacity:
           pass
 
