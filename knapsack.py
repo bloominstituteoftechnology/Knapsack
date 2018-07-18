@@ -6,8 +6,18 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  knapsack = []
+  # if knapsack if full
+  if capacity == 0:
+    return 0
+  # if we made room for items  
+  if len(value) == index: 
+    return 0
+  # if item does not fit, ignore and move to next item
+  if size[index] > capacity:
+    return knapsack(value, size, index+1, capacity)
+  # recursive step
+  
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
