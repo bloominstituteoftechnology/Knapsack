@@ -6,8 +6,43 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  """!!!! IMPLEMENT ME"""
+  # set = []
+  # size = 0
+  # value = 0
+  best_set = None
+  best_value = 0
+
+  for itemA in items:
+    set = []
+    size = 0
+    value = 0
+
+    set.append(itemA)
+    size += itemA.size
+    value += itemA.value
+
+    if value > best_value:
+      best_set = set
+      best_value = value
+
+    for itemB in items:
+      if itemA != itemB:
+        if itemB.size + size <= capacity:
+          set.append(itemB)
+          size += itemB.size
+          value += itemB.value
+      # print('current set:',set)
+
+    if value > best_value:
+      best_set = set
+      best_value = value
+      # print('bests:',best_value,best_set)
+  
+  return f'''\nItems to select: {sorted([item.index for item in best_set])}
+Total cost: {sum([item.size for item in best_set])}
+Total value: {best_value}'''
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
