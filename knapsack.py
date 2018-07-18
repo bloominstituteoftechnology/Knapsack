@@ -5,30 +5,33 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity):
+def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
     # !!!! IMPLEMENT ME
-    def bruteforce(i, size):
-    # set everything to 0 to start off 
-        if i == 0:
-            chosen = []
-            size = 0
-            value = 0
+    # Stop recursing!
+    if index >= len(items):
+        return[value, chosen] 
     # since you have an empty bag, start by checking the first item
     # does it fit? If not, recurse.
-        elif items[i].size > size:
-            return bruteforce(i - 1, size)
+    if items[index].size > capacity:
+        return knapsack_solver(items, capacity, index + 1, value, chosen)
     # if it does, check the value we get from NOT taking the item vs
     # the value we get from taking it.        
+    else:
+        chosencopy = chosen.copy()
+        chosencopy.append(items[index].index)
+ 
+        novalue = knapsack_solver(index - 1, capacity, chosen)
+        yesvalue = knapsack_solver(index - 1, capacity - items[index].size, chosencopy)
+
+        yesvalue.value += items[index].value
+
+        if novalue.value > yesvalue.value:
+            return novalue 
         else:
-            recurse0 = bruteforce(i - 1, size)
-            recurse1 = bruteforce(i - 1, size - items[i].size)
-            if recurse0.value > recurse1.value:
-                return recurse0
-            else:
-               recurse1.size += items[i].size
-               recurse1.chosen + recurse1.chosen(i+1)
-               return recurse1
-    return bruteforce(len(items)-1, capacity)
+           yesvalue.size += items[i].size
+           yesvalue.chosen + yesvalue.chosen(i+1)
+           return yesvalue 
+    return knapsack_solver(len(items)-1, capacity)
                     
 
 
