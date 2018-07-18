@@ -8,7 +8,7 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):  
     maxval = []
-    for i in range(0,100000000):
+    for i in range(0,1000000):
         size = 0
         value = 0
         its = []
