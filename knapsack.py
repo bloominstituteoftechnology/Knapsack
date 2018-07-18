@@ -24,3 +24,5 @@ if __name__ == '__main__':
     print(knapsack_solver(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
+
+# Just some pseudocode
