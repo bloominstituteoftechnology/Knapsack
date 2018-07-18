@@ -7,7 +7,9 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  pass
+  if items < capacity:
+    return items
+  return knapsack_solver(items - 1) + knapsack_solver(items - 2)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
