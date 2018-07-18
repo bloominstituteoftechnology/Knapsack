@@ -34,7 +34,7 @@ def knapsack_solver(items, capacity):
           if total_value > value:
             choice_cost = total_cost
             value = total_value
-  return (f'Value: {value}\nSize: {choice_cost}\nChosen: {str(chosen)[1:-1]}') 
+  return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}') 
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
