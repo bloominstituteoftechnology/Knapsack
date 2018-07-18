@@ -3,7 +3,7 @@
 
 When it comes to solving problems, there are _many_ ways to go about doing it. Frankly, the number of ways any one problem can be solved are limited only by your creativity and imagination.
 
-![Alt Text](https://media.giphy.com/media/QFsPtlrcMlS8w/giphy.gif)
+![Alt Text]()
 
 That being said, there are a few approaches for certain classes of problems that have stood the test of time, due to their efficiency and effectiveness. Imagination and creativity and both all well and good when you encounter a new problem, but at the same time we don't want to also constantly be re-inventing the wheel. 
 
