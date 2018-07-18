@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Wladimir Fraga CS10
 
 import sys
 from collections import namedtuple
