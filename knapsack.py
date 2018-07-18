@@ -3,13 +3,25 @@
 import sys
 from collections import namedtuple
 
-Item = namedtuple('Item', ['index', 'size', 'value'])
+Item = namedtuple('Item', ['index', 'size', 'value', 'rank'])
 
 def knapsack_solver(items, capacity):
-  print('cap',capacity)
-  for i in items:
-    worth = i.value / i.size
-    print(worth)
+  worth = sorted(items, key=lambda x: x.rank, reverse=True)
+  capacity_left = capacity
+  items_carried = []
+  total_value = 0
+  total_size = 0
+
+  for i in worth:
+    if capacity_left - i.size >= 0:
+      items_carried.append(i.index)
+      capacity_left -= i.size
+      total_value += i.value
+      total_size += i.size
+  # print(total_value, total_size, items_carried)
+  return "Value: {} \nSize: {} \nChosen: {}".format(total_value, total_size, items_carried)
+
+  
 
 
 
@@ -22,7 +34,7 @@ if __name__ == '__main__':
 
     for line in file_contents.readlines():
       data = line.rstrip().split()
-      items.append(Item(int(data[0]), int(data[1]), int(data[2])))
+      items.append(Item(int(data[0]), int(data[1]), int(data[2]), (int(data[2]) / int(data[1])) ))
     
     file_contents.close()
     print(knapsack_solver(items, capacity))
