@@ -5,22 +5,24 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-# Start with brute force/recursive function that works with small data sets
 def knapsack_solver(items, capacity):
   choice_cost = 0
   value = 0
   chosen = []
 
   for default_item in items:
+    # Don't run if the first item is over capacity
     if default_item[1] <= capacity:
       total_value = default_item[2]
       total_items = [default_item[0]]
       total_cost = default_item[1]
-
+      
       for another_item in items:
+        # Don't duplicate items
         if default_item == another_item:
-          return 'You already have this item in your inventory'
+          pass
         
+        # Don't go over capacity
         elif total_cost + another_item[1] > capacity:
           pass
 
@@ -30,11 +32,9 @@ def knapsack_solver(items, capacity):
           total_cost += another_item[1]
 
           if total_value > value:
-            value = total_value
-            chosen = total_items
             choice_cost = total_cost
-
-  return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}')
+            value = total_value
+  return (f'Value: {value}\nSize: {choice_cost}\nChosen: {str(chosen)[1:-1]}') 
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
