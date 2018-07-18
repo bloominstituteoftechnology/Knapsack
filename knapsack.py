@@ -17,14 +17,14 @@ def knapsack_solver(items, capacity):
     cost = items[ratio_tuples[0]][1]
     value = items[ratio_tuples[0]][2]
     chosen = items[ratio_tuples[0]][0]
-    if cost + cost_sum > 100:
+    if cost + cost_sum > capacity:
       for ratio_tuples in d_sorted[index + 1:]:
-        if cost_sum >= 100:
+        if cost_sum >= capacity:
           break
         cost = items[ratio_tuples[0]][1]
         value = items[ratio_tuples[0]][2]
         chosen = items[ratio_tuples[0]][0]
-        if cost + cost_sum <= 100:
+        if cost + cost_sum <= capacity:
           cost_sum += cost
           value_sum += value
           chosen_list.append(chosen)
