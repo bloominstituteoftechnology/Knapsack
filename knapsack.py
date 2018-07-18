@@ -12,7 +12,8 @@ def getValue(item) :
 def knapsack_solver(items, capacity):
   # sorting the item's values from largest to smallest with the reverse being true..
   # this is so we can just grab the first couple of items with the highest values until our knapsack is full
-  items = sorted(items, key=getValue, reverse=True)
+  # items = sorted(items, key=getValue, reverse=True)
+  items = sorted(items, key=lambda i: i.size / i.value)
   # just wanted to look at the items after the value got sorted
   print(items)
   # creating an empty list called 'choices' to put our highest valued items into
@@ -28,8 +29,6 @@ def knapsack_solver(items, capacity):
       choices.append(i.index)
       totalValue += i.value
   return [totalValue, choices]
-
-
 
 
 if __name__ == '__main__':
