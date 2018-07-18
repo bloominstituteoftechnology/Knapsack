@@ -48,12 +48,22 @@ def anotherks(items, capacity):
     value = 0
 
     # find the value/size ratio for each item
-    # sort chosen array so that highest ratios come first
+    # sort ratios from highest to lowest
 
+    items = sorted(items, key=lambda i: i.size / i.value)
+    
     # then as long as there is room in the bag (capacity), add items to the
     # chosen array. Each time you add an item be sure to add the size and value
     # to the total count so you don't overfill your bag.
-
+    # NOTE: I found that adding to the size didn't work because you need to 
+    # adjust the capacity according to the item size. so I changed it so that
+    # when you add an item you subtract the size from the total capacity.
+    for item in items:
+        if item.size <= capacity:
+            chosen.append(item.index)
+            capacity -= item.size
+            value += item.value
+    return [value, chosen]
 
 
 if __name__ == '__main__':
