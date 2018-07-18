@@ -7,34 +7,34 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 # Start with brute force/recursive function that works with small data sets
 def knapsack_solver(items, capacity):
+  choice_cost = 0
+  value = 0
+  chosen = []
 
-  #Define recursive function
+  for default_item in items:
+    if default_item[1] <= capacity:
+      total_value = default_item[2]
+      total_items = [default_item[0]]
+      total_cost = default_item[1]
 
-  def check_knapsack(i, size):
-    if (items[i].size > size):
-      # Goes through each item in knapsack and returns their sizes
-      return check_knapsack(i - 1, size)
+      for another_item in items:
+        if default_item == another_item:
+          return 'You already have this item in your inventory'
+        
+        elif total_cost + another_item[1] > capacity:
+          pass
 
-    elif (i == -1):
-      # Returns empty if knapsack is empty
-      return 'Knapsack is empty'
+        else:
+          total_value += another_item[2]
+          total_items.append(another_item[0])
+          total_cost += another_item[1]
 
-    else:
-      item1 = check_knapsack(i - 1, size)
-      item2 = check_knapsack(i - 1, size - items[i].size)
+          if total_value > value:
+            value = total_value
+            chosen = total_items
+            choice_cost = total_cost
 
-      # Increase the value of the knapsack total by the selected item
-      item2.value += items[i].value
-
-      if (item1.value > item2.value):
-        return item1
-      
-      else:
-        item2.size += items[i].size
-        item2.chosen = item1.chosen + (i + 1)
-        return item2
-
-  return check_knapsack(len(items) - 1, capacity)
+  return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}')
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
