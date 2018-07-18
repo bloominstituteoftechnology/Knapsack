@@ -7,8 +7,14 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  pass
+  new_item = []
+  for i in items:
+    new_item.append(i)
+    print(sorted(new_item, key=lambda value: value[2]))
 
+  
+  #print(isinstance(items, list))
+  
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     capacity = int(sys.argv[2])
