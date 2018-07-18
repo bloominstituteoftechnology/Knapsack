@@ -5,9 +5,22 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
+# Bruteforce Solution
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  max_value = 0
+  items_of_max = []
+  cost_of_max = 0
+
+  for first_item in items:
+    running_value = first_item[2]
+    items_of_running = [first_item]
+    cost_of_running = first_item[1]
+    for second_item in items:
+      if first_item == second_item:
+        pass
+      else:
+        
+  
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
