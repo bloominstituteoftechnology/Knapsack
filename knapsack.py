@@ -8,7 +8,10 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
     # !!!! IMPLEMENT ME
-    pass
+    capacity.reverse()
+    num_items = items
+    return sum(capacity[:num_items])
+    
 
 
 if __name__ == '__main__':
