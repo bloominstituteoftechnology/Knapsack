@@ -5,9 +5,32 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
+# this is a function that just returns the 'values' list so it can be sorted below
+def getValue(item) :
+    return item.value
+
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  # sorting the item's values from largest to smallest with the reverse being true..
+  # this is so we can just grab the first couple of items with the highest values until our knapsack is full
+  items = sorted(items, key=getValue, reverse=True)
+  # just wanted to look at the items after the value got sorted
+  print(items)
+  # creating an empty list called 'choices' to put our highest valued items into
+  choices = []
+  # creating a variable to keep track of our total values as we add them
+  totalValue = 0
+
+  # looping over all the items 
+  for i in items:
+
+    if i.size <= capacity:
+      capacity -= i.size
+      choices.append(i.index)
+      totalValue += i.value
+  return [totalValue, choices]
+
+
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
