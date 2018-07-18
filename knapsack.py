@@ -20,8 +20,7 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  """
+  # !!!! IMPLEMENT ME  
   max_value_list = []
   print(math.trunc((25 / 68) * 100))
   print(items)
@@ -30,18 +29,18 @@ def knapsack_solver(items, capacity):
     max_value_list.append(max_val)
     
   print(max_value_list)
-  """
+
 
   
-  
+  """
   if len(items) < 1 or capacity < 1:
     return 0  
   new_item = []
   for i in items:
     new_item.append(i)
-    new_item.reverse()
+  new_item.reverse()
   print(sorted(new_item, key=lambda value: value[2], reverse=True))
-
+  """
   
   #print(isinstance(items, list))
   
