@@ -8,7 +8,6 @@ Item = namedtuple("Item", ["index", "size", "value"])
 
 def knapsack_solver(items, capacity, index=0, total_value=0, choices=[]):
     # Utter brute force
-    print(capacity, index, total_value, choices)
     if index >= len(items):
         return [total_value, choices]
     else:
@@ -30,6 +29,19 @@ def knapsack_solver(items, capacity, index=0, total_value=0, choices=[]):
             return knapsack_solver(items, capacity, index + 1, total_value, choices)
 
 
+def lazy_knapsack_solver(items, capacity):
+    # Why work so hard?
+    items = sorted(items, key=lambda i: i.size / i.value)
+    choices = []
+    total_value = 0
+    for i in items:
+        if i.size <= capacity:
+            capacity -= i.size
+            choices.append(i.index)
+            total_value += i.value
+    return [total_value, choices]
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         capacity = int(sys.argv[2])
@@ -42,6 +54,6 @@ if __name__ == "__main__":
             items.append(Item(int(data[0]), int(data[1]), int(data[2])))
 
             file_contents.close()
-            print(knapsack_solver(items, capacity))
+            print(lazy_knapsack_solver(items, capacity))
         else:
             print("Usage: knapsack.py [filename] [capacity]")
