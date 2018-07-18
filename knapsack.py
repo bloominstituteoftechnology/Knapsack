@@ -21,15 +21,12 @@ def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
         chosencopy.append(items[index].index)
  
         novalue = knapsack_solver(items, capacity, index+1, value, chosen)
-        yesvalue = knapsack_solver(items, capacity - items[index].size, index+1, value, chosencopy)
-
-       # yesvalue.value += items[index]
-
-        if novalue[1] > yesvalue[1]:
+        yesvalue = knapsack_solver(items, capacity - items[index].size, index+1, value + items[index].value, chosencopy)
+        print(novalue)
+        print(yesvalue)
+        if novalue[0] > yesvalue[0]:
             return novalue 
         else:
-       #    yesvalue.size += items[i].size
-       #    yesvalue.chosen + yesvalue.chosen(i+1)
            return yesvalue 
                     
 
