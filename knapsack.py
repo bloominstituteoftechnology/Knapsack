@@ -4,7 +4,17 @@ import sys
 from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
+'''
+1. (W) capacity...we need to know how large of a knapsack we have
+2. (Items)...available items for us to take
+3. (Item)...has an index(i), a size(w), value(v)
+4. (V)...size(w) * value(v)
 
+
+
+
+
+'''
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
   pass
