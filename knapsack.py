@@ -25,7 +25,7 @@ def knapsack_solver(items, capacity):
       total_value += i.value
       total_size += i.size
 
-  return "Value: {} \nSize: {} \nChosen: {}".format(total_value, total_size, items_carried)
+  return "Value: {} \nSize: {} \nChosen: {}".format(total_value, total_size, str(items_carried)[1:-1])
 
   
 
