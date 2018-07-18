@@ -20,8 +20,21 @@ def knapsack_solver(items, capacity):
       return 'Knapsack is empty'
 
     else:
-      
+      item1 = check_knapsack(i - 1, size)
+      item2 = check_knapsack(i - 1, size - items[i].size)
 
+      # Increase the value of the knapsack total by the selected item
+      item2.value += items[i].value
+
+      if (item1.value > item2.value):
+        return item1
+      
+      else:
+        item2.size += items[i].size
+        item2.chosen = item1.chosen + (i + 1)
+        return item2
+
+  return check_knapsack(len(items) - 1, capacity)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
