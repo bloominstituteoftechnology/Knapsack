@@ -7,6 +7,9 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
+  d = {}
+  for index, item in enumerate(items):
+    d.update({index, item[2] / item[1]})
   pass
 
 if __name__ == '__main__':
