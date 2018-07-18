@@ -10,6 +10,7 @@ def knapsack_solver(items, capacity):
   for index, item in enumerate(items):
     d.update({index:float(item[2]) / float(item[1])})
   d_sorted = sorted(d.items(), key=lambda kv: kv[1], reverse=True)
+  print(d_sorted)
   cost_sum = 0
   value_sum = 0 
   chosen_list = []
@@ -19,6 +20,12 @@ def knapsack_solver(items, capacity):
     chosen = items[ratio_tuples[0]][0]
     temp_cost = cost_sum + cost
     if temp_cost >= 100:
+      for item in items:
+        if item[0] not in chosen_list:
+          if item[1] + cost_sum <= 100:
+            cost_sum += item[1]
+          else:
+            continue
       break
     else:
       cost_sum += cost
