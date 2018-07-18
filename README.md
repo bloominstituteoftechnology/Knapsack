@@ -1,5 +1,5 @@
 # Algorithmic Paradigms
-
+boo
 When it comes to solving problems, there are _many_ ways to go about doing it. Frankly, the number of ways any one problem can be solved are limited only by your creativity and imagination.
 
 ![Alt Text](https://media.giphy.com/media/QFsPtlrcMlS8w/giphy.gif)
