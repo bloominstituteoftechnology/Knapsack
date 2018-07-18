@@ -19,7 +19,7 @@ if __name__ == '__main__':
     for line in file_contents.readlines():
       data = line.rstrip().split()
       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
-    
+
     file_contents.close()
     print(knapsack_solver(items, capacity))
   else:
