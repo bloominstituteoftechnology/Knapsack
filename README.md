@@ -28,7 +28,7 @@ The main objectives for this sprint are to:
 * Try a variety of algorithmic approaches
 * Learn about performance/benchmarking, play with some actual data
 
-## Getting Started
+## Getting Starte
 
 The specific goal of this exercise is to write a program that takes input files that look like this:
 
