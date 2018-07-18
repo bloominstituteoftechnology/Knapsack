@@ -2,43 +2,47 @@
 
 import sys
 from collections import namedtuple
+from itertools import chain, combinations
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 # Bruteforce Solution
 def knapsack_solver(items, capacity):
+  
+  def powerset(iterable):
+    "powerset([1,2,3]) --> (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(1, len(s)+1))
+
+  powerset_of_items = list(powerset(items))
   max_value = 0
-  items_of_max = []
   cost_of_max = 0
+  items_of_max = []
 
-  for starting_item in items:
-    # Don't run if the first item is over capacity
-    if starting_item[1] <= capacity:
-      running_value = starting_item[2]
-      items_of_running = [starting_item[0]]
-      cost_of_running = starting_item[1]
-      
-      for additional_item in items:
-        # Don't duplicate items
-        if starting_item == additional_item:
-          pass
-        
-        # Don't go over capacity
-        elif cost_of_running + additional_item[1] > capacity:
-          pass
+  for sets in powerset_of_items:
+    running_value = 0
+    cost_of_running = 0
+    items_of_running = []
+    overload = False
+    
+    for item in sets:
+      if cost_of_running + item[1] > capacity:
+        overload = True
+        break
+      else:
+        running_value += item[2]
+        cost_of_running += item[1]
+        items_of_running.append(item[0])
 
-        else:
-          running_value += additional_item[2]
-          items_of_running.append(additional_item[0])
-          cost_of_running += additional_item[1]
+    if overload:
+      continue
 
-          if running_value > max_value:
-            max_value = running_value
-            items_of_max = items_of_running
-            cost_of_max = cost_of_running
+    if running_value > max_value:
+      max_value = running_value
+      cost_of_max = cost_of_running
+      items_of_max = items_of_running
 
   return (f'Value: {max_value}\nSize: {cost_of_max}\nChosen: {str(items_of_max)[1:-1]}')
-  
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
