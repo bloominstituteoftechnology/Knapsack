@@ -7,11 +7,8 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   d = {}
-  c =[]
   for index, item in enumerate(items):
-    d.update({index:float(item[2] / item[1])})
-    c.append()
-  print(d)
+    d.update({index:float(item[2]) / float(item[1])})
   d_sorted = sorted(d.items(), key=lambda kv: kv[1], reverse=True)
   cost_sum = 0
   value_sum = 0 
