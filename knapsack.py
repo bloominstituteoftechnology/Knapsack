@@ -6,8 +6,37 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  # Greedy Algorithm
+  valuable_chosen_items = []
+  total_cost_of_chosen_items = 0
+  running_total_cost = 0
+
+  # variables for print statements
+  item_nums_list = []
+  total_value = 0
+
+  # sorted by value in descending order 
+  items_sorted_by_value = sorted(items, key=lambda item:item[2], reverse=True)
+  # print(items_sorted_by_value)
+
+  for item in items_sorted_by_value:
+    if item[1] + running_total_cost < capacity:
+      valuable_chosen_items.append(item)
+      running_total_cost += item[1]
+  
+  for chosen_item in valuable_chosen_items:
+    item_nums_list.append(chosen_item[0])
+  
+  for chosen_item in valuable_chosen_items:
+    total_value += chosen_item[2]
+
+  
+  print('Items to select:' + str(item_nums_list[:]))
+  print('Total cost: ' + str(running_total_cost))
+  print('Total value: ' + str(total_value))
+  return valuable_chosen_items
+    
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
