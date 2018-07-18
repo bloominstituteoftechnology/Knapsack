@@ -17,8 +17,7 @@ def knapsack_solver(items, capacity):
     cost = items[ratio_tuples[0]][1]
     value = items[ratio_tuples[0]][2]
     chosen = items[ratio_tuples[0]][0]
-    temp_cost = cost_sum + cost
-    if temp_cost > 100:
+    if cost + cost_sum > 100:
       for ratio_tuples in d_sorted[index + 1:]:
         if cost_sum >= 100:
           break
