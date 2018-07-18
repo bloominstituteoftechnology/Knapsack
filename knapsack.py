@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import math
 """
 value / weight = most val per pound
 sort val
@@ -20,17 +21,20 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
+  """
   max_value_list = []
+  print(math.trunc((25 / 68) * 100))
   print(items)
   for i, c, v in items:
-    max_val = i, c, v, ((v // c) * 100)
+    max_val = i, c, v, (math.trunc((v / c) * 100))
     max_value_list.append(max_val)
     
   print(max_value_list)
+  """
 
   
   
-  """if items < 1 or capacity < 1:
+  if len(items) < 1 or capacity < 1:
     return 0  
   new_item = []
   for i in items:
@@ -38,7 +42,7 @@ def knapsack_solver(items, capacity):
     new_item.reverse()
   print(sorted(new_item, key=lambda value: value[2], reverse=True))
 
-  """
+  
   #print(isinstance(items, list))
   
 if __name__ == '__main__':
