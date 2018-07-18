@@ -7,7 +7,18 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  pass
+  # Brute Force
+  #   add size of 'all' combinations less than the capacity
+  #   find the largest value
+  indice = []
+
+  for items in Item:
+    size_1 = Item[i][1]
+    for items in Item:
+      size_2 = Item[j][1]
+      mid_sum = size_1 + size_2
+    if mid_sum <= capacity and i != j:
+      indice.append(i, j)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
