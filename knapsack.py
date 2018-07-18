@@ -55,5 +55,5 @@ if __name__ == "__main__":
 
             file_contents.close()
             print(lazy_knapsack_solver(items, capacity))
-        else:
-            print("Usage: knapsack.py [filename] [capacity]")
+    else:
+        print("Usage: knapsack.py [filename] [capacity]")
