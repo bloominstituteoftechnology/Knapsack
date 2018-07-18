@@ -2,13 +2,35 @@
 
 import sys
 from collections import namedtuple
+from operator import attrgetter
+from statistics import median
 
 Item = namedtuple("Item", ["index", "size", "value"])
 
 
 def knapsack_solver(items, capacity):
-    # !!!! IMPLEMENT ME
-    pass
+    knapsack = []
+    secondknapsack = []
+    cost = 0
+    secondcost = 0
+    average_value = median(items[2])
+    for item in sorted(items, key=attrgetter("value"), reverse=True):
+        if item.size <= capacity:
+            if cost + item.size <= capacity:
+                knapsack.append(item)
+                cost += item.size
+    for item in sorted(items, key=attrgetter("size")):
+        if item.size <= capacity and item.value >= average_value:
+            if secondcost + item.size <= capacity:
+                secondknapsack.append(item)
+                secondcost += item.size
+
+    knapswag = sum(item.value for item in knapsack)
+    secondknapswag = sum(item.value for item in secondknapsack)
+    if knapswag > secondknapswag:
+        return [knapswag, knapsack]
+    else:
+        return [secondknapswag, secondknapsack]
 
 
 if __name__ == "__main__":
