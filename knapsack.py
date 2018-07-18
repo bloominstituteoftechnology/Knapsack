@@ -11,11 +11,15 @@ def knapsack_solver(items, capacity):
   #   add size of 'all' combinations less than the capacity
   #   find the largest value
   indice = []
+  i = 0
+  j = 0
 
   for items in Item:
     size_1 = Item[i][1]
+    i += 1
     for items in Item:
       size_2 = Item[j][1]
+      j += 1
       mid_sum = size_1 + size_2
     if mid_sum <= capacity and i != j:
       indice.append(i, j)
