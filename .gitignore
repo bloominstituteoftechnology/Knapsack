@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+knapsack
+.DS_Store
+test.txt
