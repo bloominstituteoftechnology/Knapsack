@@ -76,3 +76,5 @@ If you've implemented a working solution to the knapsack problem using one of th
 The `answers.txt` file includes the expected answers for each of the data files. Note that all the runs use a capacity of 100. 
 
 The `knapsack-generator.js` file is a utility that allows you to generate larger data sets, so you can test your implementation more thoroughly. 
+
+# Xang initial commit
