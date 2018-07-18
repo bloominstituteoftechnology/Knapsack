@@ -6,8 +6,20 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  diffs = sorted(items, key=lambda x: (x[2]*1000)/(x[1]), reverse=True)
+  res = []
+  curSum = 0
+  
+  for diff in diffs:
+    print(diff[0], diff[1], diff[2], (diff[2]*1000)/(diff[1]))
+    
+  for diff in diffs:
+    if curSum + diff[2] < capacity:
+      curSum += diff[2]
+      res.append(diff[0])
+    else:
+      res.append(diff[0])
+      return res
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
