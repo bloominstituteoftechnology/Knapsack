@@ -17,18 +17,18 @@ def knapsack_solver(items, capacity):
   for i in range(amount):
     costs.append(items[i][1])  
 
-  def knappy(capacity, values, costs, amount):
+  def knapsack_helper(capacity, values, costs, amount):
     if amount == 0 or capacity == 0:
         return 0
 
-    if (costs[amount-1] > capacity):
-        return knappy(capacity, values, costs, amount-1)
+    if costs[amount-1] > capacity:
+        return knapsack_helper(capacity, values, costs, amount-1)
 
     else:
-        return max(values[amount-1] + knappy(capacity-costs[amount-1], costs, values, amount-1),
-                    knappy(capacity, values, costs, amount-1))
+        return max(values[amount-1] + knapsack_helper(capacity-costs[amount-1], values, costs, amount-1),
+                    knapsack_helper(capacity, values, costs, amount-1))
   # return values, costs, amount
-  return knappy(capacity, values, costs, amount)
+  return knapsack_helper(capacity, values, costs, amount)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
