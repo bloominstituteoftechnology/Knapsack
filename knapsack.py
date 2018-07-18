@@ -7,8 +7,18 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  pass
+  current_set = None
+  current_value = 0
 
+  for firstSetItem in items:
+    tuple = []
+    size = 0
+    value = 0
+    tuple.append(firstSetItem)
+    size += firstSetItem.size
+    value += firstSetItem.value
+
+    
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
