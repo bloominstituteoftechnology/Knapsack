@@ -3,20 +3,18 @@
 import sys
 from collections import namedtuple
 
-Item = namedtuple('Item', ['index', 'size', 'value'])
+Item = namedtuple('Item', ['index', 'size', 'value', 'true_value'])
 
 def knapsack_solver(items, capacity):
   true_value = 0
   array = []
   knapsack = capacity or 100
   for item in items:
-    true_value = item.value - item.size
-    item['true_value'] = true_value
-    print(item)
-    # array.append(true_value)
-  # array.sort(key=int)
-  
-  print(items)
+    array.append(item.true_value)
+
+  array.sort(key=int)
+  # while knapsack > 0:
+  #   pass
 
   return array
 
@@ -29,7 +27,7 @@ if __name__ == '__main__':
 
     for line in file_contents.readlines():
       data = line.rstrip().split()
-      items.append(Item(int(data[0]), int(data[1]), int(data[2])))
+      items.append(Item(int(data[0]), int(data[1]), int(data[2]), int(data[2]) -int(data[1])))
     
     file_contents.close()
     print(knapsack_solver(items, capacity))
