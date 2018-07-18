@@ -16,8 +16,8 @@ def knapsack_solver(items, capacity):
   total_value = 0
 
   # sorted by value in descending order 
-  items_sorted_by_value = sorted(items, key=lambda item:item[2], reverse=True)
-  # print(items_sorted_by_value)
+  items_sorted_by_value = sorted(items, key=lambda item:item[2]/item[1], reverse=True)
+  print(items_sorted_by_value)
 
   for item in items_sorted_by_value:
     if item[1] + running_total_cost < capacity:
