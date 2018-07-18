@@ -7,6 +7,7 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
+  # well...it seems difficult 
   pass
 
 if __name__ == '__main__':
