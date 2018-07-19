@@ -7,6 +7,7 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   knapsack = []
+  
   # if knapsack if full
   if capacity == 0:
     return 0
@@ -17,7 +18,6 @@ def knapsack_solver(items, capacity):
   if size[index] > capacity:
     return knapsack(value, size, index+1, capacity)
   # recursive step
-  
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
