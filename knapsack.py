@@ -5,20 +5,18 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
-
-# Greedy implementation
-  
+def knapsack_recursion(items, capacity, index=0, value=0, chosen=[]):
+# Alternate solution  
   if index >= len(items):
     return [value, chosen]
   
   if items[index].size > capacity:
-    return knapsack_solver(items, capacity, index + 1, value, chosen)
+    return knapsack_recursion(items, capacity, index + 1, value, chosen)
   else:
     chosen_copy = chosen.copy()
     chosen_copy.append(items[index].index)
-    value_from_leaving = knapsack_solver(items, capacity, index + 1, value, chosen)
-    value_from_taking = knapsack_solver(items, capacity - items[index].size, index + 1, value + items[index].value, chosen_copy)
+    value_from_leaving = knapsack_recursion(items, capacity, index + 1, value, chosen)
+    value_from_taking = knapsack_recursion(items, capacity - items[index].size, index + 1, value + items[index].value, chosen_copy)
     
     if value_from_leaving[0] > value_from_taking[0]:
       return value_from_leaving
@@ -36,7 +34,40 @@ def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
         chosen.append(item.index)
         capacity -=item.size
         value += item.value
-    return [value, chosen] 
+    return optimize_load
+
+# Greedy implementation
+def greedy_knapsack(items, capacity):
+  chosen = []
+  total_size = 0
+  total_value = 0
+  while capacity > 0:
+    max_gain = -1
+    size = 0
+    value = 0
+    selected = None
+
+    for item in items:
+      benefit_to_cost = item.value / item.size
+      if item.size <= capacity and benefit_to_cost > max_gain:
+        max_gain = benefit_to_cost
+        selected = item
+        value = item.value
+        size = item.size
+    if selected == None:
+      capacity = 0
+      break
+    else:
+      chosen.append(selected.index)
+      total_size += size
+      total_value += value
+      items.remove(selected)
+      capacity -= size
+  return 'Value: %s Size: %s Chosen: %s' % (total_value, total_size, chosen)
+
+'''
+Lecture solution
+'''
 
   # # Recursively checking all combinations of items
   # # Inputs: items, capacity, total value, taken items
@@ -122,6 +153,6 @@ if __name__ == '__main__':
       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
     
     file_contents.close()
-    print(knapsack_solver(items, capacity))
+    print(knapsack_recursion(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
