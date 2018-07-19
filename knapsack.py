@@ -5,12 +5,24 @@ from collections import namedtuple
 
 Item = namedtuple("Item", ["index", "size", "value"])
 
-# # Greedy Knapsack algo
-# def knapsack_solver(items, capacity):
-#     # !!!! IMPLEMENT ME
-#   weight_current = 0
-# 	value_current = 0
-#     pass
+
+# Greedy Knapsack algo
+def knapsack_solver(items, capacity):
+    size = 0
+    value = 0
+    knapsack = []
+    items_sorted = sorted(
+        [item for item in items], key=lambda item: item.value / item.size, reverse=True
+    )
+
+    while size + items_sorted[0].size <= capacity:
+        item = items_sorted.pop(0)
+        knapsack.append(item.index)
+        size += item.size
+        value += item.value
+
+    return value, size, knapsack
+
 
 # #Brute Force
 # def knapsack_solver(items, capacity):
@@ -20,11 +32,11 @@ Item = namedtuple("Item", ["index", "size", "value"])
 #     pass
 
 
-def knapsack_solver(items, capacity):
-    # !!!! IMPLEMENT ME
-  weight_current = 0
-	value_current = 0
-    pass
+# def knapsack_solver(items, capacity):
+#     # !!!! IMPLEMENT ME
+#   weight_current = 0
+# 	value_current = 0
+#     pass
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
