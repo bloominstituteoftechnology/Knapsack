@@ -6,7 +6,7 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-# V1 - Brute force
+# V1 - Heuristic Approach
 def knapsack_solver(items, capacity):
     counter = 0
     sorted_items = sorted(items, key=lambda item: item.value/item.size, reverse=True)
