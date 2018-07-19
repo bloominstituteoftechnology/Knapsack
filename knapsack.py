@@ -25,7 +25,7 @@ def knapsack_solver(items, capacity):
                 items_taken += f'''{str(items[iterationControl][0])} '''
             iterationControl += 1
         print('\nFirst Attemp:', items_taken, '\nSize: ',
-              sizeControl, '\nValue: ', value_picked_up)
+              sizeControl, '\nValue: ', value_picked_up, '\n\nEND FIRST ATTEMP')
     firstAttempt(a, capacity)
 
     def secondAttempt(items, capacity):
@@ -36,10 +36,12 @@ def knapsack_solver(items, capacity):
             'value': 0,
         }
         control = {
+            'items': [],
+            'size': 0,
+            'value': 0,
             'itemsPicked': [],
-            'size': 1,
-            'value': items[0][2],
-            'combinatories': [['Total combinations: 0']]
+            'combinatories': [['Total combinations: 0']],
+            'iterations': 1,
         }
 
         def getMaxValue(level, control):
@@ -79,47 +81,74 @@ def knapsack_solver(items, capacity):
 
             items_passed_len = len(items_passed)
 
-            print('\n\n\nITEMS PASSED:', items_passed)
-            print(len(items_passed))
+            # print('\n\n\nITEMS PASSED:', items_passed)
+            # print(len(items_passed))
             for x in items_passed:
-                print('for x in items_passed: x = ', x[0])
-                # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
-                print(
-                    f'''\n\LEVEL: {level} \DEEP: {control['itemsPicked']}''')
-                # print('c:', control)
-                print(f'''x: {x[0]}''')
 
+                # print('for x in items_passed: x = ', x[0])
+                # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
+                # print(
+                #     f'''\n\LEVEL: {level} \DEEP: {control['itemsPicked']}''')
+                # # print('c:', control)
+                # print(f'''x: {x[0]}''')
+
+                # Add current Item to the picked up control
                 control['itemsPicked'].append(x[0])
-                print('AFTER APPEND ITEM/DEEP\nc:',
-                      control['itemsPicked'], '\n')
+                # print(
+                #     f'''{control['iterations']} Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
+                # print('AFTER APPEND ITEM/DEEP\nc:',
+                #       control['itemsPicked'], '\n')
 
                 # Add Combination to the 'combinatories' list
-                control['size'] += 1
+                control['iterations'] += 1
                 control['combinatories'].append(control['itemsPicked'].copy())
                 control['combinatories'][
                     0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
-                print(f'''c: {control['combinatories']}\n''')
+                # print(f'''c: {control['combinatories']}\n''')
 
-                for y in items_passed:
-                    print(f'''x: {x[0]}, y: {y[0]}''')
+                # ADD TO BAG LOGIC
+                # Get current_level items' size
+                current_level_size = 0
+                for index in control['itemsPicked']:
+                    current_level_size += items[index - 1][1]
 
-                    if x[0] != y[0]:
+                if current_level_size <= capacity - 1:  # There is a bug reading the capacity from the command line -> it get incremented always by 1 => So I subtract 1 in the comparison here
+                    # Get current_level items' value
+                    current_level_value = 0
+                    for index in control['itemsPicked']:
+                        current_level_value += items[index - 1][2]
 
-                        new_items_to_pass = [
-                            x for x in items_passed if x[0] not in control['itemsPicked']]
-                        # for x in new_items_to_pass:
-                        #     print(x[0], x)
-                        print('LEN of new_items_to_pass', len(
-                            new_items_to_pass), new_items_to_pass)
+                    # Compare Level_value with Bag_value
+                    if current_level_value > MAX['value']:
+                        MAX['items'] = control['itemsPicked'].copy()
+                        MAX['size'] = current_level_size
+                        MAX['value'] = current_level_value
 
-                        getMAxValue2((level + 1), new_items_to_pass)
+                    # GO TO NEXT LEVEL:
+                    # (NESTED FOR LOOP) - Iterate again over the items_passed
+                    for y in items_passed:
+                        # print(f'''x: {x[0]}, y: {y[0]}''')
 
-                print(
-                    f'''Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
+                        # GO TO NEXT LEVEL IF AND ONLY IF: 'txt file line' is not the same
+                        if x[0] != y[0]:
+
+                            new_items_to_pass = [
+                                x for x in items_passed if x[0] not in control['itemsPicked']]
+                            # for x in new_items_to_pass:
+                            #     print(x[0], x)
+                            # print('LEN of new_items_to_pass', len(
+                            #     new_items_to_pass), new_items_to_pass)
+
+                            getMAxValue2((level + 1), new_items_to_pass)
+
+                # print(
+                #     f'''Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
                 if x[0] in control['itemsPicked']:
                     control['itemsPicked'].remove(x[0])
-            print(f'''\nCONTROL: {control}\n\nEND''')
+
         getMAxValue2(1, items)
+        print(
+            f'''\n**********SECOND ATTEMPT**********\nCONTROL:\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tPermutations: {control['combinatories'][0]}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
 
         def getMAxValue2_handle_add_to_bag():
             pass
