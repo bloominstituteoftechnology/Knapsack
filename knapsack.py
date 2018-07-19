@@ -7,26 +7,29 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  #print(items[:][-1])
+
+  # Create a sorted list of the items ranked by value ratio or value / weight
   sorted_list = ratio_list(items)
-  print(sorted_list)
  
   # Base case
   if len(items) == 0 or capacity == 0:
     return 0
 
   counter = 0 
+  size = 0
+  value = 0
   knapsack = []
-
-  print(sorted_list[counter][2])
 
   while (capacity > 0) and (counter < len(sorted_list)):
     if capacity >= int(sorted_list[counter][2]):
       knapsack.append(int(sorted_list[counter][0]))
       capacity -= int(sorted_list[counter][2])
+      size += sorted_list[counter][2]
+      value += items[sorted_list[counter][0]][2]
       print("capacity is ", capacity, "counter is ", counter)
     counter += 1
   
+  print('Value', value,'\n', 'Size', size)
   return sorted(knapsack)
 
 def ratio_list(items):
