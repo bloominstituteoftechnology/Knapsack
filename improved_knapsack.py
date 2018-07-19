@@ -13,50 +13,50 @@ Item = namedtuple("Item", ["index", "size", "value"])
 
 
 # Greedy Knapsack algo
-# def knapsack_solver(items, capacity):
-#     size = 0
-#     value = 0
-#     knapsack = []
-#     items_sorted = sorted(
-#         [item for item in items], key=lambda item: item.value / item.size, reverse=True
-#     )
+def knapsack_solver(items, capacity):
+    size = 0
+    value = 0
+    knapsack = []
+    items_sorted = sorted(
+        [item for item in items], key=lambda item: item.value / item.size, reverse=True
+    )
 
-#     while size + items_sorted[0].size <= capacity:
-#         item = items_sorted.pop(0)
-#         knapsack.append(item.index)
-#         size += item.size
-#         value += item.value
+    while size + items_sorted[0].size <= capacity:
+        item = items_sorted.pop(0)
+        knapsack.append(item.index)
+        size += item.size
+        value += item.value
 
-#     return value, size, knapsack
+    return value, size, knapsack
 
 
 # Bruteforce Method
-def knapsack_solver(items, capacity):
-    if capacity == 0:
-        return 0, 0, []
+# def knapsack_solver(items, capacity):
+#     if capacity == 0:
+#         return 0, 0, []
 
-    max_value = 0
-    size = 0
-    knapsack = []
-    for item in items:
-        # only consider items that are below the current capacity
-        if item.size > capacity:
-            continue
+#     max_value = 0
+#     size = 0
+#     knapsack = []
+#     for item in items:
+#         # only consider items that are below the current capacity
+#         if item.size > capacity:
+#             continue
 
-        remaining_capacity = capacity - item.size
-        remaining_items = items.copy()
-        remaining_items.remove(item)
+#         remaining_capacity = capacity - item.size
+#         remaining_items = items.copy()
+#         remaining_items.remove(item)
 
-        value, _, subsack = knapsack_solver(remaining_items, remaining_capacity)
-        value += item.value
-        subsack.append(item.index)
+#         value, _, subsack = knapsack_solver(remaining_items, remaining_capacity)
+#         value += item.value
+#         subsack.append(item.index)
 
-        if value > max_value:
-            max_value = value
-            knapsack = subsack
+#         if value > max_value:
+#             max_value = value
+#             knapsack = subsack
 
-    size = sum([items[item - 1].size for item in knapsack])
-    return max_value, size, knapsack
+#     size = sum([items[item - 1].size for item in knapsack])
+#     return max_value, size, knapsack
 
 
 # def knapsack_solver(items, capacity):
@@ -78,10 +78,10 @@ if __name__ == "__main__":
             items.append(Item(int(data[0]), int(data[1]), int(data[2])))
 
         file_contents.close()
-        new_path = "OUTPUT.txt"
+        new_path = ".\log\OUTPUT.txt"
         file = open(new_path, "a")
         file.write(
-            f".\{sys.argv[1]}{sys.argv[2]} \n log{knapsack_solver(items, capacity)} \n \n "
+            f".\{sys.argv[1]}{sys.argv[2]} \n log \n {knapsack_solver(items, capacity)} \n \n "
         )
         file.close()
         clear()
