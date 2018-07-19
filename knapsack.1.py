@@ -6,8 +6,20 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  """!!!! IMPLEMENT ME"""
   
+  def ks(n, capacity):
+    if n < 0 or capacity == 0:
+      result = 0
+    elif  items[n].size > capacity:
+      result = ks(n-1, capacity)
+    else:
+      tmp1 = ks(n-1, capacity)
+      tmp2 = items[n].value + ks(n-1, capacity - items[n].size)
+      result = max(tmp1, tmp2)
+    
+    return result
+  
+  return ks(len(items) -1, capacity)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
