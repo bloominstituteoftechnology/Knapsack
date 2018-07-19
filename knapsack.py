@@ -87,6 +87,7 @@ def knapsack_solver(items, capacity):
             # print('\n\n\nITEMS PASSED:', items_passed)
             # print(len(items_passed))
             for x in items_passed:
+                # print(items_passed)
 
                 # print('for x in items_passed: x = ', x[0])
                 # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
@@ -107,7 +108,7 @@ def knapsack_solver(items, capacity):
                 control['combinatories'].append(control['itemsPicked'].copy())
                 control['combinatories'][
                     0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
-                # print(f'''c: {control['combinatories'][-1]}\n''')
+                print(f'''c: {control['combinatories'][-1]}\n''')
 
                 # ADD TO BAG LOGIC
                 # Get current_level items' size
@@ -117,6 +118,8 @@ def knapsack_solver(items, capacity):
 
                 # There is a bug reading the capacity from the command line -> it get incremented always by 1 => So I subtract 1 in the comparison here
                 # False if we want all posible permutations (check next if statement: It prints all posible permutations)
+                remainig_items = [
+                    item for item in items_passed if item[0] != x[0]]
                 if True and current_level_size <= capacity - 1:
                     # Get current_level items' value
                     current_level_value = 0
@@ -130,38 +133,14 @@ def knapsack_solver(items, capacity):
                         MAX['value'] = current_level_value
 
                     # GO TO NEXT LEVEL:
-                    # (NESTED FOR LOOP) - Iterate again over the items_passed
-                    for y in items_passed:
-                        # print(f'''x: {x[0]}, y: {y[0]}''')
+                    # (NESTED FOR LOOP) - Iterate again over the remaining Items
+                    getMAxValue2((level + 1), remainig_items)
 
-                        # GO TO NEXT LEVEL IF AND ONLY IF: 'txt file line' is not the same
-                        if x[0] != y[0]:
-
-                            new_items_to_pass = [
-                                x for x in items_passed if x[0] not in control['itemsPicked']]
-                            # for x in new_items_to_pass:
-                            #     print(x[0], x)
-                            # print('LEN of new_items_to_pass', len(
-                            #     new_items_to_pass), new_items_to_pass)
-
-                            getMAxValue2((level + 1), new_items_to_pass)
+                # print('\nItemsPicked', control['itemsPicked'])
+                # print(x[0], remainig_items)
 
                 if False:  # True: Print all posible Permutations
-                    # print('FALSE')
-                    for y in items_passed:
-                        # print(f'''x: {x[0]}, y: {y[0]}''')
-
-                        # GO TO NEXT LEVEL IF AND ONLY IF: 'txt file line' is not the same
-                        if x[0] != y[0]:
-
-                            new_items_to_pass = [
-                                x for x in items_passed if x[0] not in control['itemsPicked']]
-                            # for x in new_items_to_pass:
-                            #     print(x[0], x)
-                            # print('LEN of new_items_to_pass', len(
-                            #     new_items_to_pass), new_items_to_pass)
-
-                            getMAxValue2((level + 1), new_items_to_pass)
+                    getMAxValue2((level + 1), remainig_items)
 
                 # print(
                 #     f'''Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
