@@ -8,16 +8,15 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
     a = sorted(items, key=lambda x: x[2], reverse=True)
-    for tup in range(len(items)):
-        print(a[tup])
-
-    print(items[0])
+    # for tup in range(len(items)):
+    #     print(a[tup])
+    print(f'''\n\nSample's size: {len(items)}''')
 
     def firstAttempt(items, capacity):
         iterationControl = 0
         sizeControl = 0
         value_picked_up = 0
-        items_taken = 'Items taken: '
+        items_taken = '\nItems taken: '
         while iterationControl < len(items) and sizeControl < capacity:
             nextSize = sizeControl + items[iterationControl][1]
             if nextSize < capacity:
@@ -25,8 +24,107 @@ def knapsack_solver(items, capacity):
                 value_picked_up += items[iterationControl][2]
                 items_taken += f'''{str(items[iterationControl][0])} '''
             iterationControl += 1
-        print(items_taken, sizeControl, value_picked_up)
+        print('\nFirst Attemp:', items_taken, '\nSize: ',
+              sizeControl, '\nValue: ', value_picked_up)
     firstAttempt(a, capacity)
+
+    def secondAttempt(items, capacity):
+        items_len = len(items)
+        MAX = {
+            'items': [],
+            'size': 0,
+            'value': 0,
+        }
+        control = {
+            'itemsPicked': [],
+            'size': 1,
+            'value': items[0][2],
+            'combinatories': [['Total combinations: 0']]
+        }
+
+        def getMaxValue(level, control):
+            # print(f'''\n\n{'*'*10}LEVEL: {level} -> START\n''')
+            if level > items_len:
+                return
+            if level == 1:
+                control['size'] = items[0][1]
+                control['value'] = items[0][2]
+
+            for x in items:
+                # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
+                print(f'''\n\DEEP: {control['itemsPicked']}''')
+                print(MAX)
+                print(f'''x: {x[0]}''')
+                if x[0] not in control['itemsPicked']:
+                    control['itemsPicked'].append(x[0])
+                    for y in items:
+                        print(f'''x: {x[0]}, y: {y[0]}''')
+                        control['size'] += y[1]
+
+                        if x[0] != y[0] and y[0] not in control['itemsPicked']:
+
+                            print(f'''{control}''')
+                            getMaxValue((level + 1), control)
+
+                    control['itemsPicked'].remove(x[0])
+
+        # getMaxValue(1, control)
+
+        # Iterate over ALL posible combinations
+        def getMAxValue2(level, items_passed):
+            if level > items_len:
+                print(
+                    f'''\n \LEVEL: {level} \DEEP: {control['itemsPicked']} - return''')
+                return
+
+            items_passed_len = len(items_passed)
+
+            print('\n\n\nITEMS PASSED:', items_passed)
+            print(len(items_passed))
+            for x in items_passed:
+                print('for x in items_passed: x = ', x[0])
+                # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
+                print(
+                    f'''\n\LEVEL: {level} \DEEP: {control['itemsPicked']}''')
+                # print('c:', control)
+                print(f'''x: {x[0]}''')
+
+                control['itemsPicked'].append(x[0])
+                print('AFTER APPEND ITEM/DEEP\nc:',
+                      control['itemsPicked'], '\n')
+
+                # Add Combination to the 'combinatories' list
+                control['size'] += 1
+                control['combinatories'].append(control['itemsPicked'].copy())
+                control['combinatories'][
+                    0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
+                print(f'''c: {control['combinatories']}\n''')
+
+                for y in items_passed:
+                    print(f'''x: {x[0]}, y: {y[0]}''')
+
+                    if x[0] != y[0]:
+
+                        new_items_to_pass = [
+                            x for x in items_passed if x[0] not in control['itemsPicked']]
+                        # for x in new_items_to_pass:
+                        #     print(x[0], x)
+                        print('LEN of new_items_to_pass', len(
+                            new_items_to_pass), new_items_to_pass)
+
+                        getMAxValue2((level + 1), new_items_to_pass)
+
+                print(
+                    f'''Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
+                if x[0] in control['itemsPicked']:
+                    control['itemsPicked'].remove(x[0])
+            print(f'''\nCONTROL: {control}\n\nEND''')
+        getMAxValue2(1, items)
+
+        def getMAxValue2_handle_add_to_bag():
+            pass
+
+    secondAttempt(items, capacity + 1)
 
 
 if __name__ == '__main__':
