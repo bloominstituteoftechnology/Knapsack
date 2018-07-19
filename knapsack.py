@@ -7,7 +7,15 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   # !!!! IMPLEMENT ME
-  pass
+  knapsack = []
+  ideal_size = 0
+  ideal_value = 0
+  #need to pass in one of the .txt files ?
+  for item_set in Item:
+    set_size = sum(map(size, Item_set))
+    set_value = sum(map(value, Item_set))
+    if set_value > ideal_value and set_size <= capacity:
+        
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
