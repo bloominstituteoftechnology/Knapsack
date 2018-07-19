@@ -15,7 +15,7 @@ def knapsack_solver_very_slowly(items, capacity):
     # print('i:',i)
 
     comb = combinations(items,i)
-
+    
     for c in comb:
       iterations += 1
       c_size = sum([item.size for item in c])

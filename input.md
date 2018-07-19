@@ -24,6 +24,13 @@ Combination   Total Value Total Weight Valid?
 2             50          10            Yes, 10 < 25
 2 1           120         35            No, 35 > 25
 
+1
+  2
+    3
+1 2
+  2 3
+1   3
+1 2 3
 ---
 
 Givens:

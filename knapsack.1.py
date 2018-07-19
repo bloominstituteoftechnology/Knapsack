@@ -6,20 +6,48 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  
-  def ks(n, capacity):
-    if n < 0 or capacity == 0:
-      result = 0
-    elif  items[n].size > capacity:
-      result = ks(n-1, capacity)
+  # Recursively checking all combinations of items
+  # inputs: items, capacity, total value, taken items
+  # returns: the resulting value and the taken array of taken items
+  def knapsack_helper(items, capacity, value, bag):
+    if not items:
+      return value, bag
+    elif len(items) == 1:
+      # Check if the last item fits or not
+      if items[0].size <= capacity:
+        # take the item by setting its index in `taken` to 1
+        bag[items[0].index - 1] = 1
+        # update our total value for taking this item
+        value += items[0].value
+        capacity -= items[0].size
+        return value, bag, capacity
+      else:
+        # last item doesn't fit, just discard it
+        return value, bag, capacity
+    # we still have a bunch of items to considier
+    # check to see if the item we just picked up fits in our remaining capacity
+    elif items[0].size <= capacity:
+      # we can consider the overall value of this item
+      # make a copy of our bag
+      bag_copy = bag[:]
+      bag_copy[items[0].index - 1] = 1
+      r1 = knapsack_helper(items[1:], capacity - items[0].size,
+                          value + items[0].value, bag_copy)
+      r2 = knapsack_helper(items[1:], capacity, value, bag)
+      return max(r1, r2, key=lambda tup: tup[0])
     else:
-      tmp1 = ks(n-1, capacity)
-      tmp2 = items[n].value + ks(n-1, capacity - items[n].size)
-      result = max(tmp1, tmp2)
-    
-    return result
-  
-  return ks(len(items) -1, capacity)
+      # item doesn't fit, discard it and continue recursing
+      return knapsack_helper(items[1:], capacity, value, bag)
+  #Initial call to our recursive knapsack_helper
+  answer = knapsack_helper(items, capacity, 0, [0] * len(items))
+
+  indicies = [ind + 1 for ind, x in enumerate(answer[1]) if x == 1]
+
+  return f"""
+Items: {indicies}
+Value: {answer[0]}
+Weight: {capacity - answer[2]}
+"""
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
