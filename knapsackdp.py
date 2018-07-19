@@ -2,6 +2,7 @@
 
 import sys
 from collections import namedtuple
+import numpy as np
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
@@ -9,6 +10,8 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 the dynamic programming method of solving the 0:1 knapsack problem would be to create
 memoization table/matrix with the possible max values at any given capacity. 
+
+n items –> 2n-1 knapsacks to evaluate...so dp will make it easier to impleent kp
 
 i.e.
 #CURR VAL/WEIGHT IS SORTED BY WEIGHT!
@@ -46,6 +49,27 @@ from max value, check (sow-w)...if we go to the corresepnding cell in the row ab
 does its weight and column number add up to the value? If so, it was included
 
 """
+capacity = 10
+
+def knapsack_solver(items, capacity):
+  sorteditems = sorted(items, key=lambda item: item[1])
+  length = len(sorteditems)
+
+  table = np.pad(np.zeros((capacity, length)), (0,0), 'constant')
+  print(table)
+
+  for column in range(0, length):
+    value = sorteditems[column - 1][2]
+    weight = sorteditems[column - 1][1]
+
+    for row in range(0, capacity):
+      if weight > row:
+        table[row, column] = table[row, column - 1]
+      else:
+        table[row, column] = max(table[row, column - 1], table[row - weight, column - 1] + value)
+  return table
+    
+    
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
