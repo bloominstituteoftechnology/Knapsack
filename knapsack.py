@@ -3,11 +3,39 @@
 import sys
 from collections import namedtuple
 
+
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  # !!!! IMPLEMENT ME
-  pass
+  best_haul = None
+  highest_value = 0
+
+  for FirstItem in items:
+    haul = []
+    size = 0 
+    value = 0
+
+    haul.append(FirstItem)
+    size += FirstItem.size
+    value += FirstItem.value
+
+    if value > highest_value:
+      best_haul = haul
+      highest_value = value
+
+    for SecondItem in items:
+      if FirstItem != SecondItem:
+        if SecondItem.size + size <= capacity:
+          haul.append(SecondItem)
+          size += SecondItem.size
+          value += SecondItem.value
+  
+    if value > highest_value:
+      best_haul = haul
+      highest_value = value
+
+  
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
