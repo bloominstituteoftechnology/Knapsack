@@ -6,20 +6,26 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  diffs = sorted(items, key=lambda x: (x[2]*1000)/(x[1]), reverse=True)
-  res = []
-  curSum = 0
+  # sort items by ratio
+  diffs = sorted(items, key=lambda x: 1. * x[2]/x[1], reverse=True)
   
+  # logging the diffs 
   for diff in diffs:
-    print(diff[0], diff[1], diff[2], (diff[2]*1000)/(diff[1]))
+    print(diff[0], diff[1], diff[2], 1. * diff[2]/diff[1])
     
+  res = []
+  sumSize = 0
+  sumValue = 0
+  
+  # calculate current sum until sum reaches capacity
   for diff in diffs:
-    if curSum + diff[2] < capacity:
-      curSum += diff[2]
+    if sumSize + diff[1] < capacity:
+      sumSize += diff[1]
+      sumValue += diff[2]
       res.append(diff[0])
-    else:
-      res.append(diff[0])
-      return res
+  
+  # res.append(diff[0])
+  return (sumSize, sumValue, sorted(res))
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
