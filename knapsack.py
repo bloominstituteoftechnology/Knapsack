@@ -70,17 +70,45 @@ def knapsack_solver(items, capacity):
 #   else:
 #     print('Usage: knapsack.py [filename] [capacity]')
 
-  def knapsack_greedy(items, max_weight, keyFunc=weight):
-    knapsack = []
-    knapsack_weight = 0
-    knapsack_value = 0
-    items_sorted = sorted(items, key=keyFunc)
-    while len(items_sorted > 0):
-      item = items_sorted.pop()
-      if weight(item) + knapsack_weight <= max_weight:
-        knapsack.append(item)
-        knapsack_weight += weight(knapsack[-1])
-        knapsack_value += value(knapsack[-1])
-      else:
-        break
-      return knapsack, knapsack_weight, knapsack_value
+  # def knapsack_greedy(items, max_weight, keyFunc=weight):
+  #   knapsack = []
+  #   knapsack_weight = 0
+  #   knapsack_value = 0
+  #   items_sorted = sorted(items, key=keyFunc)
+  #   while len(items_sorted > 0):
+  #     item = items_sorted.pop()
+  #     if weight(item) + knapsack_weight <= max_weight:
+  #       knapsack.append(item)
+  #       knapsack_weight += weight(knapsack[-1])
+  #       knapsack_value += value(knapsack[-1])
+  #     else:
+  #       break
+  #     return knapsack, knapsack_weight, knapsack_value
+
+  def knapsack_iterative(items, capacity):
+    # initialize matrix cache
+    cache = [[0] * (capacity + 1) for _ in range(len(items) +1)]
+    # initialize bag
+    bag = set()
+    # populate matrix
+    for item in range(1, len(cache)):
+      for size in range(len(cache[item])):
+        # decide to take item out or not
+        if items[item-1].size > size:
+          # skip item
+          cache[item][size] = cahce[item-1][size]
+        else:
+          # take item
+          r1 = cache[item-1][size]
+          r2 = cache[item-1][size-items[item-1].size + items[item-1].value]
+          cache[item][size] = max(r1, r2)
+    rows = len(cache) - 1
+    cols = len(cache[0]) - 1
+
+    while rows > 0 and cols > 0:
+      if cache[rows][cols] != cache[rows-1][cols]:
+        bad.add(rows - 1)
+        rows -= 1
+        cols -= items[row].size
+  
+  knapsack_iterative(updated, 100) 
