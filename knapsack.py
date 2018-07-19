@@ -40,7 +40,7 @@ def knapsack_solver(items, capacity):
             'size': 0,
             'value': 0,
             'itemsPicked': [],
-            'combinatories': [['Total combinations: 0']],
+            'combinatories': [['Total combinations: to show total permutation un comment the related lines in PERMUTATIONS AND ITERATIONS ']],
             'iterations': 1,
         }
 
@@ -99,7 +99,7 @@ def knapsack_solver(items, capacity):
                 # print('AFTER APPEND ITEM/DEEP\nc:',
                 #       control['itemsPicked'], '\n')
 
-                # Add Combination to the 'combinatories' list
+                # PERMUTATIONS AND ITERATIONS
                 control['iterations'] += 1
                 # control['combinatories'].append(control['itemsPicked'].copy())
                 # control['combinatories'][
