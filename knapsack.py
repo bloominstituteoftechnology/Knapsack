@@ -1,35 +1,34 @@
 #!/usr/bin/python
 
 import sys
-from collections import namedtuple
-from operator import attrgetter
-from statistics import median
+#from collections import namedtuple
+#from operator import attrgetter
+#from statistics import median
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-    knapsack = []
-    secondknapsack = []
-    cost = 0
-    secondcost = 0
-    average_value = median(items[2])
-    for item in sorted(items, key=attrgetter("value"), reverse=True):
-        if item.size <= capacity:
-            if cost + item.size <= capacity:
-                knapsack.append(item)
-                cost += item.size
-    for item in sorted(items, key=attrgetter("size")):
-        if item.size <= capacity and item.value >= average_value:
-            if secondcost + item.size <= capacity:
-                secondknapsack.append(item)
-                secondcost += item.size
-
-    knapbag = sum(item.value for item in knapsack)
-    secondknapswag = sum(item.value for item in secondknapsack)
-    if knapbag > secondknapswag:
-        return [knapbag, knapsack]
+      def knapsack_helper(items, capacity, value, bag):
+    if not items:
+      return value, bag
+    elif len(items) == 1:
+      if items[0].size <= capacity:
+        bag[items[0].index-1] = 1
+        value += items[0].value
+        return value, bag
+      else:
+        return value, bag
+    elif items[0].size <= capacity:
+      bag_copy = bag[:] # copy bag
+      bag_copy[items[0].index-1] = 1
+      r1 = knapsack_helper(items[1:], capacity-items[0].size, value + items[0].value, bag_copy)
+      print(r1, 'r1')
+      r2 = knapsack_helper(items[1:], capacity, value, bag)
+      print(r2, 'r2')
+      return max(r1, r2,key= lambda tup: tup[0])
     else:
-        return [secondknapswag, secondknapsack]
+      return knapsack_helper(items[1:], capacity, value, bag)
+  return knapsack_helper(items, capacity,0, [0] * len(items))
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
