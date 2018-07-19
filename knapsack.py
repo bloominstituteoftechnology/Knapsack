@@ -5,7 +5,31 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity):
+def knapsack_solver_recursive(items, capacity):
+  def naive(items, capacity, sack, value):
+    item = items[0] if len(items) > 0 else None
+    if len(items) == 0:
+      return (sack, value)
+    elif len(items) == 1:
+      if item.size <= capacity:
+        sack.add(item.index)
+        value += item.value
+        return(sack, value, capacity-item.size)
+      else:
+        return (sack, value, capacity)
+    elif item.size <= capacity:
+      temp_sack = set(sack)
+      temp_sack.add(item.index)
+
+      leave = naive(items[1:], capacity, sack, value)
+      keep = naive(items[1:], capacity-item.size, temp_sack, value+item.value)
+      return max(leave, keep, key=lambda x: x[1])
+    else:
+      return naive(items[1:], capacity, sack, value)
+  result = naive(items, capacity, set(), 0)
+  return "Value: %s\nSize: %s\nChosen: %s" %(result[1], capacity-result[2], result[0])
+
+def knapsack_solver_greedy(items, capacity):
   knapsack, total_cost, total_value = [], 0, 0
   while capacity > 0:
     biggest_gain, cost, value, chosen_item = -1, 0, 0, None
@@ -27,9 +51,6 @@ def knapsack_solver(items, capacity):
       capacity -= cost
   return "Value: %s\nSize: %s\nChosen: %s" %(total_value, total_cost, knapsack)
 
-    
-      
-
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     capacity = int(sys.argv[2])
@@ -42,6 +63,6 @@ if __name__ == '__main__':
       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
     
     file_contents.close()
-    print(knapsack_solver(items, capacity))
+    print(knapsack_solver_recursive(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
