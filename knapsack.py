@@ -2,6 +2,7 @@
 
 import sys
 from collections import namedtuple
+import time
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
@@ -29,6 +30,7 @@ def knapsack_solver(items, capacity):
     firstAttempt(a, capacity)
 
     def secondAttempt(items, capacity):  # BRUTE FORCE
+
         items_len = len(items)
         MAX = {
             'items': [],
@@ -44,6 +46,7 @@ def knapsack_solver(items, capacity):
             'iterations': 1,
         }
 
+        # NOT WORKING ALGORITHM  -that was my first attempt with burte force
         def getMaxValue(level, control):
             # print(f'''\n\n{'*'*10}LEVEL: {level} -> START\n''')
             if level > items_len:
@@ -73,7 +76,8 @@ def knapsack_solver(items, capacity):
         # getMaxValue(1, control)
 
         # Iterate over ALL posible combinations
-        def getMAxValue2(level, items_passed):
+        def getMAxValue2(level, items_passed):  # WORKING ALGORITHM
+            start_time = time.clock()
             if level > items_len:
                 print(
                     f'''\n \LEVEL: {level} \DEEP: {control['itemsPicked']} - return''')
@@ -148,7 +152,7 @@ def knapsack_solver(items, capacity):
 
         getMAxValue2(1, items)
         print(
-            f'''\n**********SECOND ATTEMPT**********\nCONTROL:\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tPermutations: {control['combinatories'][0]}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
+            f'''\n**********SECOND ATTEMPT**********\nCONTROL:\n\nTime runned: {(time.clock() - start_time) / 60} minutes\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tPermutations: {control['combinatories'][0]}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
 
         def getMAxValue2_handle_add_to_bag():
             pass
