@@ -81,7 +81,7 @@ if __name__ == "__main__":
         new_path = ".\log\OUTPUT.txt"
         file = open(new_path, "a")
         file.write(
-            f".\{sys.argv[1]}{sys.argv[2]} \n log \n {knapsack_solver(items, capacity)} \n \n "
+            f"========================================\n{sys.argv[1]} \n {sys.argv[2]} \n log \n {knapsack_solver(items, capacity)} \n \n========================================\n"
         )
         file.close()
         clear()
