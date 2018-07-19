@@ -2,48 +2,38 @@
 
 import sys
 from collections import namedtuple
+from itertools import combinations
 
 Item = namedtuple('Item', ['index', 'size', 'value', 'ratio'])
 
-def knapsack_solver_maybe(items, capacity):
-  """!!!! IMPLEMENT ME"""
-  # set = []
-  # size = 0
-  # value = 0
-  best_set = None
+def knapsack_solver_very_slowly(items, capacity):
+  best_set = []
   best_value = 0
-
-  for itemA in items:
-    set = []
-    size = 0
-    value = 0
-
-    set.append(itemA)
-    size += itemA.size
-    value += itemA.value
-    print('current set A:',[item.index for item in set])
-
-    if value > best_value:
-      best_set = set
-      best_value = value
-
-    for itemB in items:
-      if itemA != itemB:
-        if itemB.size + size <= capacity:
-          set.append(itemB)
-          size += itemB.size
-          value += itemB.value
-          print('current set B:',[item.index for item in set])
-      # print('current set:',set)
-
-    if value > best_value:
-      best_set = set
-      best_value = value
-      # print('bests:',best_value,best_set)
+  iterations = 0
   
-  return f'''\nItems to select: {sorted([item.index for item in best_set])}
+  for i in range(1,len(items)+1):
+    # print('i:',i)
+
+    comb = combinations(items,i)
+
+    for c in comb:
+      iterations += 1
+      c_size = sum([item.size for item in c])
+
+      # print('c:',[e.index for e in c],'c_size:',c_size)
+
+      if c_size <= capacity:
+        c_value = sum([item.value for item in c])
+        if best_value < c_value:
+          best_value = c_value
+          best_set = c
+          
+          # print('\nbest_set:',[b.index for b in c],'best_value:',best_value,'\n')
+
+  return f'''\nItems to select: {[item.index for item in best_set]}
 Total cost: {sum([item.size for item in best_set])}
-Total value: {best_value}'''
+Total value: {sum([item.value for item in best_set])}
+Number of iterations: {iterations}'''
 
 def knapsack_solver(items, capacity):
   sorted_items = sorted(items, key=lambda item: item.ratio, reverse=True)
@@ -54,7 +44,7 @@ def knapsack_solver(items, capacity):
     if item.size + current_size <= capacity:
       best_set.append(item)
       current_size += item.size
-      print('best set so far:',best_set)
+      # print('best set so far:',[item.index for item in best_set])
   
   return f'''\nItems to select: {sorted([item.index for item in best_set])}
 Total cost: {sum([item.size for item in best_set])}
