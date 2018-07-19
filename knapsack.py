@@ -5,38 +5,61 @@ import decimal
 from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
+# Brute Force
+Item = namedtuple('Item', ['index', 'size', 'value'])
 
-#Greedy approach
+def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
+    # !!!! IMPLEMENT ME
 
-def knapsack_solver(items, capacity):
-  sortRatio = []
-  fullStats = []
-  empArr = []
-  size_counter = int(0)
-  counter = 0
-  # !!!! IMPLEMENT ME
+    if index >= len(items):
+        return[value, chosen]
 
-  d = {'key':'value'}
-  d['mynewkey'] = 'mynewvalue'
-  print(d)
+    if items[index].size > capacity:
+        return knapsack_solver(items, capacity, index + 1, value, chosen)
 
-  print("test")
-  for i in items:
-    print(i)
-    ratio = i.value / float(i.size)
-    itemsObject = {
-      'size':i.size, 
-      'value':i.value,
-      'ratio': float(ratio)}
-    
-    fullStats.append(itemsObject)
-  while counter <= len(fullStats):
-    if fullStats[counter]['ratio'] > 1:
-      print(fullStats.ratio)
-      empArr.append(fullStats[0])
     else:
-      continue
-    counter += 1
+        chosencopy = chosen.copy()
+        chosencopy.append(items[index].index)
+
+        NoValue = knapsack_solver(items, capacity, index+1, value, chosen)
+        YesValue = knapsack_solver(items, capacity - items[index].size, index+1, value + items[index].value, chosencopy)
+        # print(NoValue)
+        # print(YesValue)
+        if NoValue[0] > YesValue[0]:
+            return NoValue
+        else:
+           return YesValue
+
+# #Greedy approach
+
+# def knapsack_solver(items, capacity):
+#   fullStats = []
+#   empArr = []
+#   counter = 0
+#   # !!!! IMPLEMENT ME
+#   for i in items:
+#     ratio = i.value / float(i.size)
+#     itemsObject = {
+#       'size':i.size, 
+#       'value':i.value,
+#       'ratio': ratio
+#       }
+#   if itemsObject['ratio'] > 0:
+#     # fullStats.append(itemsObject)
+#     print(itemsObject['ratio'])
+#   else:
+#     print(itemsObject['ratio'])
+#     return False
+  # while counter <= len(fullStats):
+  #   if fullStats[counter]['ratio'] > 1:
+  #     empArr.append(fullStats[counter])
+  #     counter += 1
+  #     if len(empArr) >= 4:
+  #       return empArr
+  #   else:
+  #     counter += 1
+  
+  
     # sorted(fullStats[ratio])
     # print(fullStats)
     
