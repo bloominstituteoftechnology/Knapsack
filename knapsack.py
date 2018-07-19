@@ -5,11 +5,26 @@ from collections import namedtuple
 
 Item = namedtuple("Item", ["index", "size", "value"])
 
+# # Greedy Knapsack algo
+# def knapsack_solver(items, capacity):
+#     # !!!! IMPLEMENT ME
+#   weight_current = 0
+# 	value_current = 0
+#     pass
+
+# #Brute Force
+# def knapsack_solver(items, capacity):
+#     # !!!! IMPLEMENT ME
+#   weight_current = 0
+# 	value_current = 0
+#     pass
+
 
 def knapsack_solver(items, capacity):
     # !!!! IMPLEMENT ME
+  weight_current = 0
+	value_current = 0
     pass
-
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
