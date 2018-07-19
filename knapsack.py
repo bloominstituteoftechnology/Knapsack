@@ -6,8 +6,8 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-# V1 - Heuristic Approach
-def knapsack_solver(items, capacity):
+# Heuristic Approach
+def knapsack_solver_greedy(items, capacity):
     counter = 0
     sorted_items = sorted(items, key=lambda item: item.value/item.size, reverse=True)
     knapsack = {
@@ -30,10 +30,53 @@ def knapsack_solver(items, capacity):
     
     return knapsack
 
+# Recursive/Brute-Force Approach
+def knapsack_solver_recursive(items, capacity):
+    knapsack = {
+        'value': 0,
+        'size': 0,
+        'chosen': [],
+        'capacity': capacity
+    }
+
+    def knapsack_solver_recursive_helper(items, capacity, knapsack):
+        # Base case
+        if not items or knapsack['capacity'] == 0:
+            return knapsack
+
+        item = items[0]
+
+        if item.size <= knapsack['capacity']:
+            # Do we take the item? Yes:
+            knapsack_take = knapsack.copy()
+            knapsack_take_chosen = knapsack['chosen'][:]
+            knapsack_take_chosen.append(item.index)
+            knapsack_take['value'] += item.value
+            knapsack_take['size'] += item.size
+            knapsack_take['capacity'] -= item.size
+            knapsack_take['chosen'] = knapsack_take_chosen
+            take = knapsack_solver_recursive_helper(
+                items[1:], capacity, knapsack_take)
+
+            # Do we take the item? No:
+            knapsack_discard = knapsack.copy()
+            disgard = knapsack_solver_recursive_helper(
+                items[1:], capacity, knapsack_discard)
+            
+            # Which decision gave a greater value:
+            knapsack_max = max(take, disgard, key=lambda results: results['value'])
+            return knapsack_max
+        else:
+            # Item didn't fit. discard it and keep going
+            return knapsack_solver_recursive_helper(items[1:], capacity, knapsack)
+
+    return knapsack_solver_recursive_helper(items, capacity, knapsack)
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         capacity = int(sys.argv[2])
         file_location = sys.argv[1].strip()
+        algo_type = sys.argv[3].strip() if len(sys.argv) == 4 else 'greedy'
         file_contents = open(file_location, 'r')
         items = []
 
@@ -42,13 +85,17 @@ if __name__ == '__main__':
             items.append(Item(int(data[0]), int(data[1]), int(data[2])))
 
         file_contents.close()
-        print(knapsack_solver(items, capacity))
+
+        if algo_type == 'recursive':
+            print('Recursive/Brute Force: {}'.format(knapsack_solver_recursive(items, capacity)))
+        else:
+            print('Greedy: {}'.format(knapsack_solver_greedy(items, capacity)))
     else:
         print('Usage: knapsack.py [filename] [capacity]')
 
 # For debugger
 # capacity = 100
-# file_contents = open('data/large1.txt', 'r')
+# file_contents = open('data/hard.txt', 'r')
 # items = []
 
 # for line in file_contents.readlines():
@@ -56,4 +103,4 @@ if __name__ == '__main__':
 #     items.append(Item(int(data[0]), int(data[1]), int(data[2])))
 
 # file_contents.close()
-# print(knapsack_solver(items, capacity))
+# print(knapsack_solver_recursive(items, capacity))
