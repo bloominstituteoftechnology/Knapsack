@@ -12,7 +12,7 @@ def knapsack_solver(items, capacity):
     #     print(a[tup])
     print(f'''\n\nSample's size: {len(items)}''')
 
-    def firstAttempt(items, capacity):
+    def firstAttempt(items, capacity):  # GREEDY
         iterationControl = 0
         sizeControl = 0
         value_picked_up = 0
@@ -28,7 +28,7 @@ def knapsack_solver(items, capacity):
               sizeControl, '\nValue: ', value_picked_up, '\n\nEND FIRST ATTEMP')
     firstAttempt(a, capacity)
 
-    def secondAttempt(items, capacity):
+    def secondAttempt(items, capacity):  # BRUTE FORCE
         items_len = len(items)
         MAX = {
             'items': [],
@@ -101,9 +101,9 @@ def knapsack_solver(items, capacity):
 
                 # Add Combination to the 'combinatories' list
                 control['iterations'] += 1
-                control['combinatories'].append(control['itemsPicked'].copy())
-                control['combinatories'][
-                    0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
+                # control['combinatories'].append(control['itemsPicked'].copy())
+                # control['combinatories'][
+                #     0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
                 # print(f'''c: {control['combinatories']}\n''')
 
                 # ADD TO BAG LOGIC
