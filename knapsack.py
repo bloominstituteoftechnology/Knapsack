@@ -5,65 +5,82 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
-    # !!!! IMPLEMENT ME
-    # Stop recursing!
+#def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
+#    # !!!! IMPLEMENT ME
+#    # Stop recursing!
+#
+#    if index >= len(items):
+#        return[value, chosen] 
+#    
+#    # since you have an empty bag, start by checking the first item
+#    # does it fit? If not, recurse.
+#  
+#    if items[index].size > capacity:
+#        return knapsack_solver(items, capacity, index + 1, value, chosen)
+# 
+#    # if it does, check the value we get from NOT taking the item
+#    # (novalue) vs the value we get from taking it (yesvalue).
+#
+#    else:
+#    # trying to not ruin the actual array/list 
+#        chosencopy = chosen.copy()
+#        chosencopy.append(items[index].index)
+# 
+#        novalue = knapsack_solver(items, capacity, index+1, value, chosen)
+#        yesvalue = knapsack_solver(items, capacity - items[index].size, index+1, value + items[index].value, chosencopy)
+#    #    print(novalue)
+#    #    print(yesvalue)
+#        if novalue[0] > yesvalue[0]:
+#            return novalue 
+#        else:
+#           return yesvalue 
+#                    
+#def anotherks(items, capacity):
+#
+#    # calculate value/size ratio for each item to determine optimal results
+#    # sort items list so that optimal results come first
+#    # take items off the top and put into your knapsack until it's full
+#
+#    # So I think first you make an empty array/list and set initial values to
+#    # zero for starters. 
+#    chosen = []
+#    size = 0
+#    value = 0
+#
+#    # find the value/size ratio for each item
+#    # sort ratios from highest to lowest
+#
+#    items = sorted(items, key=lambda i: i.size / i.value)
+#    
+#    # then as long as there is room in the bag (capacity), add items to the
+#    # chosen array. Each time you add an item be sure to add the size and value
+#    # to the total count so you don't overfill your bag.
+#    # NOTE: I found that adding to the size didn't work because you need to 
+#    # adjust the capacity according to the item size. so I changed it so that
+#    # when you add an item you subtract the size from the total capacity.
+#    for item in items:
+#        if item.size <= capacity:
+#            chosen.append(item.index)
+#            capacity -= item.size
+#            value += item.value
+#    return [value, chosen]
 
-    if index >= len(items):
-        return[value, chosen] 
-    
-    # since you have an empty bag, start by checking the first item
-    # does it fit? If not, recurse.
-  
-    if items[index].size > capacity:
-        return knapsack_solver(items, capacity, index + 1, value, chosen)
- 
-    # if it does, check the value we get from NOT taking the item
-    # (novalue) vs the value we get from taking it (yesvalue).
+def knapsack_solver(items, capacity)
+    #create cache
+    cache = [[0 for x in range(capacity + 1)] for x in range(items + 1)]
 
-    else:
-    # trying to not ruin the actual array/list 
-        chosencopy = chosen.copy()
-        chosencopy.append(items[index].index)
- 
-        novalue = knapsack_solver(items, capacity, index+1, value, chosen)
-        yesvalue = knapsack_solver(items, capacity - items[index].size, index+1, value + items[index].value, chosencopy)
-    #    print(novalue)
-    #    print(yesvalue)
-        if novalue[0] > yesvalue[0]:
-            return novalue 
-        else:
-           return yesvalue 
-                    
-def anotherks(items, capacity):
+    for i in range(items + 1):
+        for c in range(capacity+1):
+            if i==0 or c==0:
+                cache[i][c] = 0
+            elif size[i-1] <= c:
+                cache[i][c] = max(val[i-1] + cache[i-1][c-size[i-1]], cache[i-1][c])
+            else:
+                cache[i][c] = cache[i-1][c]
+    return cache[items][capacity] 
 
-    # calculate value/size ratio for each item to determine optimal results
-    # sort items list so that optimal results come first
-    # take items off the top and put into your knapsack until it's full
 
-    # So I think first you make an empty array/list and set initial values to
-    # zero for starters. 
-    chosen = []
-    size = 0
-    value = 0
 
-    # find the value/size ratio for each item
-    # sort ratios from highest to lowest
-
-    items = sorted(items, key=lambda i: i.size / i.value)
-    
-    # then as long as there is room in the bag (capacity), add items to the
-    # chosen array. Each time you add an item be sure to add the size and value
-    # to the total count so you don't overfill your bag.
-    # NOTE: I found that adding to the size didn't work because you need to 
-    # adjust the capacity according to the item size. so I changed it so that
-    # when you add an item you subtract the size from the total capacity.
-    for item in items:
-        if item.size <= capacity:
-            chosen.append(item.index)
-            capacity -= item.size
-            value += item.value
-    return [value, chosen]
 
 
 if __name__ == '__main__':
