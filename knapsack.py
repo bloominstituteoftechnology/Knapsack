@@ -8,29 +8,79 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 def knapsack_solver(items, capacity):
   knapsack = []
   
-  # if knapsack if full
-  if capacity == 0:
-    return 0
-  # if we made room for items  
-  if len(value) == index: 
-    return 0
-  # if item does not fit, ignore and move to next item
-  if size[index] > capacity:
-    return knapsack(value, size, index+1, capacity)
-  # recursive step
+  # # if knapsack if full
+  # if capacity == 0:
+  #   return 0
+  # # if we made room for items  
+  # if len(value) == index: 
+  #   return 0
+  # # if item does not fit, ignore and move to next item
+  # if size[index] > capacity:
+  #   return knapsack(value, size, index+1, capacity)
+  # # recursive step
+  
+#   def knapsack_helper(items, capacity, value, bag):
+#     if not items:
+#       return value, bag
+#     elif len(items) == 1:
+#       # Check if the last item fits or not
+#       if items[0].size <= capacity:
+#         # take the item by setting its index in `bag` to 1
+#         bag[items[0].index - 1] = 1
+#         # update our total value for taking this item
+#         value += items[0].value
+#         return value, bag
+#       else:
+#         # last item doesn't fit, just discard it
+#         return value, bag
+#     # we still have a bunch of items to consider
+#     # check to see if the item we just picked up fits in our remaining capacity
+#     elif items[0].size <= capacity:
+#       # we can consider the overall value of this item 
+#       # make a copy of our bag
+#       bag_copy = bag[:] 
+#       bag_copy[items[0].index - 1] = 1
+#       # we take the item in this universe
+#       r1 = knapsack_helper(items[1:], capacity - items[0].size,
+#                            value + items[0].value, bag_copy)
+#       # we don't take the item in this universe
+#       r2 = knapsack_helper(items[1:], capacity, value, bag)
+#       # pick the universe that results in a larger value
+#       # make sure we're comparing just the resulting values 
+#       return max(r1, r2, key=lambda tup: tup[0])
+#     else:
+#       # item doesn't fit, discard it and continue recursing
+#       return knapsack_helper(items[1:], capacity, value, bag)
+#   # Initial call our recursive knapsack_helper
+#   return knapsack_helper(items, capacity, 0, [0] * len(items))
 
-if __name__ == '__main__':
-  if len(sys.argv) > 1:
-    capacity = int(sys.argv[2])
-    file_location = sys.argv[1].strip()
-    file_contents = open(file_location, 'r')
-    items = []
+# if __name__ == '__main__':
+#   if len(sys.argv) > 1:
+#     capacity = int(sys.argv[2])
+#     file_location = sys.argv[1].strip()
+#     file_contents = open(file_location, 'r')
+#     items = []
 
-    for line in file_contents.readlines():
-      data = line.rstrip().split()
-      items.append(Item(int(data[0]), int(data[1]), int(data[2])))
+#     for line in file_contents.readlines():
+#       data = line.rstrip().split()
+#       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
     
-    file_contents.close()
-    print(knapsack_solver(items, capacity))
-  else:
-    print('Usage: knapsack.py [filename] [capacity]')
+#     file_contents.close()
+#     print(knapsack_solver(items, capacity))
+#   else:
+#     print('Usage: knapsack.py [filename] [capacity]')
+
+  def knapsack_greedy(items, max_weight, keyFunc=weight):
+    knapsack = []
+    knapsack_weight = 0
+    knapsack_value = 0
+    items_sorted = sorted(items, key=keyFunc)
+    while len(items_sorted > 0):
+      item = items_sorted.pop()
+      if weight(item) + knapsack_weight <= max_weight:
+        knapsack.append(item)
+        knapsack_weight += weight(knapsack[-1])
+        knapsack_value += value(knapsack[-1])
+      else:
+        break
+      return knapsack, knapsack_weight, knapsack_value
