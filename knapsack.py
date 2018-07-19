@@ -102,7 +102,7 @@ if __name__ == '__main__':
     file_contents.close()
     print()
 
-    # print("BruteForce recursive")
+    # print("BruteForce recursive") # only works on small files
     # brute_recursive = recursive_knapsack_solver(items, capacity)
     # print("Value:", brute_recursive[0])
     # print("Size:", brute_recursive[1])
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     print("Chosen:", memoized_recursive[2])
     print()
 
-    # print("Really recursive")
+    # print("Really recursive") # only works on small files
     # really_recursive = really_recursive_knapsack_solver(items, capacity)
     # print("Value:", really_recursive[0])
     # print("Size:", really_recursive[1])
