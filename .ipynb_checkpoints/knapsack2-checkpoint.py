@@ -1,32 +1,30 @@
 #!/usr/bin/python
-
+#brute force
 import sys
 from collections import namedtuple
 import random
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity):  
+def knapsack_solver(items, capacity):
     maxval = []
-    for i in range(0,1000000):
+    for i in range(1,10):
+        val = 0
         size = 0
-        value = 0
-        its = []
         nums = list(range(0,len(items)))
-        while size < capacity:
-            n = random.choice(nums)
-            nums.remove(n)
-            size = size + items[n].size
-            if size < capacity:
-                value = value + items[n].value
-                its.append(n)
-                #print("val",value,"size",size)
-                #print(its)
-                maxval.append((value,its))
-            
-    print(max(maxval))
-  # !!!! IMPLEMENT ME
-    
+        nums.remove(i)
+        for j in nums:
+            nums2 = list(range(0,len(items)))
+            nums2.remove(i)
+            nums2.remove(j)
+            for k in nums2:
+                val = items[i].value + items[j].value + items[k].value
+                size = items[i].size + items[j].size + items[k].size
+                if size < capacity:
+                    print(i,j,k)
+                    maxval.append(val)
+                    
+    return max(maxval)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
