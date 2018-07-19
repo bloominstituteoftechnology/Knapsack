@@ -1,37 +1,32 @@
 #!/usr/bin/python
 
 import sys
-import math
 from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  knapsack = []
-  total_cost = 0
-  total_value = 0
+  knapsack, total_cost, total_value = [], 0, 0
   while capacity > 0:
-    biggest_gain = -math.inf
-    cost = 0
-    value = 0
-    chosen_item = None
+    biggest_gain, cost, value, chosen_item = -1, 0, 0, None
     for item in items:
-      if item[1] <= capacity and item[2]/item[1] > biggest_gain:
-        biggest_gain = item[2]/item[1]
+      ratio = item.value/item.size
+      if item.size <= capacity and ratio > biggest_gain:
+        biggest_gain = ratio
         chosen_item = item
-        value = item[2]
-        cost = item[1]
+        value = item.value
+        cost = item.size
     if chosen_item == None:
       capacity = 0
       break
     else:
-      knapsack.append(chosen_item[0])
+      knapsack.append(chosen_item.index)
       total_cost += cost
       total_value += value
       items.remove(chosen_item)
       capacity -= cost
-  return "\nitems to select: %s\ntotal cost: %s\ntotal value: %s" %(knapsack, total_cost, total_value)
-    
+  return "Value: %s\nSize: %s\nChosen: %s" %(total_value, total_cost, knapsack)
+
     
       
 
