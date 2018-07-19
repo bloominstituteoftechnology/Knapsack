@@ -20,20 +20,13 @@ be taking and outputs the combination with the best value.
 
 def knapsack_solver(items, capacity):
   # Recursively check all combinations of items with inner helper method
-  def knapsack_rec(items, capacity, value, bag):
+  def knapsack_rec(items, capacity, value=0, bag=set()):
     # No remaining items that fit
     if not items:
       return value, bag
-    elif len(items) == 1:
-      # Last item and it fits, take it
-      if items[0].size <= capacity:
-        bag.add(items[0].index)
-        value += items[0].value
-        return value, bag
-      # Last item doesn't fit, discard it
-      else:
-        return value, bag
-    elif capacity > items[0].size:
+    elif items[0].size > capacity:
+        return knapsack_rec(items[1:], capacity, value, bag)
+    else:
       # Recurse cases of taking item/not taking item, return max
       bag_copy = bag.copy() # Copy to avoid marking everything taken
       bag_copy.add(items[0].index)
@@ -44,11 +37,39 @@ def knapsack_solver(items, capacity):
       r2 = knapsack_rec(items[1:], capacity, value, bag)
       # Choose the option with the larger value
       return max(r1, r2, key=lambda tup: tup[0])
-    else:
-      # Item doesn't fit, skip and move on to the next one
-      return knapsack_rec(items[1:], capacity, value, bag)
   # Initial call with our bag represented as a Set data structure
-  return knapsack_rec(items, capacity, 0, set())
+  return knapsack_rec(items, capacity)
+
+
+def knapsack_memoized(items, capacity):
+  cache = [[0] * (capacity + 1) for _ in range(len(items) + 1)]
+
+  def knapsack_memoized_helper(index, capacity, value=0, bag=set()):
+    answer = cache[index][capacity]
+    if answer == 0:
+      answer = knapsack_bf_helper(index, capacity, value, bag)
+      cache[index][capacity] = answer
+    return answer
+
+  def knapsack_bf_helper(index, capacity, value=0, bag=set()):
+    # No remaining items that fit
+    if index == -1:
+      return value, bag
+    elif items[index].size > capacity:
+        return knapsack_memoized_helper(index - 1, capacity, value, bag)
+    else:
+      # Recurse cases of taking item/not taking item, return max
+      bag_copy = bag.copy() # Copy to avoid marking everything taken
+      bag_copy.add(index)
+      # Calculate the value of taking this item
+      r1 = knapsack_memoized_helper(index - 1, capacity - items[index].size,
+                        value + items[index].value, bag_copy)
+      # Calculate the value of not taking this item
+      r2 = knapsack_memoized_helper(index - 1, capacity, value, bag)
+      # Choose the option with the larger value
+      return max(r1, r2, key=lambda tup: tup[0])
+    
+  return knapsack_bf_helper(len(items) - 1, capacity)
 
 
 def knapsackGreedy(items, capacity):
@@ -108,15 +129,15 @@ def knapsackDP(items, capacity):
     # to item i then we know we took the item and should go to the previous
     # item in the smaller knapsack
     # (the column discounting the size of the taken item)
-    i = len(cache) - 1
-    j = len(cache[-1]) - 1
-    while i > 0 and j > 0:
-        if cache[i][j] != cache[i-1][j]:
-            bag.add(i - 1)
-            i -= 1
-            j -= items[i].size
+    rows = len(cache) - 1
+    cols = len(cache[-1]) - 1
+    while rows > 0 and cols > 0:
+        if cache[rows][cols] != cache[rows-1][cols]:
+            bag.add(rows - 1)
+            rows -= 1
+            cols -= items[rows].size
         else:
-            i -= 1
+            rows -= 1
 
     return cache[-1][-1], bag
 
@@ -131,8 +152,9 @@ def knapsackBB(items):
 
 def solve(items, capacity):
     # value, taken = knapsack_solver(items, capacity)
+    value, taken = knapsack_memoized(items, capacity)
     # value, taken = knapsackGreedy(items, capacity)
-    value, taken = knapsackDP(items, capacity)
+    # value, taken = knapsackDP(items, capacity)
 
     # Output is a string of the value of the knapsack (line 1)
     # Note - first row is all 0s because picking from 0 items
