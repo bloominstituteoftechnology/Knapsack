@@ -27,7 +27,7 @@ def knapsack_solver(items, capacity):
             iterationControl += 1
         print('\nFirst Attemp:', items_taken, '\nSize: ',
               sizeControl, '\nValue: ', value_picked_up, '\n\nEND FIRST ATTEMP')
-    firstAttempt(a, capacity)
+    # firstAttempt(a, capacity)
 
     def secondAttempt(items, capacity):  # BRUTE FORCE
 
@@ -104,10 +104,10 @@ def knapsack_solver(items, capacity):
 
                 # PERMUTATIONS AND ITERATIONS
                 control['iterations'] += 1
-                # control['combinatories'].append(control['itemsPicked'].copy())
-                # control['combinatories'][
-                #     0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
-                # print(f'''c: {control['combinatories']}\n''')
+                control['combinatories'].append(control['itemsPicked'].copy())
+                control['combinatories'][
+                    0] = f'''Total combinations: {len(control['combinatories']) - 1}'''
+                # print(f'''c: {control['combinatories'][-1]}\n''')
 
                 # ADD TO BAG LOGIC
                 # Get current_level items' size
@@ -115,7 +115,9 @@ def knapsack_solver(items, capacity):
                 for index in control['itemsPicked']:
                     current_level_size += items[index - 1][1]
 
-                if current_level_size <= capacity - 1:  # There is a bug reading the capacity from the command line -> it get incremented always by 1 => So I subtract 1 in the comparison here
+                # There is a bug reading the capacity from the command line -> it get incremented always by 1 => So I subtract 1 in the comparison here
+                # False if we want all posible permutations (check next if statement: It prints all posible permutations)
+                if True and current_level_size <= capacity - 1:
                     # Get current_level items' value
                     current_level_value = 0
                     for index in control['itemsPicked']:
@@ -144,6 +146,23 @@ def knapsack_solver(items, capacity):
 
                             getMAxValue2((level + 1), new_items_to_pass)
 
+                if False:  # True: Print all posible Permutations
+                    # print('FALSE')
+                    for y in items_passed:
+                        # print(f'''x: {x[0]}, y: {y[0]}''')
+
+                        # GO TO NEXT LEVEL IF AND ONLY IF: 'txt file line' is not the same
+                        if x[0] != y[0]:
+
+                            new_items_to_pass = [
+                                x for x in items_passed if x[0] not in control['itemsPicked']]
+                            # for x in new_items_to_pass:
+                            #     print(x[0], x)
+                            # print('LEN of new_items_to_pass', len(
+                            #     new_items_to_pass), new_items_to_pass)
+
+                            getMAxValue2((level + 1), new_items_to_pass)
+
                 # print(
                 #     f'''Level: {level} - x: {x[0]} - items_picked: {control['itemsPicked']}''')
                 if x[0] in control['itemsPicked']:
@@ -151,7 +170,7 @@ def knapsack_solver(items, capacity):
 
         getMAxValue2(1, items)
         print(
-            f'''\n**********SECOND ATTEMPT**********\nCONTROL:\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tPermutations: {control['combinatories'][0]}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
+            f'''\n**********BRUTAL FORCE**********\nCONTROL:\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tPermutations: {control['combinatories'][0]}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
 
         def getMAxValue2_handle_add_to_bag():
             pass
@@ -176,3 +195,6 @@ if __name__ == '__main__':
         print(knapsack_solver(items, capacity))
     else:
         print('Usage: knapsack.py [filename] [capacity]')
+
+
+#  SEAN BRUTE FORCE
