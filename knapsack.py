@@ -5,46 +5,76 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
-def knapsack_solver(items, capacity):
-<<<<<<< HEAD
-  # Recursively checking all combinations of items
-  # Inputs: items, capacity, total value, taken items
-  # Returns the resulting value and the taken array of taken items
-  def knapsack_helper(items, capacity, value, bag):
-    if not items:
-      return value, bag
-    elif len(items) == 1:
-      # Check if the last item fits or not
-      if items[0].size <= capacity:
-        # Take the item by setting its index in 'bag' to 1
-        bag[items[0].index - 1] = 1
-        # Update our total value for taking this item
-        value += items[0].value
-        return value, bag
-      else:
-        # Last item doesn't fit, just discard it
-        return value, bag
-        # We still have to check many items
-        # Check to see if the item we just picked up fits in our remaining capacity
-    elif items[0].size <= capacity:
-      # Consider the overall value of this item
-      # Make a copy of our bag
-      bag_copy = bag[:]
-      bag_copy[items[0].index - 1] = 1
-      # We take the item in this universe
-      r1 = knapsack_helper(items[1:], capacity - items[0].size, value + items[0].value, bag_copy)
-      # We don't take the item in this universe
-      r2 = knapsack_helper(items[1:], capacity, value, bag)
-      # Pick the universe that results in a larger value
-      # r1 = (20, [1, 0, 0, 1])
-      # r2 = (19, [1, 0, 0, 1])
-      return max(r1, r2, key=lambda tup: tup[0])
-    else:
-      # Item doesn't fit, discard it and continue recursing
-      return knapsack_helper(items[1:], capacity, value, bag)
-  return knapsack_helper(items, capacity, 0, [0] * len(items))
+def knapsack_solver(items, capacity, index=0, value=0, chosen=[]):
 
 # Greedy implementation
+  
+  if index >= len(items):
+    return [value, chosen]
+  
+  if items[index].size > capacity:
+    return knapsack_solver(items, capacity, index + 1, value, chosen)
+  else:
+    chosen_copy = chosen.copy()
+    chosen_copy.append(items[index].index)
+    value_from_leaving = knapsack_solver(items, capacity, index + 1, value, chosen)
+    value_from_taking = knapsack_solver(items, capacity - items[index].size, index + 1, value + items[index].value, chosen_copy)
+    
+    if value_from_leaving[0] > value_from_taking[0]:
+      return value_from_leaving
+    else:
+      return value_from_taking
+  
+  def optimize_load(items, capacity):
+    size = 0
+    value = 0
+    chosen = []
+    items = sorted(items, key=lambda i: i.size / i.value)
+
+    for item in items:
+      if item.size <= capacity:
+        chosen.append(item.index)
+        capacity -=item.size
+        value += item.value
+    return [value, chosen] 
+
+  # # Recursively checking all combinations of items
+  # # Inputs: items, capacity, total value, taken items
+  # # Returns the resulting value and the taken array of taken items
+  # def knapsack_helper(items, capacity, value, bag):
+  #   if not items:
+  #     return value, bag
+  #   elif len(items) == 1:
+  #     # Check if the last item fits or not
+  #     if items[0].size <= capacity:
+  #       # Take the item by setting its index in 'bag' to 1
+  #       bag[items[0].index - 1] = 1
+  #       # Update our total value for taking this item
+  #       value += items[0].value
+  #       return value, bag
+  #     else:
+  #       # Last item doesn't fit, just discard it
+  #       return value, bag
+  #       # We still have to check many items
+  #       # Check to see if the item we just picked up fits in our remaining capacity
+  #   elif items[0].size <= capacity:
+  #     # Consider the overall value of this item
+  #     # Make a copy of our bag
+  #     bag_copy = bag[:]
+  #     bag_copy[items[0].index - 1] = 1
+  #     # We take the item in this universe
+  #     r1 = knapsack_helper(items[1:], capacity - items[0].size, value + items[0].value, bag_copy)
+  #     # We don't take the item in this universe
+  #     r2 = knapsack_helper(items[1:], capacity, value, bag)
+  #     # Pick the universe that results in a larger value
+  #     # r1 = (20, [1, 0, 0, 1])
+  #     # r2 = (19, [1, 0, 0, 1])
+  #     return max(r1, r2, key=lambda tup: tup[0])
+  #   else:
+  #     # Item doesn't fit, discard it and continue recursing
+  #     return knapsack_helper(items[1:], capacity, value, bag)
+  # return knapsack_helper(items, capacity, 0, [0] * len(items))
+
   
 
 '''
@@ -79,34 +109,6 @@ Code below is from an old solution that works to an extent, but needs more debug
   #           choice_cost = total_cost
   #           value = total_value
   # return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}') 
-=======
-  choice_cost = 0
-  value = 0
-  chosen = []
-
-  for default_item in items:
-    if default_item[1] <= capacity:
-      total_value = default_item[2]
-      total_items = [default_item[0]]
-      total_cost = default_item[1]
-      
-      for another_item in items:
-        if default_item == another_item:
-          pass
-        
-        elif total_cost + another_item[1] > capacity:
-          pass
-
-        else:
-          total_value += another_item[2]
-          total_items.append(another_item[0])
-          total_cost += another_item[1]
-
-          if total_value > value:
-            choice_cost = total_cost
-            value = total_value
-  return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}') 
->>>>>>> a71368036e77d70b232aa0be192eb7e00c10f021
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
