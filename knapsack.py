@@ -6,6 +6,7 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
+<<<<<<< HEAD
   # Recursively checking all combinations of items
   # Inputs: items, capacity, total value, taken items
   # Returns the resulting value and the taken array of taken items
@@ -78,6 +79,34 @@ Code below is from an old solution that works to an extent, but needs more debug
   #           choice_cost = total_cost
   #           value = total_value
   # return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}') 
+=======
+  choice_cost = 0
+  value = 0
+  chosen = []
+
+  for default_item in items:
+    if default_item[1] <= capacity:
+      total_value = default_item[2]
+      total_items = [default_item[0]]
+      total_cost = default_item[1]
+      
+      for another_item in items:
+        if default_item == another_item:
+          pass
+        
+        elif total_cost + another_item[1] > capacity:
+          pass
+
+        else:
+          total_value += another_item[2]
+          total_items.append(another_item[0])
+          total_cost += another_item[1]
+
+          if total_value > value:
+            choice_cost = total_cost
+            value = total_value
+  return (f'Value: {value} Size: {choice_cost} Chosen: {str(chosen)[1:-1]}') 
+>>>>>>> a71368036e77d70b232aa0be192eb7e00c10f021
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
