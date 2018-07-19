@@ -5,7 +5,7 @@ from collections import namedtuple
 
 Item = namedtuple('Item', ['index', 'size', 'value', 'true_value'])
 
-def knapsack_solver(items, capacity):
+def knapsack_solver(items, capacity): # GREEDY
   sort_items = sorted(items, key=lambda x: x[3])
   print(sort_items)
   result = []
@@ -17,7 +17,7 @@ def knapsack_solver(items, capacity):
       break
     for item in items:
       if item.index == temp.index:
-        if item.size < capacity:
+        if item.size <= capacity:
           capacity -= item.size
           result.append(item.index)
           max_value += item.value
@@ -41,7 +41,7 @@ def knapsack_solver(items, capacity):
 
 #     for item in items:
 #       if item.index == temp.index:
-#         if item.size < knapsack:
+#         if item.size <= knapsack:
 #           result.append(item.index)
 #           print("Result: ", result)
 #           knapsack -= item.size
