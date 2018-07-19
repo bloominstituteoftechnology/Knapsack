@@ -60,34 +60,50 @@ def knapsack_solver(items, capacity):
     return value, size, knapsack
 
   def iterative_knapsack_helper(items, capacity):
-    cache = {}
-    knapsack = {}
+    cache = [[0] * (capacity + 1) for _ in range(len(items) + 1)]
     
-    for weight in range(0, capacity + 1):
-      cache[0, weight] = 0
-      knapsack[0, weight] = []
-    
-    for index in range(1, len(items) + 1):
-      for weight in range(0, capacity + 1):
-        if items[index - 1].size > weight:
-          cache[index, weight] = cache[index - 1, weight]
-          knapsack[index, weight] = knapsack[index - 1, weight]
+    bag = set()
+
+    for item in range(1, len(cache)):
+      for size in range(len(cachr[item])):
+        if items[item - 1].size > size:
+          cache[item][size] = cashe[item - 1][size]
         else:
-          with_new = (cache[index - 1, weight - items[index - 1].size] + items[index - 1].value)
-          without_new = cache[index - 1, weight]
-
-          if with_new > without_new:
-            cache[index, weight] = with_new
-            knapsack[index, weight] = knapsack[index - 1, weight - iterms[index - 1].size] + [index]
+          r1 = cache[item - 1][size]
+          r1 = cache[item - 1][size - items[item - 1].size] + items[item - 1].value
+          cache[item][size] = max(r1, r2)
+          print(cache)
           
-          else:
-            cache[index, weight] = without_new
-            knapsack[index, weight] = knapsack[index - 1, weight]
+  # knapsack_iterative(updated, 100)
 
-    value = cache[len(items), capacity]
-    knapsack = knapsack[len(items), capacity]
-    size = sum([items[item - 1].size for item in knapsack])
-    return value, size, knapsack
+    # cache = {}
+    # knapsack = {}
+    
+    # for weight in range(0, capacity + 1):
+    #   cache[0, weight] = 0
+    #   knapsack[0, weight] = []
+    
+    # for index in range(1, len(items) + 1):
+    #   for weight in range(0, capacity + 1):
+    #     if items[index - 1].size > weight:
+    #       cache[index, weight] = cache[index - 1, weight]
+    #       knapsack[index, weight] = knapsack[index - 1, weight]
+    #     else:
+    #       with_new = (cache[index - 1, weight - items[index - 1].size] + items[index - 1].value)
+    #       without_new = cache[index - 1, weight]
+
+    #       if with_new > without_new:
+    #         cache[index, weight] = with_new
+    #         knapsack[index, weight] = knapsack[index - 1, weight - iterms[index - 1].size] + [index]
+          
+    #       else:
+    #         cache[index, weight] = without_new
+    #         knapsack[index, weight] = knapsack[index - 1, weight]
+
+    # value = cache[len(items), capacity]
+    # knapsack = knapsack[len(items), capacity]
+    # size = sum([items[item - 1].size for item in knapsack])
+    # return value, size, knapsack
 
 
 
