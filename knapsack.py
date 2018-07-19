@@ -4,20 +4,27 @@ import sys
 from collections import namedtuple
 from operator import attrgetter
 
-Item = namedtuple("Item", ["index", "size", "value", "ratio"])
+Item = namedtuple("Item", ["index", "size", "value"])  # "ratio"
 
 
 def knapsack_solver(items, capacity):
+    Item = namedtuple("Item", ["index", "size", "value", "ratio"])
+    updated_items = []
+    for item in items:
+        updated_items.append(Item(item[0], item[1], item[2], item[2] / item[1]))
+    print(updated_items)
     total_size = 0
     knapsack = []
+    #  There is only a point to organizing the data by ratio if there are more than two items
+    #  If there are two items or less, organizing by value makes more sense
     if len(items) > 2:
-        for item in sorted(items, key=attrgetter("ratio"), reverse=True):
+        for item in sorted(updated_items, key=attrgetter("ratio"), reverse=True):
             if item.size <= capacity:
                 if total_size + item.size <= capacity:
                     knapsack.append(item)
                     total_size += item.size
     else:
-        for item in sorted(items, key=attrgetter("value"), reverse=True):
+        for item in sorted(updated_items, key=attrgetter("value"), reverse=True):
             if item.size <= capacity:
                 if total_size + item.size <= capacity:
                     knapsack.append(item)
@@ -46,7 +53,7 @@ if __name__ == "__main__":
                     int(data[0]),
                     int(data[1]),
                     int(data[2]),
-                    int(data[2]) / int(data[1]),
+                    # int(data[2]) / int(data[1]),
                 )
             )
 
