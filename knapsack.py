@@ -6,7 +6,7 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  knapsack = []
+  
   
   # # if knapsack if full
   # if capacity == 0:
