@@ -12,7 +12,9 @@ def knapsack_solver(items, capacity):
     elif len(items) == 1:
       if items[0].size <= capacity:
         bag[items[0].index - 1] = 1
-        value += items [0].value
+        value += items[0].value
+        return value, bag
+      else:
         return value, bag
     elif items[0].size <= capacity:
       bag_copy = bag[:]
