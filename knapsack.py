@@ -55,7 +55,6 @@ def knapsack_solver_bottomup(items, capacity):
 
   def knapSack(capacity, costs, values, n):
     K = [[[[0 for x in range(1)] for x in range(3)] for x in range(capacity+1)] for x in range(n+1)]
-    print (K)
  
     # Build table K[][] in bottom up manner
     for i in range(n+1):
@@ -70,23 +69,20 @@ def knapsack_solver_bottomup(items, capacity):
             wasAdded = True
           if wasAdded:
             K[i][w][0][0] = values[i-1] + K[i-1][w-costs[i-1]][0][0]
-            K[i][w][1][0] = K[i-1][w][1][0] + costs[i]
+            K[i][w][1][0] = costs[i-1] + K[i-1][w-costs[i-1]][1][0]
             K[i][w][2] = K[i-1][w][2]
             K[i][w][2].append(i)
           else:
             K[i][w][0][0] = K[i-1][w][0][0]
             K[i][w][1][0] = K[i-1][w][1][0]
             K[i][w][2] = K[i-1][w][2]
-          # print (f'K[{i}][{w}][0] = {K[i][w][0]}')
         else:
           K[i][w][0][0] = K[i-1][w][0][0]
           K[i][w][1][0] = K[i-1][w][1][0]
           K[i][w][2] = K[i-1][w][2]
-    print ('\n')
-    print (K)
-    print ('\n')
-    return f'Value: {str(K[n][capacity][0])[1:-1]}\nSize: {str(K[n][capacity][1])[1:-1]}\nChosen: {str(K[n][capacity][2])[4:-1]}'
 
+    return f'\nValue: {K[n][capacity][0][0]}\nSize: {K[n][capacity][1][0]}\nChosen: {str(K[n][capacity][2])[4:-1]}\n'
+    
   return knapSack(capacity, costs, values, n)
 
 
