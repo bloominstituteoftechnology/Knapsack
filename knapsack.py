@@ -13,6 +13,7 @@ def knapsack_solver(items, capacity):
   fullStats = []
   empArr = []
   size_counter = int(0)
+  counter = 0
   # !!!! IMPLEMENT ME
 
   d = {'key':'value'}
@@ -21,43 +22,56 @@ def knapsack_solver(items, capacity):
 
   print("test")
   for i in items:
+    print(i)
     ratio = i.value / float(i.size)
     itemsObject = {
       'size':i.size, 
       'value':i.value,
       'ratio': float(ratio)}
-    sorted(itemsObject)
+    
     fullStats.append(itemsObject)
-  for elements in fullStats:
-    if fullStats[elements]['ratio'] > 1:
-      empArr.append(fullStats[elements])
+  while counter <= len(fullStats):
+    if fullStats[counter]['ratio'] > 1:
+      print(fullStats.ratio)
+      empArr.append(fullStats[0])
     else:
-     continue
-  print(empArr)
+      continue
+    counter += 1
+    # sorted(fullStats[ratio])
+    # print(fullStats)
+    
+    
+  #print("empArr ,", empArr)
   
 #################
 # taken = [0] = len(items)
 
-# def knapsack_solver(items, capacity):
-#   # Recursively checking all combinations of items
-#   # inputs: items, capacity, total value, taken items
-#   # returns the resulting value and the taken array of taken items
-#   def knapsack_helper(items, capacity, value, taken):
-#     if not items:
-#       return value, taken
-#     elif len(items) == 1:
-#       # Check if the last item fits or not
-#       if items[0].size <= capacity:
-#         # take the item by setting its index to 'taken' to 1
-#         taken[items[0].index - 1] = 1
-#         # update our total value for taking this item
-#         value += items[0].value
-#         return value, taken
-#       else:
-#         #last item doesn't fit, just discard it
-#         return value, taken
-#     # end of base cases
-#     # check to see if the item we just pickedup fits
+#def knapsack_solver(items, capacity):
+  # Recursively checking all combinations of items
+  # inputs: items, capacity, total value, taken items
+  # returns the resulting value and the taken array of taken items
+  # def knapsack_helper(items, capacity, value, bag):
+  #   if not items:
+  #     return value, bag
+  #   elif len(items) == 1:
+  #     # Check if the last item fits or not
+  #     if items[0].size <= capacity:
+  #       # take the item by setting its index to 'bag' to 1
+  #       bag[items[0].index - 1] = 1
+  #       # update our total value for taking this item
+  #       value += items[0].value
+  #       return value, bag
+  #     else:
+  #       #last item doesn't fit, just discard it
+  #       return value, bag
+  #   # end of base cases
+  #   # check to see if the item we just pickedup fits in our remaining capacity
+  #   elif items[0].size <= capacity:
+  #     # We can consider the overall value of this item
+  #     # make a copy of our bag
+  #     bag_copy = bag[:]
+  #     bag_copy[items[0].index - 1] = 1
+
 
 
     
@@ -66,7 +80,7 @@ def knapsack_solver(items, capacity):
 
       
     
-  #print("ratio ", sortRatio)
+#print("ratio ", sortRatio)
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
