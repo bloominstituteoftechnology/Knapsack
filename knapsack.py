@@ -54,19 +54,24 @@ def knapsack_solver_bottomup(items, capacity):
   n = len(items)
 
   def knapSack(capacity, costs, values, n):
-    K = [[0 for x in range(capacity+1)] for x in range(n+1)]
+    K = [[[0 for x in range(3)] for x in range(capacity+1)] for x in range(n+1)]
+    print (K)
  
     # Build table K[][] in bottom up manner
     for i in range(n+1):
         for w in range(capacity+1):
+          for d in range(3):
             if i==0 or w==0:
-                K[i][w] = 0
+                K[i][w][0] = 0
             elif costs[i-1] <= w:
-                K[i][w] = max(values[i-1] + K[i-1][w-costs[i-1]],  K[i-1][w])
+                K[i][w][0] = max(values[i-1] + K[i-1][w-costs[i-1]][0],  K[i-1][w][0])
+                print (f'K[{i}][{w}][0] = {K[i][w][0]}')
             else:
-                K[i][w] = K[i-1][w]
- 
-    return K[n][capacity]
+                K[i][w][0] = K[i-1][w][0]
+    print ('\n')
+    print (K)
+    print ('\n')
+    return K[n][capacity][0]
 
   return knapSack(capacity, costs, values, n)
 
