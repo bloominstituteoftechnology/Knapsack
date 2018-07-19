@@ -8,27 +8,29 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
   knapsack = []
-  total_cost = []
-  def naive_knapsack(index, capacity):
-    if index == 0 or capacity == 0:
-      return 0
-    elif items[index][1] > capacity:
-      result = naive_knapsack(index-1, capacity)
+  total_cost = 0
+  total_value = 0
+  while capacity > 0:
+    biggest_gain = -math.inf
+    cost = 0
+    value = 0
+    chosen_item = None
+    for item in items:
+      if item[1] <= capacity and item[2]/item[1] > biggest_gain:
+        biggest_gain = item[2]/item[1]
+        chosen_item = item
+        value = item[2]
+        cost = item[1]
+    if chosen_item == None:
+      capacity = 0
+      break
     else:
-      option1 = naive_knapsack(index-1, capacity)
-      option2 = items[index][2] + naive_knapsack(index-1, capacity-items[index][1])
-      if option2 > option1:
-        if items[index][0] not in knapsack:
-          knapsack.append(items[index][0])
-          total_cost.append(items[index][1])
-        result = option2
-      else:
-        result = option1
-    return result
-  # total_cost = sum(total_cost)
-  result = naive_knapsack(len(items)-1, capacity)
-  return "\nitems to select: %s\ntotal cost: %s\ntotal value: %s" %(knapsack, total_cost, result)
-  # return "\nitems to select: %s\ntotal cost: %s\ntotal value: %s" %(knapsack, total_cost, total_value)
+      knapsack.append(chosen_item[0])
+      total_cost += cost
+      total_value += value
+      items.remove(chosen_item)
+      capacity -= cost
+  return "\nitems to select: %s\ntotal cost: %s\ntotal value: %s" %(knapsack, total_cost, total_value)
     
     
       
