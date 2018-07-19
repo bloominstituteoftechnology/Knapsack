@@ -123,12 +123,12 @@ if __name__ == '__main__':
     # print("Chosen:", really_recursive[2])
     # print()
 
-    # print("Really recursive memoized")
-    # really_memoized = really_memoized_knapsack_solver(items, capacity)
-    # print("Value:", really_memoized[0])
-    # print("Size:", really_memoized[1])
-    # print("Chosen:", really_memoized[2])
-    # print()
+    print("Really recursive memoized")
+    really_memoized = really_memoized_knapsack_solver(items, capacity)
+    print("Value:", really_memoized[0])
+    print("Size:", really_memoized[1])
+    print("Chosen:", really_memoized[2])
+    print()
 
     print("Greedy")
     greedy = greedy_knapsack_solver(items, capacity)
