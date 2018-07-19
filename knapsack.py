@@ -51,6 +51,25 @@ def knapsack_solver_greedy(items, capacity):
       capacity -= cost
   return "Value: %s\nSize: %s\nChosen: %s" %(total_value, total_cost, knapsack)
 
+def knapsack_solver_greedy_2(items, capacity):
+  remaining = capacity
+  knapsack, total = [], 0 
+  GreedyItem = namedtuple('GreedyItem',Item._fields+('ratio',))
+  new_items = []
+  for item in items:
+    new_item = GreedyItem(item.index, item.size, item.value, item.value/item.size)
+    new_items.append(new_item)
+  new_items.sort(key=lambda item: item[3], reverse=True)
+  for item in new_items:
+    if item.size <= remaining:
+      remaining -= item.size
+      knapsack.append(item.index)
+      total += item.value
+    else:
+      pass
+  return "Value: %s\nSize: %s\nChosen: %s" %(total, capacity-remaining, knapsack)
+
+
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     capacity = int(sys.argv[2])
@@ -63,6 +82,6 @@ if __name__ == '__main__':
       items.append(Item(int(data[0]), int(data[1]), int(data[2])))
     
     file_contents.close()
-    print(knapsack_solver_recursive(items, capacity))
+    print(knapsack_solver_greedy_2(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
