@@ -11,7 +11,7 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 the dynamic programming method of solving the 0:1 knapsack problem would be to create
 memoization table/matrix with the possible max values at any given capacity. 
 
-n items –> 2n-1 knapsacks to evaluate...so dp will make it easier to impleent kp
+n items –> 2n-1 knapsacks to evaluate...so dp will make it easier to implement kp
 
 i.e.
 #CURR VAL/WEIGHT IS SORTED BY WEIGHT!
@@ -49,31 +49,50 @@ from max value, check (sow-w)...if we go to the corresepnding cell in the row ab
 does its weight and column number add up to the value? If so, it was included
 
 """
-capacity = 10
+capacity = 100
 
 def knapsack_solver(items, capacity):
   sorteditems = sorted(items, key=lambda item: item[1])
   length = len(sorteditems)
+  print(sorteditems)
+  table = np.pad(np.zeros((capacity, length)), (0,1),'constant')
+  
+  
+  for row in range(1, length + 1): #row
+    value = sorteditems[row-1][1]
+    weight = sorteditems[row-1][2]
 
-  table = np.pad(np.zeros((capacity, length)), (0,0), 'constant')
+    print(value, weight)
+    
+  for j in range(1, length + 1):
+      # j is the column in the table
+    value = sorteditems[j-1][2]
+    weight = sorteditems[j-1][1]
+    
+    for i in range(1, capacity + 1):
+        # i is the row in the table
+        if weight > i:
+            table[i,j] = table[i,j-1]
+        else:
+            table[i,j] = max(table[i,j-1], table[i-weight, j-1] + value)
+        
+
   print(table)
 
-  for column in range(0, length):
-    value = sorteditems[column - 1][2]
-    weight = sorteditems[column - 1][1]
+  taken = np.empty(length).astype(str)
+  remainingroom = capacity
 
-    for row in range(0, capacity):
-      if weight > row:
-        table[row, column] = table[row, column - 1]
-      else:
-        table[row, column] = max(table[row, column - 1], table[row - weight, column - 1] + value)
-  return table
-    
-    
-
+  for i in range(length, 0, -1):
+    if table[remainingroom][i] != table[remainingroom][i-1]:
+      taken[i-1] = 'Chosen'
+      weight = sorteditems[i-1][1]
+      remainingroom -= weight
+    else:
+      taken[i-1] = 'Not Chosen'
+  print(np.array(sorteditems)[np.where(taken == 'Chosen')[0], :])
+  print(taken)
 if __name__ == '__main__':
   if len(sys.argv) > 1:
-    capacity = int(sys.argv[2])
     file_location = sys.argv[1].strip()
     file_contents = open(file_location, 'r')
     items = []
