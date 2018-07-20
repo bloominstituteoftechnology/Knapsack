@@ -194,13 +194,6 @@ def knapsack_solver(items, capacity):
                 control['iterations'] += 1
                 # print(items_passed)
 
-                # print('for x in items_passed: x = ', x[0])
-                # MAX['items'], MAX['size'], MAX['value'] = control['itemsPicked'], control['size'], control['value']
-                # print(
-                #     f'''\n\LEVEL: {level} \DEEP: {control['itemsPicked']}''')
-                # # print('c:', control)
-                # print(f'''x: {x[0]}''')
-
                 # Add current Item to the picked up control
                 control['itemsPicked'].append((x[0]))
                 copy = control['itemsPicked'][:]
@@ -243,9 +236,61 @@ def knapsack_solver(items, capacity):
                 if x[0] in control['itemsPicked']:
                     control['itemsPicked'].remove(x[0])
 
+        # Iterate over ALL posible combinations
+        def getMAxValue3(level, items_passed):  # WORKING ALGORITHM
+            if level > items_len:
+                # print(
+                #     f'''\n \LEVEL: {level} \DEEP: {control['itemsPicked']} - return''')
+                return
+
+            items_passed_len = len(items_passed)
+
+            # print('\n\n\nITEMS PASSED:', items_passed)
+            # print(len(items_passed))
+            for x in items_passed:
+                control['iterations'] += 1
+                # print(items_passed)
+
+                # Add current Item to the picked up control
+                control['itemsPicked'].append((x[0]))
+                copy = control['itemsPicked'][:]
+                copy.sort()
+                string_of_items_picked = ''.join([str(num) for num in copy])
+                # print(string_of_items_picked)
+
+                if string_of_items_picked in control['combinatories']:
+                    pass
+
+                elif True:
+                    current_level_size = 0
+                    for index in control['itemsPicked']:
+                        current_level_size += items[index - 1][1]
+
+                    if current_level_size <= capacity - 1:
+                        remainig_items = [
+                            item for item in items_passed if item[0] != x[0]]
+                        control['combinatories'].add(string_of_items_picked)
+
+                        # Get current_level items' value
+                        current_level_value = 0
+                        for index in control['itemsPicked']:
+                            current_level_value += items[index - 1][2]
+
+                        # Compare Level_value with Bag_value
+                        if current_level_value > MAX['value']:
+                            MAX['items'] = control['itemsPicked'].copy()
+                            MAX['size'] = current_level_size
+                            MAX['value'] = current_level_value
+                        # print(
+                        #     f'''\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\tc: {control['combinatories']}\n''')
+                        getMAxValue2((level + 1), remainig_items)
+
+                if x[0] in control['itemsPicked']:
+                    control['itemsPicked'].remove(x[0])
+
         # for item in control['combinatories']:
         #     print(item)
-        getMAxValue2(1, items)
+        getMAxValue3(1, items)
         print(
             f'''\n**********MEMORIZATION**********\nCONTROL:\n\tCapacity readed by the default implementation: {capacity}\n\tCapacity passed in the CLI: {capacity - 1}\n\tIterations: {control['iterations']}\n\tCombinatories: {len(control['combinatories'])}\n\tSize: {MAX['size']}\n\tValue: {MAX['value']}\n\tItems picked: {MAX['items']}\n\nEND''')
         # Iterate over ALL posible combinations
