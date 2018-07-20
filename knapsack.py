@@ -10,23 +10,42 @@ def knapsack_solver(items, capacity):
   for head_item in items:
     bag = []
     head_item_index = items.index(head_item)
-    for item in items[head_item_index + 1:]:
+    if head_item_index == 0:
+      rest_of_items = items[head_item_index +1:]
+    else:
+      rest_of_items = items[head_item_index + 1:] + items[0:head_item_index]
+
+    for item in rest_of_items:
       bag_len = len(bag)
+      bag_size = 0
+      bag_value = 0
       if bag_len == 0:
         bag.append(head_item)
-      if bag_len == 3:
-        solutions.append(bag)
-        bag = []
-      if bag_len == 1:
-        if item[1] + bag[0][1] <= capacity:
-          bag.append(item)
+      for bag_item in bag:
+        bag_size += bag_item[1]
+        bag_value += bag_item[2]
+      if item[1] + bag_size > capacity:
+        if len(solutions) == 0:
+          solutions.append([bag_value, bag])
+          bag = []
         else:
-          continue
+          if solutions[0][0] < bag_value:
+            solutions[0] = [bag_value, bag]
       else:
-        solutions.append(bag)
-        bag = []
-        continue
-  print(solutions)
+        bag.append(item)
+    
+  indexes = []
+  cost = 0
+  for item in solutions[0][1]:
+    indexes.append(item.index)
+    cost += item.size
+
+  solution = {
+    "value": solutions[0][0],
+    "indexes": indexes,
+    "cost": cost
+  }
+  return solution
 
     
 
