@@ -51,16 +51,52 @@ def knapsack_solver(items, capacity):
   return knapsack_helper(items, capacity, 0, [0] * len(items))
 
 #Greedy Algorithm
+def anotherKnapsack(items, capacity):
+  def greedyAl(items, capacity):
+    result = {
+      'size': 0,
+      'value': 0,
+      'chosen': []
+    }
+    items = sorted(items, key=lambda i: i.size / i.value)
+    for item in items:
+      if item.size <= capacity:
+        chosen.append(item.index)
+        capacity -= item.size
+        value += item.value
+    return  [value, chosen]
+    
+    return items
 
-def greedyAl(items, capacity):
-  result = {
-    'size': 0,
-    'value': 0,
-    'chosen': []
-  }
-  sorted(items)
-  print(items)
-  return items
+#Iterative Knapsack
+def iterative_knapsack(items, capacity):
+  cache = [[0] * (capacity + 1) for _ in range(len(items) + 1)]
+  bag = set()
+#populate matrix
+  for item in range(1, len(cache)):
+    for size in range(len(cache[item])):
+      #decide if we're going to take this item or not
+      if items[item - 1].size > size:
+        #skip this item
+        cache[item][size] = cache[item - 1][size]
+      else:
+        #we take the item
+        r1 = cache[[item - 1][size]]
+        r2 = cache[item - 1][size - items[item - 1].size] + items[item - 1].size.value
+        cache[item][size] = max(r1, r2)
+
+  print(cache)
+  rows = len(cache) - 1
+  cols = len(cache[0]) - 1
+
+  while rows > 0 and cols > 0:
+    if cache[rows][cols] != cache[rows - 1][cols]:
+      bag.add(rows - 1)
+      rows -= 1
+      cols -= items[rows].size
+    else:
+      rows -= 1
+  return cache[-1][-1], bag
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
@@ -75,5 +111,6 @@ if __name__ == '__main__':
     
     file_contents.close()
     print(knapsack_solver(items, capacity))
+    print(anotherKnapsack(items, capacity))
   else:
     print('Usage: knapsack.py [filename] [capacity]')
