@@ -64,8 +64,8 @@ This test still shows the same outcome as my result which differs from the resul
 the large1.txt file '''
 
 #gunner = [671,104,737,370,432,239,107,935,561,297,796,134,693,83,949,704,271,782,814,866,566,420,295,795,997,44,648,844,623,160,337,907,909,329,335,308,373,913,700]
-#summa = 0
+#suma = 0
 #for i in gunner:
 #  print(i, items[i].value)
-#  summa += items[i].value
-#  print('summa', summa)
+#  suma += items[i].value
+#  print('suma', suma)
