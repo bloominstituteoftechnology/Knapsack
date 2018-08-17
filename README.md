@@ -30,7 +30,8 @@ The main objectives for this sprint are to:
 
 ## Getting Started
 
-The specific goal of this exercise is to write a program that takes input files that look like this:
+1. The specific goal of this exercise is to write a program that takes input files
+that look like this:
 
 ```
 1 42 81
