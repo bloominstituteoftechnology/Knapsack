@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#okay
 
 import sys
 from collections import namedtuple
