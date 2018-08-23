@@ -3,10 +3,21 @@
 import sys
 from collections import namedtuple
 
+
 Item = namedtuple('Item', ['index', 'size', 'value', 'ratio'])
 
 def knapsack_solver(items, capacity):
-  return items
+    items_sorted_by_ratios = (sorted(items, key=lambda x: x.ratio))
+    knapsack = []
+    avail_weight = capacity
+    for i in reversed(items_sorted_by_ratios):
+        if i.size <= avail_weight:
+          knapsack.append(i)
+          avail_weight -= i.size
+    return knapsack
+
+
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
