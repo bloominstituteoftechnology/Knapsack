@@ -17,6 +17,7 @@ def knapsack_solver(items, capacity):
     items_sorted_by_ratios = (sorted(items, key=lambda x: x.ratio))
     knapsack = []
     total_value = 0
+    total_weight = 0
     avail_weight = capacity
     
     for i in reversed(items_sorted_by_ratios):
@@ -24,7 +25,9 @@ def knapsack_solver(items, capacity):
           knapsack.append(i)
           avail_weight -= i.size
           total_value += i.value
-    knapsack.append(total_value)
+          total_weight += i.size
+    knapsack.append(['total value: ', total_value])
+    knapsack.append(['total weight: ', total_weight])
     return knapsack
 
 
