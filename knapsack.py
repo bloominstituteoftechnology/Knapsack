@@ -45,6 +45,8 @@ if __name__ == '__main__':
       items.append(Item(int(data[0]), int(data[1]), int(data[2]), int(data[2]) / int(data[1])))
     
     file_contents.close()
-    print("Here are the contents of your knapsack: ", knapsack_solver(items, capacity))
+    print("Here are the contents of your knapsack: ")
+    for i in knapsack_solver(items, capacity):
+      print(i)
   else:
     print('Usage: knapsack.py [filename] [capacity]')
