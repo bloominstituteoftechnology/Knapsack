@@ -1,0 +1,14 @@
+{
+  "name": "Knapsack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/runranron/Knapsack.git",
+  "author": "William Pelton <williamrpelton@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "node": "^10.0.0"
+  },
+  "scripts": {
+    "start": "node data/knapsack.js"
+  }
+}
