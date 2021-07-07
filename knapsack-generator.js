@@ -1,5 +1,8 @@
 //This file generates more data sets for the knapsack solver to process.
 //It is not a part of any solution to this problem.
+`WOULD YOU LIKE TO KNOW CUCK`
+
+
 
 const fs = require('fs');
 const path = require('path');
