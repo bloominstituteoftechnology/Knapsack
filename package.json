@@ -1,0 +1,20 @@
+{
+  "name": "Knapsack",
+  "version": "1.0.0",
+  "description": "![xkcd \"NP-Complete\"](https://imgs.xkcd.com/comics/np_complete.png \"General solutions get you a 50% tip.\")",
+  "main": "knapsack-generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axhon/Knapsack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axhon/Knapsack/issues"
+  },
+  "homepage": "https://github.com/axhon/Knapsack#readme"
+}
